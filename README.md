@@ -1,1 +1,1 @@
-# powershellGUI
+# GUI for powershell command execution
