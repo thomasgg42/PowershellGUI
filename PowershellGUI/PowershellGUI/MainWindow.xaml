@@ -9,8 +9,12 @@
     <Grid>
         <Border Padding="10">
             <StackPanel>
-                <TextBox></TextBox>
-                <Button Content="OK"></Button>
+                <ComboBox x:Name="FileListComboBox" SelectionChanged="ComboBox_SelectionChanged" Loaded="ComboBox_Loaded" />
+                <Button Content="OK" Click="Button_Click"></Button>
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="200">
+                    <TextBox Height="100" x:Name="OutputTextBlock"></TextBox>
+                </ScrollViewer>
+               
             </StackPanel>
         </Border>
     </Grid>
