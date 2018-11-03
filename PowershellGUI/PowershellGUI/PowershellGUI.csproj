@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B345D338-B95B-40CC-B121-29270D590FE4}</ProjectGuid>
+    <ProjectGuid>{C88A094E-08F6-4E43-AE47-53073F36F772}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>PowershellGUI</RootNamespace>
     <AssemblyName>PowershellGUI</AssemblyName>
