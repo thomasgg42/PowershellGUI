@@ -5,17 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PowershellGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Border Padding="10">
-            <StackPanel>
-                <ComboBox x:Name="FileListComboBox" SelectionChanged="ComboBox_SelectionChanged" Loaded="ComboBox_Loaded" />
-                <Button Content="OK" Click="Button_Click"></Button>
-                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="200">
-                    <TextBox Height="100" x:Name="OutputTextBlock"></TextBox>
-                </ScrollViewer>
-               
-            </StackPanel>
-        </Border>
+        Title="MainWindow" Height="396.752" Width="385.499">
+    <Grid Margin="0,0,2,3">
+        <Button x:Name="ActiveDirectory" Content="Active Directory" HorizontalAlignment="Left" Margin="101,99,0,0" VerticalAlignment="Top" Width="186" Height="27" Click="ActiveDirectory_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="101,153,0,0" VerticalAlignment="Top" Width="186" Height="27"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="101,207,0,0" VerticalAlignment="Top" Width="186" Height="27"/>
     </Grid>
 </Window>

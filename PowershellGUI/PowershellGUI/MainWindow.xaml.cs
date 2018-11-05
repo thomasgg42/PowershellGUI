@@ -51,39 +51,20 @@ namespace PowershellGUI
      *          skypeScript1.ps1
      */
     public partial class MainWindow : Window
-        {
+    {
         public MainWindow()
             {
             InitializeComponent();
             }
 
-        /*
-         * TEST-FUNKSJONER, SLETT SENERE
-         * 
-         */ 
-        private void Button_Click(object sender, RoutedEventArgs e)
-            {
-            Test test = new Test();
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder = test.GetPowershellScript();
-            this.OutputTextBlock.AppendText(stringBuilder.ToString());
-            }
-
-        private void ComboBox_SelectionChanged(object sender, RoutedEventArgs e)
-            {
-
-            }
-
-        // populates the dropdown box 
-        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
-            {
-            // relativ filsti til psScripts mappe
-            string filePath = @"../../psScripts";
-            string[] files = System.IO.Directory.GetFiles(filePath);
-            var comboBox = (ComboBox)sender;
-            comboBox.ItemsSource = files;
-            int firstItem = 0;
-            comboBox.SelectedIndex = firstItem;
-            }
+        private void ActiveDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            DynamicWindow ad = new DynamicWindow();
+            ad.Show();
         }
+
+
+
+
     }
+}
