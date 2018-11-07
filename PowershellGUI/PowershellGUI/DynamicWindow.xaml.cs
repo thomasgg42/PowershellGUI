@@ -25,9 +25,12 @@ namespace PowershellGUI
 
             if (test == "AD")
             {
+                this.Title = "Active Directory PowerShell";
+
                 // relativ filsti til psScripts mappe
                 string filePath = @"../../psScripts/AD";
                 string[] files = System.IO.Directory.GetFiles(filePath);
+                
                 
                 //For hver filstring i mappen AD, legges til en kanpp via dynamisk brukerkontroll
                 foreach(string i in files)
@@ -39,24 +42,27 @@ namespace PowershellGUI
                     btn.Content = i;
                     btn.Name = test;
                     btn.IsEnabled = true;
-                    btn.Visibility = Visibility.Visible;
+                    btn.Visibility = Visibility.Visible;                    
                     st.Children.Add(btn);
-                    
+                    btn.Click += Click; //Når knappen trykkes, kjør funksjon "Click"
 
-                    //TODO: Finne ut hvordan man inisialiser knapp ????btn.InitializeComponent()????
+
+                }
 
                 
-                }
-            }
+
+            }       
 
                     
         }
 
-        private void Initialize()
+        //Klikk event
+        private void Click(object sender, RoutedEventArgs e)
         {
-           
+            MessageBox.Show("OK");
         }
 
+       
     }
    
 
