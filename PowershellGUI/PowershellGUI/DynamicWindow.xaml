@@ -10,7 +10,6 @@
         <StackPanel Height="45">
             <local:DynamicUserControl Height="100" RenderTransformOrigin="0.516,0.482"/>
         </StackPanel>
-
     </StackPanel>
 
 

@@ -39,27 +39,28 @@ namespace PowershellGUI
                     sp.Children.Add(st);
 
                     Button btn = new Button();
-                    btn.Content = i;
-                    btn.Name = test;
-                    btn.IsEnabled = true;
+                    btn.Content = i; //TODO: Få inn korrekt tekst på knappen, og ikke hele filstien 
+                    btn.Name = test;                    
+                    btn.IsEnabled = true;                    
                     btn.Visibility = Visibility.Visible;                    
                     st.Children.Add(btn);
                     btn.Click += Click; //Når knappen trykkes, kjør funksjon "Click"
-
-
                 }
 
+
                 
+            }
 
-            }       
-
-                    
+            
         }
 
-        //Klikk event
+        //Klikk event for knappene i venstre marg
         private void Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("OK");
+            //TODO: Lage funksjon for lesing av kommentar i filen tilhørende knappen, for så å opprette labels og tekstbokser utifra dette.
+            MessageBox.Show("OK");          
+            
+
         }
 
        
