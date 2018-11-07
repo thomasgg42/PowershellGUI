@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:PowershellGUI"
         mc:Ignorable="d"
         Title="DynamicWindow" Height="435.097" Width="791.197">
-    <Grid>
-        <StackPanel x:Name="sp" HorizontalAlignment="Left" Height="271" Margin="0,75,0,0" VerticalAlignment="Top" Width="773" />
-    </Grid>
+    <StackPanel HorizontalAlignment="Left" Height="231" Margin="104,38,0,0" VerticalAlignment="Top" Width="408">
+        <StackPanel x:Name="sp"  Height="73" Margin="43,38,76,0"  VerticalAlignment="Top"/>
+    </StackPanel>
+
+
+
 </Window>

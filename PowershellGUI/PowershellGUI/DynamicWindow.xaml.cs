@@ -29,14 +29,15 @@ namespace PowershellGUI
                 string filePath = @"../../psScripts/AD";
                 string[] files = System.IO.Directory.GetFiles(filePath);
                 
-                //For hver fil i mappen AD, legges til en kanpp via dynamisk brukerkontroll
-                for (int i = 1; i < files.Length; i++)
+                //For hver filstring i mappen AD, legges til en kanpp via dynamisk brukerkontroll
+                foreach(string i in files)
                 {
                     DynamicUserControl btn = new DynamicUserControl();
-                    btn.Content = files[i];
-                    btn.Name = i.ToString();
-                    btn.IsEnabled = true;                  
+                    btn.Content = i;
+                    btn.Name = test;
+                    btn.IsEnabled = true;                   
                     sp.Children.Add(btn);
+                    btn.InitializeComponent();
                     //TODO: Finne ut hvordan man inisialiser knapp ????btn.InitializeComponent()????
 
                 }
@@ -45,8 +46,11 @@ namespace PowershellGUI
                     
         }
 
-       
-      
+        private void Initialize()
+        {
+           
+        }
+
     }
    
 
