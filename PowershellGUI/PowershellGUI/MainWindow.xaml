@@ -5,10 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PowershellGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="396.752" Width="385.499">
-    <Grid Margin="0,0,2,3">
-        <Button x:Name="ActiveDirectory" Content="Active Directory" HorizontalAlignment="Left" Margin="101,99,0,0" VerticalAlignment="Top" Width="186" Height="27" Click="ActiveDirectory_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="101,153,0,0" VerticalAlignment="Top" Width="186" Height="27"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="101,207,0,0" VerticalAlignment="Top" Width="186" Height="27"/>
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        
     </Grid>
 </Window>

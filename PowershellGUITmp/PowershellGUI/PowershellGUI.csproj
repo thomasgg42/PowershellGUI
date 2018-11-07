@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3D772128-3BD2-4124-A746-BB73D6144084}</ProjectGuid>
+    <ProjectGuid>{C88A094E-08F6-4E43-AE47-53073F36F772}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>PowershellGUI</RootNamespace>
     <AssemblyName>PowershellGUI</AssemblyName>
@@ -37,6 +37,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\3.0\System.Management.Automation.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,10 +59,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PowershellGuiHandler.cs" />
-    <Compile Include="ViewModel\DirectoryReader.cs" />
-    <Compile Include="ViewModel\FileReader.cs" />
-    <Compile Include="ViewModel\PowershellParser.cs" />
+    <Compile Include="DynamicUserControl.xaml.cs">
+      <DependentUpon>DynamicUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicWindow.xaml.cs">
+      <DependentUpon>DynamicWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EventHandling.cs" />
+    <Compile Include="Test.cs" />
+    <Page Include="DynamicUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DynamicWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,7 +89,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

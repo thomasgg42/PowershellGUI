@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("PowershellGUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Eika Gruppen")]
 [assembly: AssemblyProduct("PowershellGUI")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright © Eika Gruppen 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
