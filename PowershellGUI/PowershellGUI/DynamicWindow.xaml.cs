@@ -32,14 +32,20 @@ namespace PowershellGUI
                 //For hver filstring i mappen AD, legges til en kanpp via dynamisk brukerkontroll
                 foreach(string i in files)
                 {
-                    DynamicUserControl btn = new DynamicUserControl();
+                    StackPanel st = new StackPanel();
+                    sp.Children.Add(st);
+
+                    Button btn = new Button();
                     btn.Content = i;
                     btn.Name = test;
-                    btn.IsEnabled = true;                   
-                    sp.Children.Add(btn);
-                    btn.InitializeComponent();
+                    btn.IsEnabled = true;
+                    btn.Visibility = Visibility.Visible;
+                    st.Children.Add(btn);
+                    
+
                     //TODO: Finne ut hvordan man inisialiser knapp ????btn.InitializeComponent()????
 
+                
                 }
             }
 
