@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PowershellGUI"
         mc:Ignorable="d"
-        Title="DynamicWindow" Height="401.377" Width="499.682">
-    <Grid>
-        <ComboBox HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="472" SelectionChanged="ComboBox_SelectionChanged" Loaded="ComboBox_Loaded"/>
+        Title="DynamicWindow" Height="435.097" Width="791.197">
+    <StackPanel x:Name="sp" HorizontalAlignment="Left" Height="385" Margin="10,10,0,0" VerticalAlignment="Top" Width="200">
+        <StackPanel Height="45">
+            <local:DynamicUserControl Height="100" RenderTransformOrigin="0.516,0.482"/>
+        </StackPanel>
+    </StackPanel>
 
-    </Grid>
+
+
 </Window>

@@ -19,28 +19,52 @@ namespace PowershellGUI
     /// </summary>
     public partial class DynamicWindow : Window
     {
-        public DynamicWindow()
+        public DynamicWindow(string test)
         {
             InitializeComponent();
+
+            if (test == "AD")
+            {
+                this.Title = "Active Directory PowerShell";
+
+                // relativ filsti til psScripts mappe
+                string filePath = @"../../psScripts/AD";
+                string[] files = System.IO.Directory.GetFiles(filePath);
+                
+                
+                //For hver filstring i mappen AD, legges til en kanpp via dynamisk brukerkontroll
+                foreach(string i in files)
+                {
+                    StackPanel st = new StackPanel();
+                    sp.Children.Add(st);
+
+                    Button btn = new Button();
+                    btn.Content = i; //TODO: Få inn korrekt tekst på knappen, og ikke hele filstien 
+                    btn.Name = test;                    
+                    btn.IsEnabled = true;                    
+                    btn.Visibility = Visibility.Visible;                    
+                    st.Children.Add(btn);
+                    btn.Click += Click; //Når knappen trykkes, kjør funksjon "Click"
+                }
+
+
+                
+            }
+
+            
         }
 
-        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
+        //Klikk event for knappene i venstre marg
+        private void Click(object sender, RoutedEventArgs e)
         {
-            // relativ filsti til psScripts mappe
-            string filePath = @"../../psScripts";
-            string[] files = System.IO.Directory.GetFiles(filePath);
-            var comboBox = (ComboBox)sender;
-            comboBox.ItemsSource = files;
-            int firstItem = 0;
-            comboBox.SelectedIndex = firstItem;
-        }
-
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+            //TODO: Lage funksjon for lesing av kommentar i filen tilhørende knappen, for så å opprette labels og tekstbokser utifra dette.
+            MessageBox.Show("OK");          
+            
 
         }
 
-        
+       
     }
+   
+
 }

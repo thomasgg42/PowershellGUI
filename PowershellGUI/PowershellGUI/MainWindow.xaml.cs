@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace PowershellGUI
-    {
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -53,13 +53,16 @@ namespace PowershellGUI
     public partial class MainWindow : Window
     {
         public MainWindow()
-            {
+        {
             InitializeComponent();
-            }
+
+        }
+        string test = null;
 
         private void ActiveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            DynamicWindow ad = new DynamicWindow();
+            test = "AD";
+            DynamicWindow ad = new DynamicWindow(test);
             ad.Show();
         }
 
@@ -67,4 +70,6 @@ namespace PowershellGUI
 
 
     }
+
+   
 }
