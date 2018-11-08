@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+
 
 namespace PowershellGUI
     {
@@ -25,6 +13,15 @@ namespace PowershellGUI
             InitializeComponent();
             PowershellGUIHandler powershellGUI = new PowershellGUIHandler();
             powershellGUI.ModulePath = @"../../Modules";
+            
+            // Scan antall mapper i ModulePath
+            // Opprett antall radio knapper ut ifra dette
+            
+            // for hver valgte radio knapp
+            // scan antall mapper i mappen tilhørende valgt radio knapp
+            // populer dropdown med mappenes navn
+
+            
             }
         }
     }

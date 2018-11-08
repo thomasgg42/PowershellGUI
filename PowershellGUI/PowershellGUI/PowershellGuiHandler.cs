@@ -14,6 +14,7 @@ namespace PowershellGUI
         private ViewModel.PowershellParser psParser;
 
         public string ModulePath { get; set; }
+
         /*
          * Constructor
          */
@@ -22,6 +23,11 @@ namespace PowershellGUI
             directoryReader = new ViewModel.DirectoryReader();
             fileReader      = new ViewModel.FileReader();
             psParser        = new ViewModel.PowershellParser();
+            }
+
+        public string getDirectoryURI()
+            {
+            return directoryReader.getDirectory();
             }
         }
     }

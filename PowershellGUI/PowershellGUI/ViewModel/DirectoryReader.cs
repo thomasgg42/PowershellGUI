@@ -16,5 +16,10 @@ namespace PowershellGUI.ViewModel
             {
 
             }
+
+        public string getDirectory()
+            {
+            return "";
+            }
         }
     }
