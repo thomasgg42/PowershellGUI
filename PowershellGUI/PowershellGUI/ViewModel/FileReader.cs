@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PowershellGUI.ViewModel
     {
-    class FileReader
+    class FileReader : ObservableObject
         {
 
         /*

@@ -5,8 +5,75 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PowershellGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="600" Width="450">
+    <Border Padding="10">
+        <StackPanel>
+            <!-- Category -->
+            <TextBlock Text="Kategori" FontWeight="Bold" Margin="0 0 0 10" />
+            <Grid>
+                <!-- Radio buttons -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Column 1 -->
+                <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="True"/>
+                </StackPanel>
+
+                <!-- Column 2 -->
+                <StackPanel Grid.Column="1" Margin="0 0 0 0">
+                    <RadioButton GroupName="Category" Content="Exchange"/>
+                </StackPanel>
+
+                <!-- Column 3 -->
+                <StackPanel Grid.Column="2" Margin="0 0 0 0">
+                    <RadioButton GroupName="Category" Content="Skype"/>
+                </StackPanel>
+            </Grid>
+            
+            <!-- Dropdown menu -->
+            <ComboBox Margin="0 10 0 0"/>
+            
+            <!-- Input field -->
+            <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
+            <Grid MaxHeight="150">
+                <!-- Test text boxes -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0 0 5 0">
+                    <TextBlock Text="User ID" />
+                    <TextBox />
+
+                    <TextBlock Text="Group Name" />
+                    <TextBox />
+
+                    <TextBlock Text="OU Name" />
+                    <TextBox />
+                </StackPanel>
+                <StackPanel Grid.Column="1" >
+                    <TextBlock Text="Department" />
+                    <TextBox />
+
+                    <TextBlock Text="Location" />
+                    <TextBox />
+
+                    <TextBlock Text="Language" />
+                    <TextBox />
+                </StackPanel>
+            </Grid>
+            <Button Content="Run script" Margin="50 20 50 0"/>
+            <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
+            <TextBlock Height="235" 
+                   FontSize="12" 
+                   TextWrapping="Wrap" 
+                   Foreground="Black"
+                   Text="Lorem ipsum dolor, lorem isum dolor,Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet " />
+        </StackPanel>
+    </Border>
 </Window>
