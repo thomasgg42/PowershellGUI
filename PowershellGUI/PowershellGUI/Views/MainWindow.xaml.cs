@@ -1,7 +1,8 @@
 ﻿using System.Windows;
+using PowershellGUI.ViewModels;
+using PowershellGUI.Views;
 
-
-namespace PowershellGUI
+namespace PowershellGUI.Views
     {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -11,8 +12,7 @@ namespace PowershellGUI
         public MainWindow()
             {
             InitializeComponent();
-            PowershellGUIHandler powershellGUI = new PowershellGUIHandler();
-            powershellGUI.ModulePath = @"../../Modules";
+            DataContext = new ViewModel();
             
             // Scan antall mapper i ModulePath
             // Opprett antall radio knapper ut ifra dette

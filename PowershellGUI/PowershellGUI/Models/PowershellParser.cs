@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PowershellGUI.ViewModel
+namespace PowershellGUI.Models
     {
-    class FileReader : ObservableObject
+    class PowershellParser : ObservableObject
         {
 
         /*
-         *  Constructor
+         *  Constructor 
          */
-        public FileReader()
+        public PowershellParser()
             {
 
             }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="PowershellGUI.MainWindow"
+﻿<Window x:Class="PowershellGUI.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -35,7 +35,7 @@
             </Grid>
             
             <!-- Dropdown menu -->
-            <ComboBox Margin="0 10 0 0"/>
+            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding Path=DirectoryReader.DirectoryPath}"/>
             
             <!-- Input field -->
             <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
@@ -50,15 +50,18 @@
                     <TextBlock Text="User ID" />
                     <TextBox />
 
+                  
                     <TextBlock Text="Group Name" />
-                    <TextBox />
+                    <!-- Binding example test -->
+                    <TextBox Text="{Binding Path=DirectoryReader.DirectoryPath}"/>
 
                     <TextBlock Text="OU Name" />
                     <TextBox />
                 </StackPanel>
                 <StackPanel Grid.Column="1" >
                     <TextBlock Text="Department" />
-                    <TextBox />
+                    <!-- Binding example test -->
+                    <TextBox Text="{Binding Path=FileReader.FilePath}"/>
 
                     <TextBlock Text="Location" />
                     <TextBox />
