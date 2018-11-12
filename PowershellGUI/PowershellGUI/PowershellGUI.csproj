@@ -58,6 +58,7 @@
     <Compile Include="Models\DirectoryReader.cs" />
     <Compile Include="Models\FileReader.cs" />
     <Compile Include="Models\PowershellParser.cs" />
+    <Compile Include="ComparisonConverter.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
