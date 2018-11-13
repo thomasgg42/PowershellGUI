@@ -17,6 +17,7 @@ namespace PowershellGUI.Models
 
     class DirectoryReader : ObservableObject
         {
+        private string _modulePath;
         private ObservableCollection<string> _directoryBrowser; // trenge kanskje ObservableCollection<string> 
         private RadioButtons _activeButton;
 
@@ -28,6 +29,7 @@ namespace PowershellGUI.Models
             {
             // SIMEN HER KAN DU STARTE
             // if/else dårlig mtp økning av antall kategorier i fremtiden
+            // modulePath skal lede til topp-dir hvor AD/Exchange/Skype ligger
             _directoryBrowser.Clear();
             if (_activeButton == RadioButtons.ActiveDirectory)
                 {
@@ -47,9 +49,10 @@ namespace PowershellGUI.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        public DirectoryReader()
+        public DirectoryReader(string modulePath)
             {
-            _activeButton  = RadioButtons.ActiveDirectory;
+            _modulePath       = modulePath;
+            _activeButton     = RadioButtons.ActiveDirectory;
             _directoryBrowser = new ObservableCollection<string>();
             UpdateDirectoryBrowser();
             }

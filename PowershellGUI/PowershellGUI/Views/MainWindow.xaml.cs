@@ -12,7 +12,8 @@ namespace PowershellGUI.Views
         public MainWindow()
             {
             InitializeComponent();
-            DataContext = new ViewModel();
+            string relModulePath = "../../../Modules";
+            DataContext = new ViewModel(relModulePath);
             
             // Scan antall mapper i ModulePath
             // Opprett antall radio knapper ut ifra dette

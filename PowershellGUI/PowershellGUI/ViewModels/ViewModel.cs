@@ -4,17 +4,17 @@ namespace PowershellGUI.ViewModels
     {
     class ViewModel
         {
-        private DirectoryReader _DirectoryReader;
-        private FileReader _FileReader;
-        private PowershellParser _PowershellParser;
+        private DirectoryReader     _DirectoryReader;
+        private FileReader          _FileReader;
+        private PowershellParser    _PowershellParser;
         private ComparisonConverter _ComparisonConverter;
 
 
 
-        public ViewModel()
+        public ViewModel(string modulePath)
             {
-            _DirectoryReader = new DirectoryReader();
-            _FileReader = new FileReader();
+            _DirectoryReader = new DirectoryReader(modulePath);
+            _FileReader = new FileReader(modulePath);
             _PowershellParser = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
             }
@@ -62,5 +62,8 @@ namespace PowershellGUI.ViewModels
                 return _ComparisonConverter;
                 }
             }
+
+
+
         }
     }
