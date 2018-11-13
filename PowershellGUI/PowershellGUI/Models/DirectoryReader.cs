@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,32 @@ namespace PowershellGUI.Models
 
     class DirectoryReader : ObservableObject
         {
-        private List<string> _directoryPath;
+        private ObservableCollection<string> _directoryBrowser; // trenge kanskje ObservableCollection<string> 
         private RadioButtons _activeButton;
+
+        /// <summary>
+        /// Updates the directory browser to match the 
+        /// selected category.
+        /// </summary>
+        private void UpdateDirectoryBrowser()
+            {
+            // SIMEN HER KAN DU STARTE
+            // if/else dårlig mtp økning av antall kategorier i fremtiden
+            _directoryBrowser.Clear();
+            if (_activeButton == RadioButtons.ActiveDirectory)
+                {
+                _directoryBrowser.Add("ad valgt");
+                }
+            else if (_activeButton == RadioButtons.Exchange)
+                {
+                _directoryBrowser.Add("exchange valgt");
+                }
+            else
+                {
+                _directoryBrowser.Add("noe annet");
+                }
+            OnPropertyChanged("DirectoryBrowser");
+            }
 
         /// <summary>
         /// Constructor
@@ -25,23 +50,23 @@ namespace PowershellGUI.Models
         public DirectoryReader()
             {
             _activeButton  = RadioButtons.ActiveDirectory;
-            _directoryPath = new List<string>();
-            _directoryPath.Add("test/test/test");
+            _directoryBrowser = new ObservableCollection<string>();
+            UpdateDirectoryBrowser();
             }
 
         /// <summary>
         /// Gets or sets the directoryPath to the directory to read
         /// </summary>
-        public List<string> DirectoryPath
+        public ObservableCollection<string> DirectoryBrowser
             {
             get
                 {
-                return _directoryPath;
+                return _directoryBrowser;
                 }
             set
                 {
-                _directoryPath = value;
-                OnPropertyChanged("DirectoryPath");
+                _directoryBrowser = value;
+                OnPropertyChanged("DirectoryBrowser");
                 }
             }
 
@@ -59,6 +84,7 @@ namespace PowershellGUI.Models
                 {
                 _activeButton = value;
                 OnPropertyChanged("ActiveButton");
+                UpdateDirectoryBrowser();
                 }
             }
 
