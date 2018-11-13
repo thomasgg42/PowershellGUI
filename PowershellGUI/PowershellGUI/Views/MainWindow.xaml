@@ -27,17 +27,26 @@
 
                 <!-- Column 1 -->
                 <StackPanel Grid.Column="0" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding Path=DirectoryReader.ActiveButton, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}}"/>
+                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding Path=DirectoryReader.ActiveButton, 
+                                                                                                     UpdateSourceTrigger=PropertyChanged,
+                                                                                                     Converter={StaticResource ComparisonConverter}, 
+                                                                                                     ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}}"/>
                 </StackPanel>
 
                 <!-- Column 2 -->
                 <StackPanel Grid.Column="1" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding Path=DirectoryReader.ActiveButton, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static models:RadioButtons.Exchange}}" />
+                    <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding Path=DirectoryReader.ActiveButton,
+                                                                                             UpdateSourceTrigger=PropertyChanged,
+                                                                                             Converter={StaticResource ComparisonConverter}, 
+                                                                                             ConverterParameter={x:Static models:RadioButtons.Exchange}}" />
                 </StackPanel>
 
                 <!-- Column 3 -->
                 <StackPanel Grid.Column="2" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding Path=DirectoryReader.ActiveButton, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static models:RadioButtons.Skype}}" />
+                    <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding Path=DirectoryReader.ActiveButton, 
+                                                                                          UpdateSourceTrigger=PropertyChanged,
+                                                                                          Converter={StaticResource ComparisonConverter},
+                                                                                          ConverterParameter={x:Static models:RadioButtons.Skype}}" />
                 </StackPanel>
             </Grid>
             

@@ -16,23 +16,23 @@ namespace PowershellGUI.Models
 
     class DirectoryReader : ObservableObject
         {
-        private string       _directoryPath;
+        private List<string> _directoryPath;
         private RadioButtons _activeButton;
 
-        /*
-         *  Constructor
-         *  Temporary solution
-         */
-        public DirectoryReader(string directoryPath)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public DirectoryReader()
             {
-            _directoryPath = directoryPath;
             _activeButton  = RadioButtons.ActiveDirectory;
+            _directoryPath = new List<string>();
+            _directoryPath.Add("test/test/test");
             }
 
         /// <summary>
         /// Gets or sets the directoryPath to the directory to read
         /// </summary>
-        public String DirectoryPath
+        public List<string> DirectoryPath
             {
             get
                 {
@@ -41,12 +41,14 @@ namespace PowershellGUI.Models
             set
                 {
                 _directoryPath = value;
-                // Setting a new directoryPath notifies listeners
-                // Name of Binding Path name
                 OnPropertyChanged("DirectoryPath");
                 }
             }
 
+        /// <summary>
+        /// Gets or sets the current active radio button
+        /// @see ComparisonConverter for Enum -> boolean transition
+        /// </summary>
         public RadioButtons ActiveButton
             {
             get

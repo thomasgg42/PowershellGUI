@@ -13,8 +13,8 @@ namespace PowershellGUI.ViewModels
 
         public ViewModel()
             {
-            _DirectoryReader = new DirectoryReader("DirectoryReadertest");
-            _FileReader = new FileReader("FileReaderTest");
+            _DirectoryReader = new DirectoryReader();
+            _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
             }

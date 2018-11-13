@@ -9,12 +9,12 @@ namespace PowershellGUI.Models
     class FileReader : ObservableObject
         {
         private string _FilePath;
-        /*
-         *  Constructor
-         */
-        public FileReader(string filePath)
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FileReader()
             {
-            _FilePath = filePath;
             }
 
         public string FilePath
@@ -26,7 +26,6 @@ namespace PowershellGUI.Models
             set
                 {
                 _FilePath = value;
-
                 // Setting a new directory path notifies listeners
                 OnPropertyChanged("FilePath");
                 }

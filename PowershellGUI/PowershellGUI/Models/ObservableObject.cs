@@ -10,10 +10,10 @@ namespace PowershellGUI.Models
         {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /*
-         *  Raises the event.
-         *  @name - Name of the changed property.
-         */
+        /// <summary>
+        /// Raises the event
+        /// </summary>
+        /// <param name="name">Name of the property which is changed</param>
         protected void OnPropertyChanged(string name)
             {
             PropertyChangedEventHandler handler = PropertyChanged;

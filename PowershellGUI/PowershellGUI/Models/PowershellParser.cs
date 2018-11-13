@@ -9,9 +9,9 @@ namespace PowershellGUI.Models
     class PowershellParser : ObservableObject
         {
 
-        /*
-         *  Constructor 
-         */
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PowershellParser()
             {
 
