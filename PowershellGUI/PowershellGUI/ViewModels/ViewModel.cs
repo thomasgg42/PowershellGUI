@@ -14,7 +14,7 @@ namespace PowershellGUI.ViewModels
         public ViewModel(string modulePath)
             {
             _DirectoryReader = new DirectoryReader(modulePath);
-            _FileReader = new FileReader(modulePath);
+            _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
             }
@@ -63,7 +63,17 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
+        /// <summary>
+        /// Executes a Powershell script
+        /// Passes data between DirectoryReader, FileReader
+        /// and PowershellParser.
+        /// </summary>
+        public void executePowershellScript()
+            {
+            // button click kaller på denne funk
+            FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
 
+            }
 
         }
     }

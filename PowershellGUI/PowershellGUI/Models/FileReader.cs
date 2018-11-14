@@ -8,34 +8,13 @@ namespace PowershellGUI.Models
     {
     class FileReader : ObservableObject
         {
-        private string _fileURI;
-        private string _fileContents;
-
-        private void SetFileToRead(string ModulePath)
-            {
-            // håndterer logikk rundt hvordan filen som skal leses, velges
-            // radio knapp valg etc
-            }
+        public string FileURI { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FileReader(string modulePath)
+        public FileReader()
             {
-            SetFileToRead(modulePath);
-            }
-
-        public string FileURI
-            {
-            get
-                {
-                return _fileURI;
-                }
-            set
-                {
-                _fileURI = value;
-                OnPropertyChanged("FileURI");
-                }
             }
 
 
@@ -51,7 +30,7 @@ namespace PowershellGUI.Models
               [bool]SomeBool = "beskrivelse av someBool"
               #>
 */
-            string[] lines = System.IO.File.ReadAllLines(_fileURI);
+            string[] lines = System.IO.File.ReadAllLines(FileURI);
             string desc, header, output;
             List<string> psArgumentList = new List<string>();
             int ii = 1;

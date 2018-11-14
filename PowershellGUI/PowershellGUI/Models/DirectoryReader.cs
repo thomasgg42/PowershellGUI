@@ -18,8 +18,13 @@ namespace PowershellGUI.Models
     class DirectoryReader : ObservableObject
         {
         private string _modulePath;
-        private ObservableCollection<string> _directoryBrowser; // trenge kanskje ObservableCollection<string> 
+        private ObservableCollection<string> directoryBrowser; // trenge kanskje ObservableCollection<string> 
         private RadioButtons _activeButton;
+
+        /// <summary>
+        /// Returns the selected Powershell script's filepath
+        /// </summary>
+        public string GetSelectedPsScript { get; private set; }
 
         /// <summary>
         /// Updates the directory browser to match the 
@@ -30,18 +35,18 @@ namespace PowershellGUI.Models
             // SIMEN HER KAN DU STARTE
             // if/else dårlig mtp økning av antall kategorier i fremtiden
             // modulePath skal lede til topp-dir hvor AD/Exchange/Skype ligger
-            _directoryBrowser.Clear();
+            directoryBrowser.Clear();
             if (_activeButton == RadioButtons.ActiveDirectory)
                 {
-                _directoryBrowser.Add("ad valgt");
+                directoryBrowser.Add("ad valgt");
                 }
             else if (_activeButton == RadioButtons.Exchange)
                 {
-                _directoryBrowser.Add("exchange valgt");
+                directoryBrowser.Add("exchange valgt");
                 }
             else
                 {
-                _directoryBrowser.Add("noe annet");
+                directoryBrowser.Add("noe annet");
                 }
             OnPropertyChanged("DirectoryBrowser");
             }
@@ -53,8 +58,9 @@ namespace PowershellGUI.Models
             {
             _modulePath       = modulePath;
             _activeButton     = RadioButtons.ActiveDirectory;
-            _directoryBrowser = new ObservableCollection<string>();
-            UpdateDirectoryBrowser();
+            directoryBrowser = new ObservableCollection<string>();
+            //UpdateDirectoryBrowser();
+            TmpUpdateDirectoryBrowser(); // for testing
             }
 
         /// <summary>
@@ -64,11 +70,11 @@ namespace PowershellGUI.Models
             {
             get
                 {
-                return _directoryBrowser;
+                return directoryBrowser;
                 }
             set
                 {
-                _directoryBrowser = value;
+                directoryBrowser = value;
                 OnPropertyChanged("DirectoryBrowser");
                 }
             }
@@ -92,5 +98,15 @@ namespace PowershellGUI.Models
             }
 
 
+        /// <summary>
+        /// Used for testing to build other functions
+        /// </summary>
+        public void TmpUpdateDirectoryBrowser()
+            {
+            directoryBrowser.Clear();
+            GetSelectedPsScript = _modulePath + "\\Active Directory\\" + "psfile1.ps1";
+            DirectoryBrowser.Add(GetSelectedPsScript);
+            OnPropertyChanged("DirectoryBrowser");
+            }
         }
     }
