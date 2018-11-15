@@ -68,11 +68,11 @@ namespace PowershellGUI.ViewModels
         /// Passes data between DirectoryReader, FileReader
         /// and PowershellParser.
         /// </summary>
-        public void executePowershellScript()
+        public void ExecutePowershellScript()
             {
-            // button click kaller på denne funk
+            // button click kaller på executePowershellScript()
             FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
-
+            FileReader.ReadFile();
             }
 
         }

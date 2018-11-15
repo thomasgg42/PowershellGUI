@@ -88,7 +88,7 @@
                     <TextBox />
                 </StackPanel>
             </Grid>
-            <Button Content="Run script" Margin="50 20 50 0" Click="{Binding Path=executePowershellScript()}"/>
+            <Button Content="Run script" Margin="50 20 50 0" Command="{Binding Path=ExecutePowershellScript()}"/>
             <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
             <TextBlock Height="235" 
                    FontSize="12" 

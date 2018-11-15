@@ -29,8 +29,13 @@ namespace PowershellGUI.Models
               [int]SomeNumber = "beskrivelse av somenumber"
               [bool]SomeBool = "beskrivelse av someBool"
               #>
+
+            // les fil der filsti er definert i FileURI
+            // parse fil metadata
 */
             string[] lines = System.IO.File.ReadAllLines(FileURI);
+            System.Console.WriteLine("test");
+            /*
             string desc, header, output;
             List<string> psArgumentList = new List<string>();
             int ii = 1;
@@ -47,6 +52,7 @@ namespace PowershellGUI.Models
                     }
                 ii++;
                 }
+                */
 
             }
 
