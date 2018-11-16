@@ -12,7 +12,7 @@ namespace PowershellGUI.Views
         public MainWindow()
             {
             InitializeComponent();
-            string relModulePath = @"..\..\..\Modules";
+            string relModulePath = @".\..\..\..\Modules"; // utestet om denne leder til riktig mappe
             DataContext = new ViewModel(relModulePath);
             
             // Scan antall mapper i ModulePath

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace PowershellGUI.Models
     {
@@ -24,7 +19,7 @@ namespace PowershellGUI.Models
         /// <summary>
         /// Returns the selected Powershell script's filepath
         /// </summary>
-        public string GetSelectedPsScript { get; private set; }
+        public string SelectedPsScript { get; private set; }
 
         /// <summary>
         /// Updates the directory browser to match the 
@@ -32,10 +27,14 @@ namespace PowershellGUI.Models
         /// </summary>
         private void UpdateDirectoryBrowser()
             {
-            // SIMEN HER KAN DU STARTE
+            // @SIMEN
+            // funksjonen har som mål å fylle directoryBrowser med powershellscriptene som kan velges
+
             // if/else dårlig mtp økning av antall kategorier i fremtiden
             // modulePath skal lede til topp-dir hvor AD/Exchange/Skype ligger
             directoryBrowser.Clear();
+
+            /*
             if (_activeButton == RadioButtons.ActiveDirectory)
                 {
                 directoryBrowser.Add("ad valgt");
@@ -48,6 +47,8 @@ namespace PowershellGUI.Models
                 {
                 directoryBrowser.Add("noe annet");
                 }
+
+            */
             OnPropertyChanged("DirectoryBrowser");
             }
 
@@ -104,8 +105,8 @@ namespace PowershellGUI.Models
         public void TmpUpdateDirectoryBrowser()
             {
             directoryBrowser.Clear();
-            GetSelectedPsScript = _modulePath + "\\Active Directory\\" + "psfile1.ps1";
-            DirectoryBrowser.Add(GetSelectedPsScript);
+            SelectedPsScript = _modulePath + "\\Active Directory\\psfile1.txt";
+            DirectoryBrowser.Add(SelectedPsScript);
             OnPropertyChanged("DirectoryBrowser");
             }
         }

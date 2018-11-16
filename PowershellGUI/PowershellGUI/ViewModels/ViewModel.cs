@@ -13,6 +13,9 @@ namespace PowershellGUI.ViewModels
         private ICommand _clickCommand;
         private bool     _canExecute;
 
+        /// <summary>
+        /// Handles the click-functionality of the Run script button
+        /// </summary>
         public ICommand ClickCommand
             {
             get
@@ -22,9 +25,13 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="modulePath"></param>
         public ViewModel(string modulePath)
             {
-            // Knapp er ikke grået ut, kan utføres, putt et annet sted
+            // Run script knappen er aktiv
             _canExecute = true;
 
             _DirectoryReader = new DirectoryReader(modulePath);
@@ -85,7 +92,7 @@ namespace PowershellGUI.ViewModels
         public void ExecutePowershellScript()
             {
             // button click kaller på executePowershellScript()
-             FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
+             FileReader.FileURI = DirectoryReader.SelectedPsScript;
              FileReader.ReadFile();
             }
         }

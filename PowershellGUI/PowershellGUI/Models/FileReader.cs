@@ -48,8 +48,8 @@ namespace PowershellGUI.Models
             // les fil der filsti er definert i FileURI
             // parse fil metadata
 */
-            //string[] lines = System.IO.File.ReadAllLines(FileURI);
-            FileContent = "toast";//lines[0];
+            string[] lines = System.IO.File.ReadAllLines(FileURI);
+            FileContent = lines[1];
             /*
             string desc, header, output;
             List<string> psArgumentList = new List<string>();
