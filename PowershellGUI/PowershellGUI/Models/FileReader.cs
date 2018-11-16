@@ -29,7 +29,7 @@ namespace PowershellGUI.Models
         /// </summary>
         public FileReader()
             {
-            _fileContent = "testcontent";
+            _fileContent = "";
             }
 
 
@@ -48,7 +48,7 @@ namespace PowershellGUI.Models
             // les fil der filsti er definert i FileURI
             // parse fil metadata
 */
-            string[] lines = System.IO.File.ReadAllLines(FileURI);
+            //string[] lines = System.IO.File.ReadAllLines(FileURI);
             FileContent = "toast";//lines[0];
             /*
             string desc, header, output;

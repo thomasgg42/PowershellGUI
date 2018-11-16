@@ -1,4 +1,5 @@
 ﻿using PowershellGUI.Models;
+using System.Windows.Input;
 
 namespace PowershellGUI.ViewModels
     {
@@ -9,10 +10,23 @@ namespace PowershellGUI.ViewModels
         private PowershellParser    _PowershellParser;
         private ComparisonConverter _ComparisonConverter;
 
+        private ICommand _clickCommand;
+        private bool     _canExecute;
 
+        public ICommand ClickCommand
+            {
+            get
+                {
+                // "Coalescing operator"
+                return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), _canExecute));
+                }
+            }
 
         public ViewModel(string modulePath)
             {
+            // Knapp er ikke grået ut, kan utføres, putt et annet sted
+            _canExecute = true;
+
             _DirectoryReader = new DirectoryReader(modulePath);
             _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
@@ -71,8 +85,8 @@ namespace PowershellGUI.ViewModels
         public void ExecutePowershellScript()
             {
             // button click kaller på executePowershellScript()
-            FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
-            FileReader.ReadFile();
+             FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
+             FileReader.ReadFile();
             }
         }
     }
