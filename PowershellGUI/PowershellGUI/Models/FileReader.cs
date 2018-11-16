@@ -49,7 +49,7 @@ namespace PowershellGUI.Models
             // parse fil metadata
 */
             string[] lines = System.IO.File.ReadAllLines(FileURI);
-            System.Console.WriteLine("test");
+            FileContent = "toast";//lines[0];
             /*
             string desc, header, output;
             List<string> psArgumentList = new List<string>();

@@ -74,6 +74,5 @@ namespace PowershellGUI.ViewModels
             FileReader.FileURI = DirectoryReader.GetSelectedPsScript;
             FileReader.ReadFile();
             }
-
         }
     }
