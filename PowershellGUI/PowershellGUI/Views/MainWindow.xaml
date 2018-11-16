@@ -79,7 +79,7 @@
                 <StackPanel Grid.Column="1" >
                     <TextBlock Text="Department" />
                     <!-- Binding example test -->
-                    <TextBox Text="{Binding Path=FileReader.DirectoryBrowser}"/>
+                    <TextBox Text=""/>
 
                     <TextBlock Text="Location" />
                     <TextBox />
@@ -94,7 +94,7 @@
                    FontSize="12" 
                    TextWrapping="Wrap" 
                    Foreground="Black"
-                   Text="Lorem ipsum dolor, lorem isum dolor,Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet " />
+                   Text="{Binding Path=FileReader.FileContent}" />
         </StackPanel>
     </Border>
 </Window>

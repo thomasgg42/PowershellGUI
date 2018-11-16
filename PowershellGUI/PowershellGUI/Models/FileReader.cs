@@ -9,12 +9,27 @@ namespace PowershellGUI.Models
     class FileReader : ObservableObject
         {
         public string FileURI { get; set; }
+        public string _fileContent;
+
+        public string FileContent
+            {
+            get
+                {
+                return _fileContent;
+                }
+            set
+                {
+                _fileContent = value;
+                OnPropertyChanged("FileContent");
+                }
+            }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FileReader()
             {
+            _fileContent = "testcontent";
             }
 
 
