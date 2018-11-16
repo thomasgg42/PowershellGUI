@@ -9,7 +9,13 @@ namespace PowershellGUI.Models
     class FileReader : ObservableObject
         {
         public string FileURI { get; set; }
-        public string _fileContent;
+
+        private string scriptDescription;
+        private string scriptHeader;
+        private string scriptOutput;
+        private List<string> scriptVariables;
+
+        private string _fileContent;
 
         public string FileContent
             {
@@ -29,10 +35,60 @@ namespace PowershellGUI.Models
         /// </summary>
         public FileReader()
             {
-            _fileContent = "";
+            scriptVariables   = new List<string>();
+            _fileContent      = "";
+            scriptDescription = "";
+            scriptHeader      = "";
+            scriptOutput      = "";
+            }
+
+        /// <summary>
+        /// Parses the powershell script header's top area.
+        /// </summary>
+        /// <param name="lineNum"></param>
+        /// <param name="line"></param>
+        private void ParseScriptHeader(int lineNum, string line)
+            {
+            // logic to separate variable names from variable content
+            const int description = 1;
+            const int header      = 2;
+            const int output      = 3;
+
+            switch (lineNum)
+                {
+                case description:
+                    {
+                    scriptDescription = line;
+                    break;
+                    }
+                case header:
+                    {
+                    scriptHeader = line;
+                    break;
+                    }
+                case output:
+                    {
+                    scriptOutput = line;
+                    break;
+                    }
+                }
+            }
+
+        /// <summary>
+        /// Parses the Powershell script header's bottom area.
+        /// </summary>
+        /// <param name="line"></param>
+        private void ParseScriptVariables(string line)
+            {
+            // logic to separate variablename from variable content
+            scriptVariables.Add(line);
             }
 
 
+        /// <summary>
+        /// Parses a powerscript file and saves the 
+        /// header contents.
+        /// </summary>
         public void ReadFile()
             {
 /*
@@ -45,31 +101,36 @@ namespace PowershellGUI.Models
               [bool]SomeBool = "beskrivelse av someBool"
               #>
 
-            // les fil der filsti er definert i FileURI
-            // parse fil metadata
+            foreach(Match match in Regex.Matches(inputString, "\"([^\"]*)\""))
+    Console.WriteLine(match.ToString());
 */
-            string[] lines = System.IO.File.ReadAllLines(FileURI);
-            FileContent = lines[1];
-            /*
-            string desc, header, output;
-            List<string> psArgumentList = new List<string>();
-            int ii = 1;
-            bool varSectionEnd = false;
+            string[] lines         = System.IO.File.ReadAllLines(FileURI);
+            string scriptHeaderEnd = "#>";
+            int lineNum            = 0;
+            int lastHeaderLine     = 3;
+
             foreach (string line in lines)
                 {
-                // if line starts with #> break
-                if(ii == 1) { desc = line; }
-                if(ii == 2) { header = line; }
-                if(ii == 3) { output = line; }
-                if(ii > 3 && varSectionEnd == false)
+                // if header is completely parsed
+                if (line == scriptHeaderEnd)
                     {
-                    psArgumentList.Add(line);
+                    break;
                     }
-                ii++;
+                // If description, header or output
+                if (lineNum <= lastHeaderLine)
+                    {
+                    ParseScriptHeader(lineNum, line);
+                    }
+                // else if input variables to script
+                else
+                    {
+                    ParseScriptVariables(line);
+                    }
+                lineNum++;
                 }
-                */
-
+            FileContent = scriptDescription;
             }
+
 
         }
     }

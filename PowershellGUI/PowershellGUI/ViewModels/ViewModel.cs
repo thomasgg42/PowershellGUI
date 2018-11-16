@@ -92,8 +92,9 @@ namespace PowershellGUI.ViewModels
         public void ExecutePowershellScript()
             {
             // button click kaller på executePowershellScript()
-             FileReader.FileURI = DirectoryReader.SelectedPsScript;
-             FileReader.ReadFile();
+            FileReader.FileURI = DirectoryReader.SelectedPsScript;
+            FileReader.ReadFile();
+            PowershellParser.ExecuteScript();
             }
         }
     }

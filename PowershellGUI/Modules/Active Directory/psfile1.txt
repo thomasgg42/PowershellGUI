@@ -1,4 +1,15 @@
 <#
-User="Test"
-Name="NameTest"
+Description = "beskrivelse"
+Header = "Funksjonsnavn"
+Output = "True"
+[string]Username = "beskrivelse av CLI"
+[int]SomeNumber = "beskrivelse av somenumber"
+[bool]SomeBool = "beskrivelse av someBool"
 #>
+foreach(user in users) {
+Get-ADUser -Identity "h804602" -properties *
+
+whoami
+
+netstat -a -b
+}

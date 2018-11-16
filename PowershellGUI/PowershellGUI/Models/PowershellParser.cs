@@ -16,5 +16,11 @@ namespace PowershellGUI.Models
             {
 
             }
+
+        public void ExecuteScript()
+            {
+
+            }
+
         }
     }
