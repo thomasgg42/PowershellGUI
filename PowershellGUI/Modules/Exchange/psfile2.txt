@@ -1,0 +1,15 @@
+<#
+Description = "psfile2 beskrivelse"
+Header = "psfile 2Funksjonsnavn"
+Output = "True"
+[string]Username = "psfile 2 beskrivelse av CLI"
+[int]SomeNumber = "psfile 2 beskrivelse av somenumber"
+[bool]SomeBool = "psfile 2 beskrivelse av someBool"
+#>
+foreach(user in users) {
+Get-ADUser -Identity "h804602" -properties *
+
+whoami
+
+netstat -a -b
+}

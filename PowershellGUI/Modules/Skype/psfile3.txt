@@ -1,0 +1,15 @@
+<#
+Description = "3beskrivelse"
+Header = "3Funksjonsnavn"
+Output = "True"
+[string]Username = "3beskrivelse av CLI"
+[int]SomeNumber = "3beskrivelse av somenumber"
+[bool]SomeBool = "3beskrivelse av someBool"
+#>
+foreach(user in users) {
+Get-ADUser -Identity "h804602" -properties *
+
+whoami
+
+netstat -a -b
+}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace PowershellGUI.Models
     {
@@ -12,14 +13,42 @@ namespace PowershellGUI.Models
 
     class DirectoryReader : ObservableObject
         {
+        private bool   _isScriptSelected;
         private string _modulePath;
-        private ObservableCollection<string> directoryBrowser; // trenge kanskje ObservableCollection<string> 
+        private string _selectedPsScript;
+        private ObservableCollection<string> directoryBrowser;
         private RadioButtons _activeButton;
 
         /// <summary>
         /// Returns the selected Powershell script's filepath
         /// </summary>
-        public string SelectedPsScript { get; private set; }
+        public string SelectedPsScript
+            {
+            get
+                {
+                return _selectedPsScript;
+                }
+            set
+                {
+                _selectedPsScript = value;
+                OnPropertyChanged("SelectedPsScript");
+                IsScriptSelected = true;
+                }
+            }
+
+        public bool IsScriptSelected
+            {
+            get
+                {
+                return _isScriptSelected;
+                }
+            set
+                {
+                _isScriptSelected = value;
+                OnPropertyChanged("IsScriptSelected");
+                }
+            }
+
 
         /// <summary>
         /// Updates the directory browser to match the 
@@ -57,8 +86,9 @@ namespace PowershellGUI.Models
         /// </summary>
         public DirectoryReader(string modulePath)
             {
-            _modulePath       = modulePath;
-            _activeButton     = RadioButtons.ActiveDirectory;
+            _isScriptSelected = false;
+            _modulePath      = modulePath;
+            _activeButton    = RadioButtons.ActiveDirectory;
             directoryBrowser = new ObservableCollection<string>();
             //UpdateDirectoryBrowser();
             TmpUpdateDirectoryBrowser(); // for testing
@@ -94,7 +124,9 @@ namespace PowershellGUI.Models
                 {
                 _activeButton = value;
                 OnPropertyChanged("ActiveButton");
-                UpdateDirectoryBrowser();
+                //UpdateDirectoryBrowser();
+                TmpUpdateDirectoryBrowser();
+                IsScriptSelected = false;
                 }
             }
 
@@ -104,10 +136,24 @@ namespace PowershellGUI.Models
         /// </summary>
         public void TmpUpdateDirectoryBrowser()
             {
+            // Denne kan ikke sette SelectedScript
+            // Den skal kun fylle ComboBox med tilgjengelige scripts
+            // SelectedScript skal settes i det et script er valgt!
             directoryBrowser.Clear();
-            SelectedPsScript = _modulePath + "\\Active Directory\\psfile1.txt";
-            DirectoryBrowser.Add(SelectedPsScript);
-            OnPropertyChanged("DirectoryBrowser");
+            string script = "";
+            if(_activeButton == RadioButtons.ActiveDirectory)
+                {
+                script = _modulePath + "\\Active Directory\\psfile1.txt";
+                }
+            else if(_activeButton == RadioButtons.Exchange)
+                {
+                script = _modulePath + "\\Exchange\\psfile2.txt";
+                }
+            else if(_activeButton == RadioButtons.Skype)
+                {
+                script = _modulePath + "\\Skype\\psfile3.txt";
+                }
+            DirectoryBrowser.Add(script);
             }
         }
     }

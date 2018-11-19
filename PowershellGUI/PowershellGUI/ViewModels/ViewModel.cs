@@ -13,6 +13,22 @@ namespace PowershellGUI.ViewModels
         private ICommand _clickCommand;
         private bool     _canExecute;
 
+        public bool CanExecute
+            {
+            get
+                {
+                return _canExecute;
+                }
+            set
+                {
+                if(_canExecute == value)
+                    {
+                    return;
+                    }
+                _canExecute = value;
+                }
+            }
+
         /// <summary>
         /// Handles the click-functionality of the Run script button
         /// </summary>
@@ -21,7 +37,13 @@ namespace PowershellGUI.ViewModels
             get
                 {
                 // "Coalescing operator"
-                return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), _canExecute));
+                //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), CanExecute()));
+                //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), DirectoryReader.IsScriptSelected));
+                return _clickCommand;
+                }
+            set
+                {
+                _clickCommand = value;
                 }
             }
 
@@ -31,13 +53,16 @@ namespace PowershellGUI.ViewModels
         /// <param name="modulePath"></param>
         public ViewModel(string modulePath)
             {
-            // Run script knappen er aktiv
-            _canExecute = true;
-
+            // Run script knappen er inaktiv til et script velges
+            // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
+            // Nederste textbox demostrerer dette - alltid false!
             _DirectoryReader = new DirectoryReader(modulePath);
             _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
+
+            _canExecute = DirectoryReader.IsScriptSelected;
+            ClickCommand = new CommandHandler(ExecutePowershellScript, _canExecute);
             }
 
         /// <summary>
@@ -84,6 +109,7 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
+
         /// <summary>
         /// Executes a Powershell script
         /// Passes data between DirectoryReader, FileReader
@@ -91,10 +117,13 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         public void ExecutePowershellScript()
             {
-            // button click kaller på executePowershellScript()
-            FileReader.FileURI = DirectoryReader.SelectedPsScript;
-            FileReader.ReadFile();
-            PowershellParser.ExecuteScript();
+            // disse to skal trigges når drop down valg velges..
+           // FileReader.FileURI = DirectoryReader.SelectedPsScript;
+           // FileReader.ReadFile();
+
+
+           // PowershellParser.ExecuteScript();
             }
+
         }
     }

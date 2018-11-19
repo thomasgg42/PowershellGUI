@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +105,7 @@ namespace PowershellGUI.Models
             foreach(Match match in Regex.Matches(inputString, "\"([^\"]*)\""))
     Console.WriteLine(match.ToString());
 */
+
             string[] lines         = System.IO.File.ReadAllLines(FileURI);
             string scriptHeaderEnd = "#>";
             int lineNum            = 0;
@@ -128,7 +130,8 @@ namespace PowershellGUI.Models
                     }
                 lineNum++;
                 }
-            FileContent = scriptDescription;
+            // output test
+            FileContent = scriptHeader;
             }
 
 
