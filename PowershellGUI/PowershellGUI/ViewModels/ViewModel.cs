@@ -1,4 +1,5 @@
 ﻿using PowershellGUI.Models;
+using System;
 using System.Windows.Input;
 
 namespace PowershellGUI.ViewModels
@@ -11,23 +12,8 @@ namespace PowershellGUI.ViewModels
         private ComparisonConverter _ComparisonConverter;
 
         private ICommand _clickCommand;
-        private bool     _canExecute;
+        private Predicate<object> _canExecute;
 
-        public bool CanExecute
-            {
-            get
-                {
-                return _canExecute;
-                }
-            set
-                {
-                if(_canExecute == value)
-                    {
-                    return;
-                    }
-                _canExecute = value;
-                }
-            }
 
         /// <summary>
         /// Handles the click-functionality of the Run script button
@@ -56,13 +42,10 @@ namespace PowershellGUI.ViewModels
             // Run script knappen er inaktiv til et script velges
             // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
             // Nederste textbox demostrerer dette - alltid false!
-            _DirectoryReader = new DirectoryReader(modulePath);
-            _FileReader = new FileReader();
-            _PowershellParser = new PowershellParser();
+            _DirectoryReader     = new DirectoryReader(modulePath);
+            _FileReader          = new FileReader();
+            _PowershellParser    = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
-
-            _canExecute = DirectoryReader.IsScriptSelected;
-            ClickCommand = new CommandHandler(ExecutePowershellScript, _canExecute);
             }
 
         /// <summary>
