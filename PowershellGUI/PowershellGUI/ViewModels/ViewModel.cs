@@ -124,10 +124,10 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         public void ExecutePowershellScript(object obj)
             {
-            System.Windows.MessageBox.Show("test");
+            
             // disse to skal trigges når drop down valg velges..
-           // FileReader.FileURI = DirectoryReader.SelectedPsScript;
-           // FileReader.ReadFile();
+            FileReader.FileURI = DirectoryReader.SelectedPsScript;
+            FileReader.ReadFile();
 
 
            // PowershellParser.ExecuteScript();

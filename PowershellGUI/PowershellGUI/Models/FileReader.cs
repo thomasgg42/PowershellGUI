@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PowershellGUI.Models
@@ -82,7 +83,16 @@ namespace PowershellGUI.Models
         private void ParseScriptVariables(string line)
             {
             // logic to separate variablename from variable content
-            scriptVariables.Add(line);
+
+            string cleanOutput = ParseTextContents(line);
+            scriptVariables.Add(cleanOutput);
+            }
+
+        private string ParseTextContents(string line)
+            {
+            Regex regx;
+
+            return "";
             }
 
 
@@ -129,9 +139,15 @@ namespace PowershellGUI.Models
                     ParseScriptVariables(line);
                     }
                 lineNum++;
+               // FileContent += line;
                 }
             // output test
-            FileContent = scriptHeader;
+            /*
+            foreach(string line in scriptVariables)
+                {
+                FileContent += line;
+                }
+            */
             }
 
 
