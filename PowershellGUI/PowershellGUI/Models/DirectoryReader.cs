@@ -49,7 +49,6 @@ namespace PowershellGUI.Models
                 }
             }
 
-
         /// <summary>
         /// Updates the directory browser to match the 
         /// selected category.

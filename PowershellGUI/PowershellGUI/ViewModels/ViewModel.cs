@@ -12,7 +12,6 @@ namespace PowershellGUI.ViewModels
         private ComparisonConverter _ComparisonConverter;
 
         private ICommand _clickCommand;
-        private bool _canExecute;
 
 
         /// <summary>
@@ -28,19 +27,7 @@ namespace PowershellGUI.ViewModels
             _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
-            }
-
-        public bool IsScriptSelected
-            {
-            get
-                {
-                return DirectoryReader.IsScriptSelected;
-                }
-            set
-                {
-                DirectoryReader.IsScriptSelected = value;
-                _canExecute = DirectoryReader.IsScriptSelected;
-                }
+            _clickCommand = new CommandHandler(ExecutePowershellScript, CanExecute);
             }
 
         /// <summary>
@@ -50,14 +37,18 @@ namespace PowershellGUI.ViewModels
             {
             get
                 {
+                return _clickCommand;
                 // "Coalescing operator"
                 //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), CanExecute()));
                 //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), DirectoryReader.IsScriptSelected));
-                if(_clickCommand == null)
+                /*
+                if (_clickCommand == null)
                     {
-                    _clickCommand = new CommandHandler(ExecutePowershellScript, _canExecute);
+
+                    _clickCommand = new CommandHandler(ExecutePowershellScript, IsScriptSelected);
                     }
                 return _clickCommand;
+                */
                 }
             set
                 {
@@ -65,7 +56,22 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
-
+        /// <summary>
+        /// Decides if the execute button is active or not.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CanExecute(object parameter)
+            {
+            if (DirectoryReader.IsScriptSelected)
+                {
+                return true;
+                }
+            else
+                {
+                return false;
+                }
+            }
 
         /// <summary>
         /// Gets the DirectoryReader instance
@@ -111,16 +117,14 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
-
-
-
         /// <summary>
         /// Executes a Powershell script
         /// Passes data between DirectoryReader, FileReader
         /// and PowershellParser.
         /// </summary>
-        public void ExecutePowershellScript()
+        public void ExecutePowershellScript(object obj)
             {
+            System.Windows.MessageBox.Show("test");
             // disse to skal trigges når drop down valg velges..
            // FileReader.FileURI = DirectoryReader.SelectedPsScript;
            // FileReader.ReadFile();

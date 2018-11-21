@@ -1,11 +1,4 @@
-﻿/*
- * Credit: ethicallogics @Stackoverflow
- * https://stackoverflow.com/questions/12422945/how-to-bind-wpf-button-to-a-command-in-viewmodelbase
- * 
- * ser ut til at denne skal inn i view model
- */
-
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace PowershellGUI
@@ -15,39 +8,58 @@ namespace PowershellGUI
     /// </summary>
     public class CommandHandler : ICommand
         {
-        Action _execAction;
-        bool   _canExecAction;
+        private Action<object>     _executeAction;
+        private Func<object, bool> _canExecuteAction;
+        private event EventHandler CanExecuteChangedInternal;
 
-
-        public CommandHandler(Action execAction, bool canExecAction)
+        public CommandHandler(Action<object> execAction, Func<object, bool> canExecAction)
             {
-            _execAction = execAction;
-            _canExecAction = canExecAction;
+            _executeAction = execAction;
+            _canExecuteAction = canExecAction;
             }
 
         public event EventHandler CanExecuteChanged
             {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            // event logic which runs canExecute continously
+            add
+                {
+                CommandManager.RequerySuggested += value;
+                CanExecuteChangedInternal += value;
+                }
+            remove {
+                CommandManager.RequerySuggested -= value;
+                CanExecuteChangedInternal += value;
+                }
             }
-
-        public void RaiseCanExecuteChanged()
-            {
-
-            }
-
 
         public bool CanExecute(object parameter)
             {
-            return _canExecAction;
+            // return _canExecuteAction != null && canExecute(parameter);
+            // return _canExecuteAction;
+            if(_canExecuteAction != null)
+                {
+                return _canExecuteAction(parameter);
+                }
+            else
+                {
+                return false;
+                }
             }
-    
+
         public void Execute(object parameter)
             {
             // kjøres om CanExecute returnerer true
             // her kjøres logikken
-            _execAction();
+            _executeAction(parameter);
             }
 
+        public void OnCanExecuteChanged()
+            {
+            EventHandler handler = CanExecuteChangedInternal;
+            if(handler != null)
+                {
+                handler.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
     }
