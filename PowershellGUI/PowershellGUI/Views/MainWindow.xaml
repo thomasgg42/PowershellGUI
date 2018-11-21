@@ -87,7 +87,7 @@
                     <TextBox Text="{Binding Path=DirectoryReader.IsScriptSelected}"/>
 
                     <TextBlock Text="Language" />
-                    <TextBox Text="{Binding Path=CanExecute}"/>
+                    <TextBox Text="{Binding Path=IsScriptSelected}"/>
                 </StackPanel>
             </Grid>
             <Button Content="Run script" Margin="50 20 50 0" Command="{Binding Path=ClickCommand}"/>

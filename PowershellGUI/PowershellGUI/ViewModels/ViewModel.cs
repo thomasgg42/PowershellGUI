@@ -12,8 +12,36 @@ namespace PowershellGUI.ViewModels
         private ComparisonConverter _ComparisonConverter;
 
         private ICommand _clickCommand;
-        private Predicate<object> _canExecute;
+        private bool _canExecute;
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="modulePath"></param>
+        public ViewModel(string modulePath)
+            {
+            // Run script knappen er inaktiv til et script velges
+            // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
+            // Nederste textbox demostrerer dette - alltid false!
+            _DirectoryReader = new DirectoryReader(modulePath);
+            _FileReader = new FileReader();
+            _PowershellParser = new PowershellParser();
+            _ComparisonConverter = new ComparisonConverter();
+            }
+
+        public bool IsScriptSelected
+            {
+            get
+                {
+                return DirectoryReader.IsScriptSelected;
+                }
+            set
+                {
+                DirectoryReader.IsScriptSelected = value;
+                _canExecute = DirectoryReader.IsScriptSelected;
+                }
+            }
 
         /// <summary>
         /// Handles the click-functionality of the Run script button
@@ -25,6 +53,10 @@ namespace PowershellGUI.ViewModels
                 // "Coalescing operator"
                 //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), CanExecute()));
                 //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), DirectoryReader.IsScriptSelected));
+                if(_clickCommand == null)
+                    {
+                    _clickCommand = new CommandHandler(ExecutePowershellScript, _canExecute);
+                    }
                 return _clickCommand;
                 }
             set
@@ -33,20 +65,7 @@ namespace PowershellGUI.ViewModels
                 }
             }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="modulePath"></param>
-        public ViewModel(string modulePath)
-            {
-            // Run script knappen er inaktiv til et script velges
-            // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
-            // Nederste textbox demostrerer dette - alltid false!
-            _DirectoryReader     = new DirectoryReader(modulePath);
-            _FileReader          = new FileReader();
-            _PowershellParser    = new PowershellParser();
-            _ComparisonConverter = new ComparisonConverter();
-            }
+
 
         /// <summary>
         /// Gets the DirectoryReader instance
@@ -91,6 +110,8 @@ namespace PowershellGUI.ViewModels
                 return _ComparisonConverter;
                 }
             }
+
+
 
 
         /// <summary>

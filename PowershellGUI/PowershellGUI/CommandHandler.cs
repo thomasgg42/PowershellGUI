@@ -15,29 +15,38 @@ namespace PowershellGUI
     /// </summary>
     public class CommandHandler : ICommand
         {
-        Action<object>     _execAction;
-        Func<bool, object> _canExecAction;
+        Action _execAction;
+        bool   _canExecAction;
 
-        public CommandHandler(Action<object> execAction, Func<bool, object> canExecAction)
+
+        public CommandHandler(Action execAction, bool canExecAction)
             {
             _execAction = execAction;
             _canExecAction = canExecAction;
             }
 
-        public EventHandler CanExecuteChanged
+        public event EventHandler CanExecuteChanged
+            {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+            }
+
+        public void RaiseCanExecuteChanged()
             {
 
             }
 
+
         public bool CanExecute(object parameter)
             {
-            // bestemmer om utføre kommando
+            return _canExecAction;
             }
     
         public void Execute(object parameter)
             {
             // kjøres om CanExecute returnerer true
             // her kjøres logikken
+            _execAction();
             }
 
         }
