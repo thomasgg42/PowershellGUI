@@ -15,9 +15,11 @@ namespace PowershellGUI.Models
         private string scriptDescription;
         private string scriptHeader;
         private string scriptOutput;
-        private List<string> scriptVariables;
-
         private string _fileContent;
+
+        Dictionary<string, string> scriptVariables;
+
+        
 
         public string FileContent
             {
@@ -37,7 +39,7 @@ namespace PowershellGUI.Models
         /// </summary>
         public FileReader()
             {
-            scriptVariables   = new List<string>();
+            scriptVariables   = new Dictionary<string, string>();
             _fileContent      = "";
             scriptDescription = "";
             scriptHeader      = "";
@@ -80,19 +82,41 @@ namespace PowershellGUI.Models
         /// Parses the Powershell script header's bottom area.
         /// </summary>
         /// <param name="line"></param>
-        private void ParseScriptVariables(string line)
+        private void GetScriptVariables(string line)
             {
-            // logic to separate variablename from variable content
-
-            string cleanOutput = ParseTextContents(line);
-            scriptVariables.Add(cleanOutput);
+            string varName    = ParseVariableName(line);
+            string varContent = ParseQuotationContent(line);
+            scriptVariables.Add(varName, varContent);
             }
 
-        private string ParseTextContents(string line)
+        /// <summary>
+        /// Gets the variable name from a string from the 
+        /// script header's input variables section.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private string ParseVariableName(string line)
             {
-            Regex regx;
+            string[] temp = line.Split(' ');
+            int varNameIndex = 0;
+            return temp[varNameIndex];
+            }
 
-            return "";
+        /// <summary>
+        /// Gets the content inside quotation marks in a string.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private string ParseQuotationContent(string line)
+            {
+            Regex regex    = new Regex("\".*?\"");
+            var match      = regex.Match(line);
+            string content = (match.ToString());
+            int firstChar  = 1;
+            int lastChar   = content.Length;
+            content = content.Substring(firstChar);
+            content = content.Substring(0, lastChar - 2);
+            return content;
             }
 
 
@@ -111,9 +135,6 @@ namespace PowershellGUI.Models
               [int]SomeNumber = "beskrivelse av somenumber"
               [bool]SomeBool = "beskrivelse av someBool"
               #>
-
-            foreach(Match match in Regex.Matches(inputString, "\"([^\"]*)\""))
-    Console.WriteLine(match.ToString());
 */
 
             string[] lines         = System.IO.File.ReadAllLines(FileURI);
@@ -124,30 +145,18 @@ namespace PowershellGUI.Models
             foreach (string line in lines)
                 {
                 // if header is completely parsed
-                if (line == scriptHeaderEnd)
-                    {
-                    break;
-                    }
+                if (line == scriptHeaderEnd)   { break; }
                 // If description, header or output
-                if (lineNum <= lastHeaderLine)
-                    {
-                    ParseScriptHeader(lineNum, line);
-                    }
+                if (lineNum <= lastHeaderLine) { ParseScriptHeader(lineNum, line); }
                 // else if input variables to script
-                else
-                    {
-                    ParseScriptVariables(line);
-                    }
+                else { GetScriptVariables(line); }
                 lineNum++;
-               // FileContent += line;
                 }
-            // output test
-            /*
-            foreach(string line in scriptVariables)
+
+            foreach(KeyValuePair<string, string> variable in scriptVariables)
                 {
-                FileContent += line;
+                FileContent += variable.Key + " = " + variable.Value + '\n';
                 }
-            */
             }
 
 

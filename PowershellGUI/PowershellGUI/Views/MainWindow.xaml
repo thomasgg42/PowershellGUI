@@ -59,8 +59,8 @@
             <!-- Input field -->
             <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
             <Grid MaxHeight="150">
-                <!-- Test text boxes -->
-                <Grid.ColumnDefinitions>
+                
+                <!--                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -69,9 +69,8 @@
                     <TextBlock Text="User ID" />
                     <TextBox />
 
-                  
+
                     <TextBlock Text="Group Name" />
-                    <!-- Binding example test -->
                     <TextBox Text="{Binding Path=DirectoryReader.ActiveButton,
                                             UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -80,7 +79,6 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" >
                     <TextBlock Text="Department" />
-                    <!-- Binding example test -->
                     <TextBox Text=""/>
 
                     <TextBlock Text="Location" />
@@ -89,6 +87,7 @@
                     <TextBlock Text="Language" />
                     <TextBox Text="{Binding Path=IsScriptSelected}"/>
                 </StackPanel>
+                -->
             </Grid>
             <Button Content="Run script" Margin="50 20 50 0" Command="{Binding Path=ClickCommand}"/>
             <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />

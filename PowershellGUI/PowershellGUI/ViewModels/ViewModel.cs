@@ -57,23 +57,6 @@ namespace PowershellGUI.ViewModels
             }
 
         /// <summary>
-        /// Decides if the execute button is active or not.
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        public bool CanExecute(object parameter)
-            {
-            if (DirectoryReader.IsScriptSelected)
-                {
-                return true;
-                }
-            else
-                {
-                return false;
-                }
-            }
-
-        /// <summary>
         /// Gets the DirectoryReader instance
         /// </summary>
         public DirectoryReader DirectoryReader
@@ -115,6 +98,18 @@ namespace PowershellGUI.ViewModels
                 {
                 return _ComparisonConverter;
                 }
+            }
+
+        /// <summary>
+        /// Decides if the execute button is active or not.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CanExecute(object parameter)
+            {
+            // må ogå sjekke om alle input felt har tekst i seg
+
+            return DirectoryReader.IsScriptSelected;
             }
 
         /// <summary>

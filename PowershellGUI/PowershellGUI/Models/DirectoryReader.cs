@@ -36,6 +36,9 @@ namespace PowershellGUI.Models
                 }
             }
 
+        /// <summary>
+        /// Gets or sets the boolean value true if a script is selected.
+        /// </summary>
         public bool IsScriptSelected
             {
             get
