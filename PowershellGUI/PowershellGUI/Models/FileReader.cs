@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,21 @@ namespace PowershellGUI.Models
         private string scriptOutput;
         private string _fileContent;
 
-        Dictionary<string, string> scriptVariables;
+        // Ønsket oprinnelig Dictionary, men denne er ikke "observable"
+        // IDictionary interfacet var tungvint å implementere
+        private ObservableCollection<KeyValuePair> _scriptVariables;
 
-        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FileReader()
+            {
+            _scriptVariables = new ObservableCollection<KeyValuePair>();
+            _fileContent = "";
+            scriptDescription = "";
+            scriptHeader = "";
+            scriptOutput = "";
+            }
 
         public string FileContent
             {
@@ -34,16 +47,17 @@ namespace PowershellGUI.Models
                 }
             }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FileReader()
+        public ObservableCollection<KeyValuePair> ScriptVariables
             {
-            scriptVariables   = new Dictionary<string, string>();
-            _fileContent      = "";
-            scriptDescription = "";
-            scriptHeader      = "";
-            scriptOutput      = "";
+            get
+                {
+                return _scriptVariables;
+                }
+            set
+                {
+                _scriptVariables = value;
+                OnPropertyChanged("ScriptVariables");
+                }
             }
 
         /// <summary>
@@ -84,9 +98,12 @@ namespace PowershellGUI.Models
         /// <param name="line"></param>
         private void GetScriptVariables(string line)
             {
+            // 
             string varName    = ParseVariableName(line);
             string varContent = ParseQuotationContent(line);
-            scriptVariables.Add(varName, varContent);
+            KeyValuePair kwPair = new KeyValuePair(varName, varContent);
+            _scriptVariables.Add(kwPair);
+            OnPropertyChanged("ScriptVariables");
             }
 
         /// <summary>
@@ -111,7 +128,7 @@ namespace PowershellGUI.Models
             {
             Regex regex    = new Regex("\".*?\"");
             var match      = regex.Match(line);
-            string content = (match.ToString());
+            string content = match.ToString();
             int firstChar  = 1;
             int lastChar   = content.Length;
             content = content.Substring(firstChar);
@@ -153,9 +170,9 @@ namespace PowershellGUI.Models
                 lineNum++;
                 }
 
-            foreach(KeyValuePair<string, string> variable in scriptVariables)
+            foreach(KeyValuePair variable in _scriptVariables)
                 {
-                FileContent += variable.Key + " = " + variable.Value + '\n';
+                FileContent += variable.InputKey + " = " + variable.InputValue + '\n';
                 }
             }
 
