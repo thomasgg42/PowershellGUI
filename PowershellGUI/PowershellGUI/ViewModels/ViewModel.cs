@@ -1,5 +1,6 @@
 ﻿using PowershellGUI.Models;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace PowershellGUI.ViewModels
@@ -11,7 +12,9 @@ namespace PowershellGUI.ViewModels
         private PowershellParser    _PowershellParser;
         private ComparisonConverter _ComparisonConverter;
 
+
         private ICommand _clickCommand;
+        private ObservableCollection<string> InputCollection { get; set; } // for input boxes (num input variables)
 
 
         /// <summary>

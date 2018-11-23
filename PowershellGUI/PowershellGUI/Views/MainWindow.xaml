@@ -59,6 +59,13 @@
             <!-- Input field -->
             <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
             <Grid MaxHeight="150">
+                <ItemsControl ItemsSource="{Binding Path=InputCollection}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBox />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 
                 <!--                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
