@@ -112,8 +112,32 @@ namespace PowershellGUI.ViewModels
         public bool CanExecute(object parameter)
             {
             // må ogå sjekke om alle input felt har tekst i seg
-
             return DirectoryReader.IsScriptSelected;
+            }
+
+        /// <summary>
+        /// Gets or sets the selected powershell script. 
+        /// </summary>
+        public string SelectedPsScript
+            {
+            get
+                {
+                FileReader.FileURI = DirectoryReader.SelectedPsScript;
+                if(FileReader.FileURI != null)
+                    {
+                    FileReader.ReadFile();
+                    }
+                else
+                    {
+                    // Clear input fields if no URI selected
+                    FileReader.ScriptVariables.Clear();
+                    }
+                return DirectoryReader.SelectedPsScript;
+                }
+            set
+                {
+                DirectoryReader.SelectedPsScript = value;
+                }
             }
 
         /// <summary>
@@ -123,11 +147,6 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         public void ExecutePowershellScript(object obj)
             {
-            
-            // disse to skal trigges når drop down valg velges..
-            FileReader.FileURI = DirectoryReader.SelectedPsScript;
-            FileReader.ReadFile();
-
 
            // PowershellParser.ExecuteScript();
             }

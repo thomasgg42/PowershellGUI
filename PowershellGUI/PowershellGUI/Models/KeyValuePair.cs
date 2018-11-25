@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace PowershellGUI.Models
     {
+    /// <summary>
+    /// Dictionary-alike class providing a key and a value pair.
+    /// </summary>
     class KeyValuePair
         {
         private string _inputKey;
         private string _inputValue;
+        private string _inputType;
 
-        public KeyValuePair(string key, string value)
+        public KeyValuePair(string key, string value, string type)
             {
             _inputKey   = key;
             _inputValue = value;
+            _inputType = type;
             }
 
         public string InputKey
@@ -38,6 +43,18 @@ namespace PowershellGUI.Models
             set
                 {
                 _inputValue = value;
+                }
+            }
+
+        public string InputType
+            {
+            get
+                {
+                return _inputType;
+                }
+            set
+                {
+                _inputType = value;
                 }
             }
         }

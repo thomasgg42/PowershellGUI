@@ -8,10 +8,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="450">
 
-    <!-- Makes sure Converter={StaticResource ComparisonConverter} finds the correct class -->
     <Window.Resources>
+        <!-- Makes sure Converter={StaticResource ComparisonConverter} finds the correct class -->
         <local:ComparisonConverter x:Key="ComparisonConverter" />
     </Window.Resources>
+
     
     <Border Padding="10">
         <StackPanel>
@@ -54,49 +55,35 @@
             <ComboBox Margin="0 10 0 0" ItemsSource="{Binding Path=DirectoryReader.DirectoryBrowser,
                                                               Mode=TwoWay,
                                                               UpdateSourceTrigger=PropertyChanged}"
-                                        SelectedItem="{Binding Path=DirectoryReader.SelectedPsScript, Mode=TwoWay}"/>
+                                        SelectedItem="{Binding Path=SelectedPsScript, Mode=TwoWay}"/>
             
-            <!-- Input field -->
+            <!-- Input -->
             <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
-            <Grid MaxHeight="150">
-                <ItemsControl ItemsSource="{Binding Path=FileReader.ScriptVariables}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBox />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                
-                <!--                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            
+            <!-- Input fields -->
+            <ItemsControl ItemsSource="{Binding Path=FileReader.ScriptVariables}">
+                <!-- ItemsPanelTemplate -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-                <StackPanel Grid.Column="0" Margin="0 0 5 0">
-                    <TextBlock Text="User ID" />
-                    <TextBox />
-
-
-                    <TextBlock Text="Group Name" />
-                    <TextBox Text="{Binding Path=DirectoryReader.ActiveButton,
-                                            UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <TextBlock Text="OU Name" />
-                    <TextBox Text="{Binding Path=DirectoryReader.SelectedPsScript}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" >
-                    <TextBlock Text="Department" />
-                    <TextBox Text=""/>
-
-                    <TextBlock Text="Location" />
-                    <TextBox Text="{Binding Path=DirectoryReader.IsScriptSelected}"/>
-
-                    <TextBlock Text="Language" />
-                    <TextBox Text="{Binding Path=IsScriptSelected}"/>
-                </StackPanel>
-                -->
-            </Grid>
+                <!-- ItemTemplate -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0 5 5 0">
+                            <TextBlock Text="{Binding Path=InputKey}"/>
+                            <TextBox Text="{Binding Path=InputValue}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+               
+            <!-- Execute button -->
             <Button Content="Run script" Margin="50 20 50 0" Command="{Binding Path=ClickCommand}"/>
+
+            <!-- Output -->
             <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
             <TextBlock Height="235" 
                    FontSize="12" 

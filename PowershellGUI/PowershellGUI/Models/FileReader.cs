@@ -20,6 +20,7 @@ namespace PowershellGUI.Models
 
         // Ønsket oprinnelig Dictionary, men denne er ikke "observable"
         // IDictionary interfacet var tungvint å implementere
+        // Ser ut til at man egentlig skal ha denne i ViewModel 
         private ObservableCollection<KeyValuePair> _scriptVariables;
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace PowershellGUI.Models
             set
                 {
                 _scriptVariables = value;
-                OnPropertyChanged("ScriptVariables");
+                //OnPropertyChanged("ScriptVariables");
                 }
             }
 
@@ -98,12 +99,17 @@ namespace PowershellGUI.Models
         /// <param name="line"></param>
         private void GetScriptVariables(string line)
             {
-            // 
             string varName    = ParseVariableName(line);
+            string varType    = ParseVariableType(line);
             string varContent = ParseQuotationContent(line);
-            KeyValuePair kwPair = new KeyValuePair(varName, varContent);
-            _scriptVariables.Add(kwPair);
-            OnPropertyChanged("ScriptVariables");
+            SaveInputField(varName, varContent, varType);
+            //OnPropertyChanged("ScriptVariables");
+            }
+
+        private void SaveInputField(string inputKey, string inputValue, string inputType)
+            {
+            KeyValuePair scriptInput = new KeyValuePair(inputKey, inputValue, inputType);
+            _scriptVariables.Add(scriptInput);
             }
 
         /// <summary>
@@ -117,6 +123,18 @@ namespace PowershellGUI.Models
             string[] temp = line.Split(' ');
             int varNameIndex = 0;
             return temp[varNameIndex];
+            }
+
+        /// <summary>
+        /// Gets the variable types defined by brackets.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private string ParseVariableType(string line)
+            {
+            // Parse typen ([bool]) slik at vi kan 
+            // utøfre logikk ut i fra typen variabel
+            return "";
             }
 
         /// <summary>
@@ -138,8 +156,8 @@ namespace PowershellGUI.Models
 
 
         /// <summary>
-        /// Parses a powerscript file and saves the 
-        /// header contents.
+        /// Parses a powerscript file and saves the header contents. 
+        /// Requires the FileURI to be set.
         /// </summary>
         public void ReadFile()
             {
@@ -170,12 +188,13 @@ namespace PowershellGUI.Models
                 lineNum++;
                 }
 
+            /*
             foreach(KeyValuePair variable in _scriptVariables)
                 {
                 FileContent += variable.InputKey + " = " + variable.InputValue + '\n';
                 }
+
+            */
             }
-
-
         }
     }
