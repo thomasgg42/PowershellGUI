@@ -116,7 +116,8 @@ namespace PowershellGUI.ViewModels
             }
 
         /// <summary>
-        /// Gets or sets the selected powershell script. 
+        /// Gets or sets the selected powershell script. Handles
+        /// GUI-related logic related to if a script is selected or not.
         /// </summary>
         public string SelectedPsScript
             {

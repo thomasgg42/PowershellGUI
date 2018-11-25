@@ -120,9 +120,9 @@ namespace PowershellGUI.Models
         /// <returns></returns>
         private string ParseVariableName(string line)
             {
-            string[] temp = line.Split(' ');
-            int varNameIndex = 0;
-            return temp[varNameIndex];
+            string tmp  = line.Split(' ')[0];
+            string varName = tmp.Split(']')[1];
+            return varName;
             }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace PowershellGUI.Models
         /// <returns></returns>
         private string ParseVariableType(string line)
             {
-            // Parse typen ([bool]) slik at vi kan 
-            // utøfre logikk ut i fra typen variabel
-            return "";
+            string tmp     = line.Split(']')[0];
+            string varType = tmp.Substring(1);
+            return varType.ToLower();
             }
 
         /// <summary>
@@ -193,7 +193,6 @@ namespace PowershellGUI.Models
                 {
                 FileContent += variable.InputKey + " = " + variable.InputValue + '\n';
                 }
-
             */
             }
         }

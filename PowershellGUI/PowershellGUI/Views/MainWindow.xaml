@@ -74,7 +74,7 @@
                     <DataTemplate>
                         <StackPanel Margin="0 5 5 0">
                             <TextBlock Text="{Binding Path=InputKey}"/>
-                            <TextBox Text="{Binding Path=InputValue}"/>
+                            <TextBox Text="{Binding Path=InputType}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
