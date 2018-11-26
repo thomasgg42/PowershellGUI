@@ -42,17 +42,6 @@ namespace PowershellGUI.ViewModels
             get
                 {
                 return _clickCommand;
-                // "Coalescing operator"
-                //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), CanExecute()));
-                //return _clickCommand ?? (_clickCommand = new CommandHandler(() => ExecutePowershellScript(), DirectoryReader.IsScriptSelected));
-                /*
-                if (_clickCommand == null)
-                    {
-
-                    _clickCommand = new CommandHandler(ExecutePowershellScript, IsScriptSelected);
-                    }
-                return _clickCommand;
-                */
                 }
             set
                 {
@@ -117,7 +106,7 @@ namespace PowershellGUI.ViewModels
 
         /// <summary>
         /// Gets or sets the selected powershell script. Handles
-        /// GUI-related logic related to if a script is selected or not.
+        /// GUI logic related to if a script is selected or not.
         /// </summary>
         public string SelectedPsScript
             {

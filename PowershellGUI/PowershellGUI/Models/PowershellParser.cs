@@ -14,6 +14,9 @@ namespace PowershellGUI.Models
         /// </summary>
         public PowershellParser()
             {
+            // Get file from FileReader.FileURI
+            // execute file with input values from gui
+            // display output
 
             }
 

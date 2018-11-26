@@ -161,17 +161,6 @@ namespace PowershellGUI.Models
         /// </summary>
         public void ReadFile()
             {
-/*
-              <#
-              Description = "beskrivelse"
-              Header = "Funksjonsnavn"
-              Output = "True"
-              [string]Username = "beskrivelse av CLI"
-              [int]SomeNumber = "beskrivelse av somenumber"
-              [bool]SomeBool = "beskrivelse av someBool"
-              #>
-*/
-
             string[] lines         = System.IO.File.ReadAllLines(FileURI);
             string scriptHeaderEnd = "#>";
             int lineNum            = 0;
@@ -187,13 +176,6 @@ namespace PowershellGUI.Models
                 else { GetScriptVariables(line); }
                 lineNum++;
                 }
-
-            /*
-            foreach(KeyValuePair variable in _scriptVariables)
-                {
-                FileContent += variable.InputKey + " = " + variable.InputValue + '\n';
-                }
-            */
             }
         }
     }
