@@ -17,6 +17,12 @@
     <Border Padding="10">
         <StackPanel>
             <!-- Category -->
+            <TextBlock Height="235" 
+                   FontSize="12" 
+                   TextWrapping="Wrap" 
+                   Foreground="Black"
+                   Text="{Binding PowershellParser.ScriptOutput}" />
+            <!-- Category -->
             <TextBlock Text="Kategori" FontWeight="Bold" Margin="0 0 0 10" />
             <Grid>
                 <!-- Radio buttons -->
@@ -28,40 +34,29 @@
 
                 <!-- Column 1 -->
                 <StackPanel Grid.Column="0" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding Path=DirectoryReader.ActiveButton, 
-                                                                                                     UpdateSourceTrigger=PropertyChanged,
-                                                                                                     Converter={StaticResource ComparisonConverter}, 
-                                                                                                     ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}}"/>
+                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Column 2 -->
                 <StackPanel Grid.Column="1" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding Path=DirectoryReader.ActiveButton,
-                                                                                             UpdateSourceTrigger=PropertyChanged,
-                                                                                             Converter={StaticResource ComparisonConverter}, 
-                                                                                             ConverterParameter={x:Static models:RadioButtons.Exchange}}" />
+                    <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Exchange}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
 
                 <!-- Column 3 -->
                 <StackPanel Grid.Column="2" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding Path=DirectoryReader.ActiveButton, 
-                                                                                          UpdateSourceTrigger=PropertyChanged,
-                                                                                          Converter={StaticResource ComparisonConverter},
-                                                                                          ConverterParameter={x:Static models:RadioButtons.Skype}}" />
+                    <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Skype}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
-            
+
             <!-- Dropdown menu -->
-            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding Path=DirectoryReader.DirectoryBrowser,
-                                                              Mode=TwoWay,
-                                                              UpdateSourceTrigger=PropertyChanged}"
-                                        SelectedItem="{Binding Path=SelectedPsScript, Mode=TwoWay}"/>
-            
+            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryBrowser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        SelectedItem="{Binding SelectedPsScript, Mode=TwoWay}"/>
+
             <!-- Input -->
             <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
-            
+
             <!-- Input fields -->
-            <ItemsControl ItemsSource="{Binding Path=FileReader.ScriptVariables}">
+            <ItemsControl ItemsSource="{Binding FileReader.ScriptVariables}">
                 <!-- ItemsPanelTemplate -->
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -73,23 +68,18 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0 5 5 0">
-                            <TextBlock Text="{Binding Path=InputKey}"/>
-                            <TextBox Text="{Binding Path=InputValue}"/>
+                            <TextBlock Text="{Binding InputKey}"/>
+                            <TextBox Text="{Binding InputValue}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-               
+
             <!-- Execute button -->
-            <Button Content="Run script" Margin="50 20 50 0" Command="{Binding Path=ClickCommand}"/>
+            <Button Content="Run script" Margin="50 20 50 0" Command="{Binding ClickCommand}"/>
 
             <!-- Output -->
             <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
-            <TextBlock Height="235" 
-                   FontSize="12" 
-                   TextWrapping="Wrap" 
-                   Foreground="Black"
-                   Text="{Binding Path=FileReader.FileContent}" />
         </StackPanel>
     </Border>
 </Window>

@@ -6,10 +6,4 @@ Output = "True"
 [int]SomeNumber = "beskrivelse av somenumber"
 [bool]SomeBool = "beskrivelse av someBool"
 #>
-foreach(user in users) {
-Get-ADUser -Identity "h804602" -properties *
-
-whoami
-
-netstat -a -b
-}
+New-Item -ItemType directory -Path ./tmp2

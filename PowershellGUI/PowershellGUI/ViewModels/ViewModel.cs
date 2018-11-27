@@ -137,9 +137,7 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         public void ExecutePowershellScript(object obj)
             {
-
-           // PowershellParser.ExecuteScript();
+            PowershellParser.ExecuteScript(FileReader.FileURI);
             }
-
         }
     }

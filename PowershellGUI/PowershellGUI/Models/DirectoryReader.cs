@@ -145,7 +145,7 @@ namespace PowershellGUI.Models
             string script = "";
             if(_activeButton == RadioButtons.ActiveDirectory)
                 {
-                script = _modulePath + "\\Active Directory\\psfile1.txt";
+                script = _modulePath + "\\Active Directory\\psfile1.ps1";
                 }
             else if(_activeButton == RadioButtons.Exchange)
                 {
