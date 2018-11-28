@@ -62,7 +62,7 @@
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Models\DirectoryReader.cs" />
     <Compile Include="Models\FileReader.cs" />
-    <Compile Include="Models\KeyValuePair.cs" />
+    <Compile Include="Models\ScriptArgument.cs" />
     <Compile Include="Models\PowershellParser.cs" />
     <Compile Include="ComparisonConverter.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />

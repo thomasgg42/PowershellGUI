@@ -21,14 +21,14 @@ namespace PowershellGUI.Models
         // Ønsket oprinnelig Dictionary, men denne er ikke "observable"
         // IDictionary interfacet var tungvint å implementere
         // Ser ut til at man egentlig skal ha denne i ViewModel 
-        private ObservableCollection<KeyValuePair> _scriptVariables;
+        private ObservableCollection<ScriptArgument> _scriptVariables;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FileReader()
             {
-            _scriptVariables = new ObservableCollection<KeyValuePair>();
+            _scriptVariables = new ObservableCollection<ScriptArgument>();
             _fileContent = "";
             scriptDescription = "";
             scriptHeader = "";
@@ -48,7 +48,7 @@ namespace PowershellGUI.Models
                 }
             }
 
-        public ObservableCollection<KeyValuePair> ScriptVariables
+        public ObservableCollection<ScriptArgument> ScriptVariables
             {
             get
                 {
@@ -101,14 +101,14 @@ namespace PowershellGUI.Models
             {
             string varName    = ParseVariableName(line);
             string varType    = ParseVariableType(line);
-            string varContent = ParseQuotationContent(line);
-            SaveInputField(varName, varContent, varType);
+            string varDescription = ParseQuotationContent(line);
+            SaveInputField(varName, varDescription, varType);
             //OnPropertyChanged("ScriptVariables");
             }
 
-        private void SaveInputField(string inputKey, string inputValue, string inputType)
+        private void SaveInputField(string inputKey, string inputDesc, string inputType)
             {
-            KeyValuePair scriptInput = new KeyValuePair(inputKey, inputValue, inputType);
+            ScriptArgument scriptInput = new ScriptArgument(inputKey, inputDesc, inputType);
             _scriptVariables.Add(scriptInput);
             }
 

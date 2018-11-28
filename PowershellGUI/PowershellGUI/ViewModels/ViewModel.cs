@@ -80,6 +80,10 @@ namespace PowershellGUI.ViewModels
                 {
                 return _PowershellParser;
                 }
+            set
+                {
+                _PowershellParser = value;
+                }
             }
 
         /// <summary>
@@ -137,7 +141,7 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         public void ExecutePowershellScript(object obj)
             {
-            PowershellParser.ExecuteScript(FileReader.FileURI);
+            PowershellParser.RunPsScript(FileReader.FileURI, FileReader.ScriptVariables);
             }
         }
     }

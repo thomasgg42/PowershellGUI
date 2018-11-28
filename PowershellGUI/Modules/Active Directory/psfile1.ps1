@@ -2,8 +2,7 @@
 Description = "beskrivelse"
 Header = "Funksjonsnavn"
 Output = "True"
-[string]Username = "beskrivelse av CLI"
-[int]SomeNumber = "beskrivelse av somenumber"
-[bool]SomeBool = "beskrivelse av someBool"
+[string]Brukernavn = "beskrivelse av CLI"
+[string]Property navn = "beskrivelse av somenumber"
 #>
-New-Item -ItemType directory -Path ./tmp2
+(Get-TimeZone).DisplayName
