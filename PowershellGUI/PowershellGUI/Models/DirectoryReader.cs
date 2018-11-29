@@ -149,11 +149,11 @@ namespace PowershellGUI.Models
                 }
             else if(_activeButton == RadioButtons.Exchange)
                 {
-                script = _modulePath + "\\Exchange\\psfile2.txt";
+                script = _modulePath + "\\Exchange\\psfile2.ps1";
                 }
             else if(_activeButton == RadioButtons.Skype)
                 {
-                script = _modulePath + "\\Skype\\psfile3.txt";
+                script = _modulePath + "\\Skype\\psfile3.ps1";
                 }
             DirectoryBrowser.Add(script);
             }

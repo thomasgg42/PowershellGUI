@@ -2,7 +2,12 @@
 Description = "beskrivelse"
 Header = "Funksjonsnavn"
 Output = "True"
-[string]Brukernavn = "beskrivelse av CLI"
-[string]Property navn = "beskrivelse av somenumber"
+[string]Navn = "Brukerens navn"
+[int]Alder = "Brukerens alder"
 #>
-(Get-TimeZone).DisplayName
+param(
+	[string]$navn = "TempNavn",
+	[string]$alder
+	)
+$msg = "Hei $navn, du er $alder år gammel"
+Write-Output $msg

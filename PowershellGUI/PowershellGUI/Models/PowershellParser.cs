@@ -1,18 +1,21 @@
 ﻿using System.Management.Automation;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Collections.Generic;
 
 namespace PowershellGUI.Models
     {
     class PowershellParser : ObservableObject
         {
         private string _scriptOutput;
+        private List<string> commandLineArguments;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PowershellParser()
             {
+            commandLineArguments = new List<string>();
             // Get file from FileReader.FileURI
             // execute file with input values from gui
             // display output
@@ -23,6 +26,11 @@ namespace PowershellGUI.Models
             using (PowerShell psInstance = PowerShell.Create())
                 {
                 psInstance.AddCommand(scriptPath);
+                //for every commandLineArgument, psInstance.AddArgument(arg)
+                foreach (string arg in commandLineArguments)
+                    {
+                    psInstance.AddArgument(arg);
+                    }
                 Collection<PSObject> psOutput = psInstance.Invoke();
                 ScriptOutput = psOutput.ToString();
 
@@ -40,10 +48,15 @@ namespace PowershellGUI.Models
 
         private void GetScriptParameters(ObservableCollection<ScriptArgument> scriptVariables)
             {
-            foreach(ScriptArgument obj in scriptVariables)
+            foreach (ScriptArgument obj in scriptVariables)
                 {
-                System.Windows.MessageBox.Show(obj.InputValue);
+                string argKey   = obj.InputKey.ToString().ToLower();
+                string argValue = obj.InputValue.ToString().ToLower();
+               // string argument = "-" + argKey + " \"" + argValue + "\"";
+                commandLineArguments.Add(argValue);
                 }
+            
+
             }
 
         public string ScriptOutput
@@ -62,7 +75,7 @@ namespace PowershellGUI.Models
         public void RunPsScript(string scriptPath, ObservableCollection<ScriptArgument> scriptVariables)
             {
             GetScriptParameters(scriptVariables);
-            //ExecuteScript(scriptPath);
+            ExecuteScript(scriptPath);
             }
 
 
