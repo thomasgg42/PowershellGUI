@@ -18,6 +18,7 @@ namespace PowershellGUI.Models
         private string scriptOutput;
         private string _fileContent;
 
+
         // Ønsket oprinnelig Dictionary, men denne er ikke "observable"
         // IDictionary interfacet var tungvint å implementere
         // Ser ut til at man egentlig skal ha denne i ViewModel 

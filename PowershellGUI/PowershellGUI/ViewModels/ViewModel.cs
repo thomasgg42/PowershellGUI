@@ -14,10 +14,6 @@ namespace PowershellGUI.ViewModels
 
         private ICommand            _clickCommand;
 
-
-
-
-
         /// <summary>
         /// Constructor
         /// </summary>

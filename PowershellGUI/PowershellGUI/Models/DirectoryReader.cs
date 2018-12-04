@@ -138,9 +138,6 @@ namespace PowershellGUI.Models
         /// </summary>
         public void TmpUpdateDirectoryBrowser()
             {
-            // Denne kan ikke sette SelectedScript
-            // Den skal kun fylle ComboBox med tilgjengelige scripts
-            // SelectedScript skal settes i det et script er valgt!
             directoryBrowser.Clear();
             string script = "";
             if(_activeButton == RadioButtons.ActiveDirectory)

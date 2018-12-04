@@ -15,6 +15,19 @@ namespace PowershellGUI.Models
         private string _inputDescription;
         private string _inputType;
         private string _inputValue;
+        ArgumentChecker inputCheck;
+
+        private bool isInputOk(string input)
+            {
+            bool inputOk = false;
+            switch(_inputType)
+                {
+                case "string": inputOk = inputCheck.isString(input); break;
+                case "int": inputOk    = inputCheck.isInt(input);    break;
+                case "bool": inputOk   = inputCheck.isBool(input);   break;
+                }
+            return inputOk;
+            }
 
         public ScriptArgument(string key, string desc, string type)
             {
@@ -22,6 +35,7 @@ namespace PowershellGUI.Models
             _inputDescription = desc;
             _inputType        = type;
             _inputValue       = "";
+            inputCheck        = new ArgumentChecker();
             }
 
         /// <summary>
@@ -81,13 +95,11 @@ namespace PowershellGUI.Models
             set
                 {
                 // om InputType == bool then if(value != alphanummeric) then inputvalue = value; else block
-                if(value != "k")
+                if(value != "1")
                     {
                     _inputValue = value;
                     }
                 }
             }
-
-
         }
     }

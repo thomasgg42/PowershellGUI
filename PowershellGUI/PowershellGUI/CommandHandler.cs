@@ -26,7 +26,8 @@ namespace PowershellGUI
                 CommandManager.RequerySuggested += value;
                 CanExecuteChangedInternal += value;
                 }
-            remove {
+            remove
+                {
                 CommandManager.RequerySuggested -= value;
                 CanExecuteChangedInternal += value;
                 }

@@ -2,11 +2,11 @@
 Description = "beskrivelse"
 Header = "Funksjonsnavn"
 Output = "True"
-[string]Navn = "Brukerens navn"
-[int]Alder = "Brukerens alder"
+[string]navn = "Brukerens navn"
+[int]alder = "Brukerens alder"
 #>
 param(
-	[string]$navn = "TempNavn",
+	[string]$navn,
 	[string]$alder
 	)
 $msg = "Hei $navn, du er $alder år gammel"

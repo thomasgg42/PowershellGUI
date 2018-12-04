@@ -2,9 +2,9 @@
 Description = "beskrivelse"
 Header = "Funksjonsnavn"
 Output = "True"
-[string]MappeNavn = "Mappens navn"
-[int]TekstfilNavn = "Antall tekstfiler i mappe"
-[int]TekstfilInnhold = "Tekstfilens innhold"
+[string]tekstfilnavn = "Mappens navn"
+[int]mappenavn = "Antall tekstfiler i mappe"
+[int]tekstfilinnhold = "Tekstfilens innhold"
 #>
 param(
 	[string]$mappenavn,
@@ -12,7 +12,7 @@ param(
 	[string]$tekstfilinnhold
 	)
 cd "C:\Users\h804602.EIKANETT\Desktop"
-New-Item -Name $navn -ItemType "directory"
-cd $navn
+New-Item -Name $mappenavn -ItemType "directory"
+cd $mappenavn
 New-Item -Name $tekstfilnavn -ItemType "file"
 Write-Output $tekstfilinnhold >> $tekstfilnavn

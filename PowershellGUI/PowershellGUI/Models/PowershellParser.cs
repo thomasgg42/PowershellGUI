@@ -9,16 +9,16 @@ namespace PowershellGUI.Models
         {
         private string _scriptOutput;
         private List<string> commandLineArguments;
+        private List<string> commandLineArgKeys;
 
         /// <summary>
-        /// Constructor
+        /// Sets the script output which is to be shown
+        /// to the user.
         /// </summary>
-        public PowershellParser()
+        /// <param name="output">String output from the PS-script.</param>
+        private void SetScriptOutput(string output)
             {
-            commandLineArguments = new List<string>();
-            // Get file from FileReader.FileURI
-            // execute file with input values from gui
-            // display output
+            ScriptOutput = output;
             }
 
         private void ExecuteScript(string scriptPath)
@@ -26,13 +26,13 @@ namespace PowershellGUI.Models
             using (PowerShell psInstance = PowerShell.Create())
                 {
                 psInstance.AddCommand(scriptPath);
-                //for every commandLineArgument, psInstance.AddArgument(arg)
-                foreach (string arg in commandLineArguments)
+                int argLength = commandLineArguments.Count;
+                for (int ii = 0; ii < argLength; ii++)
                     {
-                    psInstance.AddArgument(arg);
+                    psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
                     }
+
                 Collection<PSObject> psOutput = psInstance.Invoke();
-                ScriptOutput = psOutput.ToString();
 
                 StringBuilder tmp = new StringBuilder();
                 foreach (PSObject output in psOutput)
@@ -42,7 +42,7 @@ namespace PowershellGUI.Models
                         tmp.Append(output.ToString());
                         }
                     }
-                ScriptOutput = tmp.ToString();
+                SetScriptOutput(tmp.ToString());
                 }
             }
 
@@ -50,13 +50,25 @@ namespace PowershellGUI.Models
             {
             foreach (ScriptArgument obj in scriptVariables)
                 {
-                string argKey   = obj.InputKey.ToString().ToLower();
+                string argKey = obj.InputKey.ToString().ToLower();
                 string argValue = obj.InputValue.ToString().ToLower();
-               // string argument = "-" + argKey + " \"" + argValue + "\"";
+                // string argument = "-" + argKey + " \"" + argValue + "\"";
+                commandLineArgKeys.Add(argKey);
                 commandLineArguments.Add(argValue);
                 }
-            
+            }
 
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PowershellParser()
+            {
+            commandLineArguments = new List<string>();
+            commandLineArgKeys = new List<string>();
+            // Get file from FileReader.FileURI
+            // execute file with input values from gui
+            // display output
             }
 
         public string ScriptOutput
@@ -72,12 +84,17 @@ namespace PowershellGUI.Models
                 }
             }
 
+        /// <summary>
+        /// Gets the script input arguments
+        /// and runs the script.
+        /// </summary>
+        /// <param name="scriptPath">Filepath to script.</param>
+        /// <param name="scriptVariables">Collection of input arguments</param>
         public void RunPsScript(string scriptPath, ObservableCollection<ScriptArgument> scriptVariables)
             {
             GetScriptParameters(scriptVariables);
             ExecuteScript(scriptPath);
             }
-
 
         }
     }
