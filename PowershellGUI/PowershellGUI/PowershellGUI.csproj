@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Models\ArgumentChecker.cs" />
     <Compile Include="Models\DirectoryReader.cs" />
     <Compile Include="Models\FileReader.cs" />
     <Compile Include="Models\ScriptArgument.cs" />

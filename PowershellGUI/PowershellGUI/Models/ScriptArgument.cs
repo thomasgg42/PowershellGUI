@@ -22,9 +22,9 @@ namespace PowershellGUI.Models
             bool inputOk = false;
             switch(_inputType)
                 {
-                case "string": inputOk = inputCheck.isString(input); break;
-                case "int": inputOk    = inputCheck.isInt(input);    break;
-                case "bool": inputOk   = inputCheck.isBool(input);   break;
+                case "string": inputOk = inputCheck.IsString(input); break;
+                case "int":    inputOk = inputCheck.IsInt(input);    break;
+                case "bool":   inputOk = inputCheck.IsBool(input);   break;
                 }
             return inputOk;
             }
@@ -94,8 +94,7 @@ namespace PowershellGUI.Models
                 }
             set
                 {
-                // om InputType == bool then if(value != alphanummeric) then inputvalue = value; else block
-                if(value != "1")
+                if(isInputOk(value))
                     {
                     _inputValue = value;
                     }

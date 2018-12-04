@@ -17,21 +17,30 @@ namespace PowershellGUI.Models
 
             }
 
-        public bool isString(string input)
+        public bool IsString(string input)
             {
-            return false;
+            return true;
             }
 
-        public bool isInt(string input)
+        public bool IsInt(string input)
             {
-
-            return false;
+            return int.TryParse(input, out int n);
             }
 
-        public bool isBool(string input)
+        public bool IsBool(string input)
             {
-
-            return false;
+            if(String.Equals(input, "true"))
+                {
+                return true;
+                }
+            else if(String.Equals(input, "false"))
+                {
+                return false;
+                }
+            else
+                {
+                return false;
+                }
             }
 
         }

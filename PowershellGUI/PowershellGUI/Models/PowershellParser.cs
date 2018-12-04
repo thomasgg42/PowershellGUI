@@ -25,15 +25,20 @@ namespace PowershellGUI.Models
             {
             using (PowerShell psInstance = PowerShell.Create())
                 {
+                // Add command
                 psInstance.AddCommand(scriptPath);
+
+                // Add arguments to command
                 int argLength = commandLineArguments.Count;
                 for (int ii = 0; ii < argLength; ii++)
                     {
                     psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
                     }
 
+                // Execute script
                 Collection<PSObject> psOutput = psInstance.Invoke();
 
+                // Get output from execution
                 StringBuilder tmp = new StringBuilder();
                 foreach (PSObject output in psOutput)
                     {
