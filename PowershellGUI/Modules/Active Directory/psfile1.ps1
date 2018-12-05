@@ -7,7 +7,7 @@ Output = "True"
 #>
 param(
 	[string]$navn,
-	[string]$alder
+	[int]$alder
 	)
-$msg = "Hei $navn, du er $alder år gammel"
+$msg = "Hei $navn, du er $alder år gammel."
 Write-Output $msg

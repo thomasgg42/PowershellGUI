@@ -55,9 +55,8 @@ namespace PowershellGUI.Models
             {
             foreach (ScriptArgument obj in scriptVariables)
                 {
-                string argKey = obj.InputKey.ToString().ToLower();
+                string argKey   = obj.InputKey.ToString().ToLower();
                 string argValue = obj.InputValue.ToString().ToLower();
-                // string argument = "-" + argKey + " \"" + argValue + "\"";
                 commandLineArgKeys.Add(argKey);
                 commandLineArguments.Add(argValue);
                 }

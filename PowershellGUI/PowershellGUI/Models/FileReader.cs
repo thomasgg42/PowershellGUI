@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace PowershellGUI.Models
     {
+    /// <summary>
+    /// Reads the commented out area in the top of each Powershell script.
+    /// Builds input fields accordingly. Will also store the input field values
+    /// as they're set. 
+    /// </summary>
     class FileReader : ObservableObject
         {
         public string FileURI { get; set; }
@@ -95,7 +100,8 @@ namespace PowershellGUI.Models
             }
 
         /// <summary>
-        /// Parses the Powershell script header's bottom area.
+        /// Parses the Powershell script header's variable area. The variable values
+        /// are bound directly to the View.
         /// </summary>
         /// <param name="line"></param>
         private void GetScriptVariables(string line)

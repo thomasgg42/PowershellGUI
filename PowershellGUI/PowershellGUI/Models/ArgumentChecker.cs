@@ -17,25 +17,28 @@ namespace PowershellGUI.Models
 
             }
 
+        /// <summary>
+        /// Returns true if input can be translated to a string value.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public bool IsString(string input)
             {
             return true;
             }
 
+        /// <summary>
+        /// Returns true if input can be translated to an integer value.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public bool IsInt(string input)
             {
-            return int.TryParse(input, out int n);
-            }
-
-        public bool IsBool(string input)
-            {
-            if(String.Equals(input, "true"))
+            // Empty string must be allowed to erase input numbers
+            // due to this function being evaluated on each keyboard push
+            if (int.TryParse(input, out int n) || input.Equals(""))
                 {
                 return true;
-                }
-            else if(String.Equals(input, "false"))
-                {
-                return false;
                 }
             else
                 {
@@ -43,5 +46,14 @@ namespace PowershellGUI.Models
                 }
             }
 
+        /// <summary>
+        /// Returns true if input can be translated to a boolean value.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool IsBool(string input)
+            {
+            return true;
+            }
         }
     }

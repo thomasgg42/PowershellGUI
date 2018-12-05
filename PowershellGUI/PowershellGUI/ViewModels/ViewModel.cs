@@ -7,12 +7,26 @@ namespace PowershellGUI.ViewModels
     {
     class ViewModel
         {
+        private string              modulePath;
         private DirectoryReader     _DirectoryReader;
         private FileReader          _FileReader;
         private PowershellParser    _PowershellParser;
         private ComparisonConverter _ComparisonConverter;
 
         private ICommand            _clickCommand;
+
+        /// <summary>
+        /// Clears the script session allowing a new script
+        /// to be run without previous input values interfering
+        /// with the new script.
+        /// </summary>
+        private void ClearLastScriptSession()
+            {
+            // fungerte ikke.. fiks
+            _DirectoryReader = new DirectoryReader(modulePath);
+            _FileReader = new FileReader();
+            _PowershellParser = new PowershellParser();
+            }
 
         /// <summary>
         /// Constructor
@@ -23,6 +37,7 @@ namespace PowershellGUI.ViewModels
             // Run script knappen er inaktiv til et script velges
             // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
             // Nederste textbox demostrerer dette - alltid false!
+            this.modulePath = modulePath;
             _DirectoryReader = new DirectoryReader(modulePath);
             _FileReader = new FileReader();
             _PowershellParser = new PowershellParser();
@@ -100,8 +115,26 @@ namespace PowershellGUI.ViewModels
         /// <returns></returns>
         public bool CanExecute(object parameter)
             {
-            // må ogå sjekke om alle input felt har tekst i seg
-            return DirectoryReader.IsScriptSelected;
+            bool canExecute = true;
+            int empty = 0;
+            // script must be selected
+            if(DirectoryReader.IsScriptSelected)
+                {
+                // all input fields must contain something
+                foreach (ScriptArgument input in FileReader.ScriptVariables)
+                    {
+                    if (input.InputValue.Length == empty)
+                        {
+                        canExecute = false;
+                        }
+                    }
+                }
+            else
+                {
+                canExecute = false;
+                }
+
+            return canExecute;
             }
 
         /// <summary>
@@ -138,6 +171,7 @@ namespace PowershellGUI.ViewModels
         public void ExecutePowershellScript(object obj)
             {
             PowershellParser.RunPsScript(FileReader.FileURI, FileReader.ScriptVariables);
+            ClearLastScriptSession();
             }
         }
     }
