@@ -20,39 +20,6 @@ namespace PowershellGUI.Models
         private RadioButtons _activeButton;
 
         /// <summary>
-        /// Returns the selected Powershell script's filepath
-        /// </summary>
-        public string SelectedPsScript
-            {
-            get
-                {
-                return _selectedPsScript;
-                }
-            set
-                {
-                _selectedPsScript = value;
-                OnPropertyChanged("SelectedPsScript");
-                IsScriptSelected = true;
-                }
-            }
-
-        /// <summary>
-        /// Gets or sets the boolean value true if a script is selected.
-        /// </summary>
-        public bool IsScriptSelected
-            {
-            get
-                {
-                return _isScriptSelected;
-                }
-            set
-                {
-                _isScriptSelected = value;
-                OnPropertyChanged("IsScriptSelected");
-                }
-            }
-
-        /// <summary>
         /// Updates the directory browser to match the 
         /// selected category.
         /// </summary>
@@ -89,11 +56,59 @@ namespace PowershellGUI.Models
         public DirectoryReader(string modulePath)
             {
             _isScriptSelected = false;
-            _modulePath      = modulePath;
-            _activeButton    = RadioButtons.ActiveDirectory;
+            _modulePath = modulePath;
+            _activeButton = RadioButtons.ActiveDirectory;
             directoryBrowser = new ObservableCollection<string>();
             //UpdateDirectoryBrowser();
             TmpUpdateDirectoryBrowser(); // for testing
+            }
+
+        public void ClearDirectoryReader()
+            {
+            // Also sets script selected false
+            SelectedPsScript = "";
+            TmpUpdateDirectoryBrowser();
+            //directoryBrowser.Clear();
+            }
+
+        /// <summary>
+        /// Returns the selected Powershell script's filepath
+        /// </summary>
+        public string SelectedPsScript
+            {
+            get
+                {
+                return _selectedPsScript;
+                }
+            set
+                {
+                _selectedPsScript = value;
+                if(value.ToString().Equals(""))
+                    {
+                    IsScriptSelected = false;
+                    }
+                else
+                    {
+                    IsScriptSelected = true;
+                    }
+                OnPropertyChanged("SelectedPsScript");
+                }
+            }
+
+        /// <summary>
+        /// Gets or sets the boolean value true if a script is selected.
+        /// </summary>
+        public bool IsScriptSelected
+            {
+            get
+                {
+                return _isScriptSelected;
+                }
+            set
+                {
+                _isScriptSelected = value;
+                OnPropertyChanged("IsScriptSelected");
+                }
             }
 
         /// <summary>

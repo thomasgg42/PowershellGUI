@@ -75,6 +75,15 @@ namespace PowershellGUI.Models
             // display output
             }
 
+        public void ClearPowershellParser()
+            {
+            commandLineArgKeys.Clear();
+            commandLineArguments.Clear();
+            }
+
+        /// <summary>
+        /// Gets or sets the output returned from the powershell script.
+        /// </summary>
         public string ScriptOutput
             {
             get

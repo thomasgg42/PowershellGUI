@@ -21,51 +21,12 @@ namespace PowershellGUI.Models
         private string scriptDescription;
         private string scriptHeader;
         private string scriptOutput;
-        private string _fileContent;
 
 
         // Ønsket oprinnelig Dictionary, men denne er ikke "observable"
         // IDictionary interfacet var tungvint å implementere
         // Ser ut til at man egentlig skal ha denne i ViewModel 
         private ObservableCollection<ScriptArgument> _scriptVariables;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FileReader()
-            {
-            _scriptVariables = new ObservableCollection<ScriptArgument>();
-            _fileContent = "";
-            scriptDescription = "";
-            scriptHeader = "";
-            scriptOutput = "";
-            }
-
-        public string FileContent
-            {
-            get
-                {
-                return _fileContent;
-                }
-            set
-                {
-                _fileContent = value;
-                OnPropertyChanged("FileContent");
-                }
-            }
-
-        public ObservableCollection<ScriptArgument> ScriptVariables
-            {
-            get
-                {
-                return _scriptVariables;
-                }
-            set
-                {
-                _scriptVariables = value;
-                //OnPropertyChanged("ScriptVariables");
-                }
-            }
 
         /// <summary>
         /// Parses the powershell script header's top area.
@@ -76,8 +37,8 @@ namespace PowershellGUI.Models
             {
             // logic to separate variable names from variable content
             const int description = 1;
-            const int header      = 2;
-            const int output      = 3;
+            const int header = 2;
+            const int output = 3;
 
             switch (lineNum)
                 {
@@ -106,8 +67,8 @@ namespace PowershellGUI.Models
         /// <param name="line"></param>
         private void GetScriptVariables(string line)
             {
-            string varName    = ParseVariableName(line);
-            string varType    = ParseVariableType(line);
+            string varName = ParseVariableName(line);
+            string varType = ParseVariableType(line);
             string varDescription = ParseQuotationContent(line);
             SaveInputField(varName, varDescription, varType);
             //OnPropertyChanged("ScriptVariables");
@@ -127,7 +88,7 @@ namespace PowershellGUI.Models
         /// <returns></returns>
         private string ParseVariableName(string line)
             {
-            string tmp  = line.Split(' ')[0];
+            string tmp = line.Split(' ')[0];
             string varName = tmp.Split(']')[1];
             return varName;
             }
@@ -139,7 +100,7 @@ namespace PowershellGUI.Models
         /// <returns></returns>
         private string ParseVariableType(string line)
             {
-            string tmp     = line.Split(']')[0];
+            string tmp = line.Split(']')[0];
             string varType = tmp.Substring(1);
             return varType.ToLower();
             }
@@ -156,11 +117,40 @@ namespace PowershellGUI.Models
             string content = match.ToString();
             int firstChar  = 1;
             int lastChar   = content.Length;
-            content = content.Substring(firstChar);
-            content = content.Substring(0, lastChar - 2);
+            content        = content.Substring(firstChar);
+            content        = content.Substring(0, lastChar - 2);
             return content;
             }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FileReader()
+            {
+            _scriptVariables  = new ObservableCollection<ScriptArgument>();
+            scriptDescription = "";
+            scriptHeader      = "";
+            scriptOutput      = "";
+            }
+
+        public void ClearFileReader()
+            {
+            scriptDescription = "";
+            scriptHeader      = "";
+            _scriptVariables.Clear();
+            }
+
+        public ObservableCollection<ScriptArgument> ScriptVariables
+            {
+            get
+                {
+                return _scriptVariables;
+                }
+            set
+                {
+                _scriptVariables = value;
+                }
+            }
 
         /// <summary>
         /// Parses a powerscript file and saves the header contents. 

@@ -22,10 +22,18 @@ namespace PowershellGUI.ViewModels
         /// </summary>
         private void ClearLastScriptSession()
             {
-            // fungerte ikke.. fiks
-            _DirectoryReader = new DirectoryReader(modulePath);
-            _FileReader = new FileReader();
-            _PowershellParser = new PowershellParser();
+            DirectoryReader.ClearDirectoryReader();
+            FileReader.ClearFileReader();
+            PowershellParser.ClearPowershellParser();
+            }
+
+        /// <summary>
+        /// Is not included in ClearLastScriptSession() 
+        /// so that the output is kept a bit longer on screen.
+        /// </summary>
+        private void ClearScriptOutput()
+            {
+            PowershellParser.ScriptOutput = "";
             }
 
         /// <summary>
@@ -37,12 +45,12 @@ namespace PowershellGUI.ViewModels
             // Run script knappen er inaktiv til et script velges
             // Tror alt som mangler er å få DirectoryReader til å endre på _canExecute
             // Nederste textbox demostrerer dette - alltid false!
-            this.modulePath = modulePath;
-            _DirectoryReader = new DirectoryReader(modulePath);
-            _FileReader = new FileReader();
-            _PowershellParser = new PowershellParser();
+            this.modulePath      = modulePath;
+            _DirectoryReader     = new DirectoryReader(modulePath);
+            _FileReader          = new FileReader();
+            _PowershellParser    = new PowershellParser();
             _ComparisonConverter = new ComparisonConverter();
-            _clickCommand = new CommandHandler(ExecutePowershellScript, CanExecute);
+            _clickCommand        = new CommandHandler(ExecutePowershellScript, CanExecute);
             }
 
         /// <summary>
@@ -116,24 +124,11 @@ namespace PowershellGUI.ViewModels
         public bool CanExecute(object parameter)
             {
             bool canExecute = true;
-            int empty = 0;
-            // script must be selected
-            if(DirectoryReader.IsScriptSelected)
-                {
-                // all input fields must contain something
-                foreach (ScriptArgument input in FileReader.ScriptVariables)
-                    {
-                    if (input.InputValue.Length == empty)
-                        {
-                        canExecute = false;
-                        }
-                    }
-                }
-            else
+            // Button inactive if no scripts selected
+            if(DirectoryReader.IsScriptSelected == false)
                 {
                 canExecute = false;
                 }
-
             return canExecute;
             }
 
@@ -159,6 +154,18 @@ namespace PowershellGUI.ViewModels
                 }
             set
                 {
+                // logisk feil her. IsSelected skal kun trigges i det man
+                // velger et script fra dropdown-liste. Den skal ikke trigges
+                // ved bytte av radioknapp
+
+                // If script already is selected, clear history
+                
+                if (DirectoryReader.IsScriptSelected == true)
+                    {
+                    System.Windows.MessageBox.Show("T");
+                   // ClearLastScriptSession();
+                    ClearScriptOutput();
+                    }
                 DirectoryReader.SelectedPsScript = value;
                 }
             }

@@ -3,8 +3,8 @@ Description = "beskrivelse"
 Header = "Funksjonsnavn"
 Output = "True"
 [string]tekstfilnavn = "Mappens navn"
-[int]mappenavn = "Antall tekstfiler i mappe"
-[int]tekstfilinnhold = "Tekstfilens innhold"
+[string]mappenavn = "Antall tekstfiler i mappe"
+[string]tekstfilinnhold = "Tekstfilens innhold"
 #>
 param(
 	[string]$mappenavn,
