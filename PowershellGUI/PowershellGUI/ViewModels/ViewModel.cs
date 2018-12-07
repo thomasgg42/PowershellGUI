@@ -129,42 +129,47 @@ namespace PowershellGUI.ViewModels
                 {
                 canExecute = false;
                 }
+            // Button inactive if input field empty
+            /*
+             foreach scriptVariable, if inputValue == empty then caNExecute = false
+             */
             return canExecute;
             }
 
         /// <summary>
         /// Gets or sets the selected powershell script. Handles
         /// GUI logic related to if a script is selected or not.
+        /// This includes clearing fields and values.
         /// </summary>
         public string SelectedPsScript
             {
             get
                 {
                 FileReader.FileURI = DirectoryReader.SelectedPsScript;
+                // If a file has been chosen
                 if(FileReader.FileURI != null)
                     {
                     FileReader.ReadFile();
                     }
+                // Else no file chosen
                 else
                     {
-                    // Clear input fields if no URI selected
-                    FileReader.ScriptVariables.Clear();
+                    /*
+                    if(FileReader.ScriptVariables.Count > 0)
+                        {
+                        FileReader.ScriptVariables.Clear();
+                        }
+                    */
                     }
                 return DirectoryReader.SelectedPsScript;
                 }
             set
                 {
-                // logisk feil her. IsSelected skal kun trigges i det man
-                // velger et script fra dropdown-liste. Den skal ikke trigges
-                // ved bytte av radioknapp
-
-                // If script already is selected, clear history
-                
-                if (DirectoryReader.IsScriptSelected == true)
+                // Clear the output when selecting a new script
+                if(value != null)
                     {
-                    System.Windows.MessageBox.Show("T");
-                   // ClearLastScriptSession();
                     ClearScriptOutput();
+                    ClearLastScriptSession();
                     }
                 DirectoryReader.SelectedPsScript = value;
                 }

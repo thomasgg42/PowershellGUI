@@ -83,7 +83,7 @@ namespace PowershellGUI.Models
             set
                 {
                 _selectedPsScript = value;
-                if(value.ToString().Equals(""))
+                if(value.Equals(""))
                     {
                     IsScriptSelected = false;
                     }
@@ -146,7 +146,6 @@ namespace PowershellGUI.Models
                 IsScriptSelected = false;
                 }
             }
-
 
         /// <summary>
         /// Used for testing to build other functions

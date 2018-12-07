@@ -16,10 +16,11 @@ namespace PowershellGUI.Models
         /// to the user.
         /// </summary>
         /// <param name="output">String output from the PS-script.</param>
-        private void SetScriptOutput(string output)
+       /* private void SetScriptOutput(string output)
             {
             ScriptOutput = output;
             }
+        */
 
         private void ExecuteScript(string scriptPath)
             {
@@ -47,7 +48,7 @@ namespace PowershellGUI.Models
                         tmp.Append(output.ToString());
                         }
                     }
-                SetScriptOutput(tmp.ToString());
+                ScriptOutput = tmp.ToString();
                 }
             }
 
@@ -61,7 +62,6 @@ namespace PowershellGUI.Models
                 commandLineArguments.Add(argValue);
                 }
             }
-
 
         /// <summary>
         /// Constructor
@@ -108,7 +108,6 @@ namespace PowershellGUI.Models
             GetScriptParameters(scriptVariables);
             ExecuteScript(scriptPath);
             }
-
         }
     }
 

@@ -43,7 +43,7 @@
             </Grid>
 
             <!-- Dropdown menu -->
-            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryBrowser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryBrowser, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedItem="{Binding SelectedPsScript, Mode=TwoWay}"/>
 
             <!-- Input -->
