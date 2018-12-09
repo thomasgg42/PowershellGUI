@@ -1,4 +1,0 @@
-<#
-Color="Green"
-Name="ColorTest"
-#>

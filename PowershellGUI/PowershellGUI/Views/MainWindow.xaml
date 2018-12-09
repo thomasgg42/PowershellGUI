@@ -19,7 +19,7 @@
             <!-- Category -->
             <TextBlock Text="Kategori" FontWeight="Bold" Margin="0 0 0 10" />
             <Grid>
-                <!-- Radio buttons -->
+                <!-- Radio buttons row 1 -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -41,9 +41,28 @@
                     <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Skype}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
-
+            
+            <!-- 
+            DUE TO HARDCODED DIRECTORIES, THIS MUST BE ADDED FOR FUTURE NEW CATEGORIES
+            AS WELL AS ENUMS IN DIRECTORY READER
+            
+            <Grid Margin="0 5 0 0">
+            // Radio buttons row 2 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            
+                <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                    <RadioButton GroupName="Category" Content="Future Category" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.FutureCategory}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </Grid>
+            -->
+            
             <!-- Dropdown menu -->
-            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryBrowser, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+           <!-- ItemsSource=DirectoryPathBrowser--> 
+            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryNameBrowser, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedItem="{Binding SelectedPsScript, Mode=TwoWay}"/>
 
             <!-- Input -->
@@ -75,11 +94,14 @@
 
             <!-- Output -->
             <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
-            <TextBlock Height="235" 
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                   VerticalScrollBarVisibility="Visible"
+                   CanContentScroll="True">
+                <TextBlock MaxHeight="400" Width="385"
                    FontSize="12" 
-                   TextWrapping="Wrap" 
-                   Foreground="Black"
+                   TextWrapping="Wrap"
                    Text="{Binding PowershellParser.ScriptOutput}" />
+            </ScrollViewer>
         </StackPanel>
     </Border>
 </Window>

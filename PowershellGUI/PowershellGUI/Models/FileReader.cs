@@ -187,6 +187,7 @@ namespace PowershellGUI.Models
         /// </summary>
         public void ReadFile()
             {
+            // mangler filnavnet i filstien
             string[] lines         = System.IO.File.ReadAllLines(FileURI);
             string scriptHeaderEnd = "#>";
             int lineNum            = 0;

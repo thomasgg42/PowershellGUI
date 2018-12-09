@@ -2,7 +2,6 @@
  * Credit: Scott @Stackoverflow
  * https://stackoverflow.com/questions/397556/how-to-bind-radiobuttons-to-an-enum
  * 
- * view model?
  */
 
 using System;

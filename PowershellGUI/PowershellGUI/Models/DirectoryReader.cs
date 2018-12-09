@@ -1,52 +1,72 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 
 namespace PowershellGUI.Models
     {
-
+    /// <summary>
+    /// Radio buttons corresponding to each module-folder. For every new
+    /// folder, this list must be updated as well as the XML-file's stack panel.
+    /// </summary>
     enum RadioButtons
         {
         ActiveDirectory,
         Exchange,
-        Skype
+        Skype,
+        FutureCategory // Example of a new category
         }
 
+    /// <summary>
+    /// Stores information about existing script directories and the selected
+    /// scripts files.
+    /// </summary>
     class DirectoryReader : ObservableObject
         {
         private bool   _isScriptSelected;
         private string _modulePath;
         private string _selectedPsScript;
-        private ObservableCollection<string> directoryBrowser;
+        private string directoryName;
+        private ObservableCollection<string> _directoryNameBrowser;
         private RadioButtons _activeButton;
 
         /// <summary>
-        /// Updates the directory browser to match the 
-        /// selected category.
+        /// Returns the provided radio button as a string.
+        /// </summary>
+        /// <param name="btn">RadioButton corresponding to a script directory</param>
+        /// <returns></returns>
+        private string getSelectedDirectory(RadioButtons btn)
+            {
+            return btn.ToString();
+            }
+
+        /// <summary>
+        /// Fills the _directoryNameBrowser collection with powershell
+        /// script names. Also stores the full filepath to the given script
+        /// for later use.
         /// </summary>
         private void UpdateDirectoryBrowser()
             {
-            // @SIMEN
-            // funksjonen har som mål å fylle directoryBrowser med powershellscriptene som kan velges
+            _directoryNameBrowser.Clear();
 
-            // if/else dårlig mtp økning av antall kategorier i fremtiden
-            // modulePath skal lede til topp-dir hvor AD/Exchange/Skype ligger
-            directoryBrowser.Clear();
-
-            /*
-            if (_activeButton == RadioButtons.ActiveDirectory)
+            // Gets the directory corresponding to selected radio button
+            foreach(RadioButtons btn in (RadioButtons[])System.Enum.GetValues(typeof(RadioButtons)))
                 {
-                directoryBrowser.Add("ad valgt");
-                }
-            else if (_activeButton == RadioButtons.Exchange)
-                {
-                directoryBrowser.Add("exchange valgt");
-                }
-            else
-                {
-                directoryBrowser.Add("noe annet");
+                if(_activeButton == btn)
+                    {
+                    directoryName = getSelectedDirectory(btn);
+                    }
                 }
 
-            */
+            // Gets all the .ps1 scripts in the active directory
+            string directoryFilePath = _modulePath + "\\" + directoryName + "\\";
+            string[] scripts = System.IO.Directory.GetFiles(directoryFilePath, "*.ps1");
+            int fileExtensionLength = 4;
+            foreach(string script in scripts)
+                {
+                string fileNameWithExtension = Path.GetFileName(script);
+                string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
+                DirectoryNameBrowser.Add(Path.GetFileName(fileNameWithoutExtension));
+                }
             OnPropertyChanged("DirectoryBrowser");
             }
 
@@ -57,10 +77,10 @@ namespace PowershellGUI.Models
             {
             _isScriptSelected = false;
             _modulePath = modulePath;
+            directoryName = "";
             _activeButton = RadioButtons.ActiveDirectory;
-            directoryBrowser = new ObservableCollection<string>();
-            //UpdateDirectoryBrowser();
-            TmpUpdateDirectoryBrowser(); // for testing
+            _directoryNameBrowser = new ObservableCollection<string>();
+            UpdateDirectoryBrowser();
             }
 
         /// <summary>
@@ -69,13 +89,13 @@ namespace PowershellGUI.Models
         /// </summary>
         public void ClearDirectoryReader()
             {
-            // Also sets script selected false
             SelectedPsScript = "";
-            TmpUpdateDirectoryBrowser();
+            UpdateDirectoryBrowser();
             }
 
         /// <summary>
-        /// Returns the selected Powershell script's filepath
+        /// Sets the script's full file path.
+        /// Gets only the script's name, excluding the file path, as shown in the ComboBox.
         /// </summary>
         public string SelectedPsScript
             {
@@ -87,19 +107,18 @@ namespace PowershellGUI.Models
                 {
                 if(value != null)
                     {
-                    _selectedPsScript = value;
+                    _selectedPsScript = _modulePath + "\\" + directoryName + "\\" + value + ".ps1"; // + .ps1 når jeg fjerner denne..
                     OnPropertyChanged("SelectedPsScript");
                     }
                 if(value != null && value.Equals(""))
                     {
+                    _selectedPsScript = "";
                     IsScriptSelected = false;
                     }
                 else
                     {
                     IsScriptSelected = true;
                     }
-                //_selectedPsScript = value;
-                //OnPropertyChanged("SelectedPsScript");
                 }
             }
 
@@ -122,21 +141,22 @@ namespace PowershellGUI.Models
         /// <summary>
         /// Gets or sets the directoryPath to the directory to read
         /// </summary>
-        public ObservableCollection<string> DirectoryBrowser
+        public ObservableCollection<string> DirectoryNameBrowser
             {
             get
                 {
-                return directoryBrowser;
+                return _directoryNameBrowser;
                 }
             set
                 {
                 if(value != null)
                     {
-                    directoryBrowser = value;
-                    OnPropertyChanged("DirectoryBrowser");
+                    _directoryNameBrowser = value;
+                 //   OnPropertyChanged("DirectoryPathBrowser");
                     }
                 }
             }
+
 
         /// <summary>
         /// Gets or sets the current active radio button
@@ -152,32 +172,10 @@ namespace PowershellGUI.Models
                 {
                 _activeButton = value;
                 OnPropertyChanged("ActiveButton");
-                //UpdateDirectoryBrowser();
-                TmpUpdateDirectoryBrowser();
+                UpdateDirectoryBrowser();
                 IsScriptSelected = false;
                 }
             }
 
-        /// <summary>
-        /// Used for testing to build other functions
-        /// </summary>
-        public void TmpUpdateDirectoryBrowser()
-            {
-            directoryBrowser.Clear();
-            string script = "";
-            if(_activeButton == RadioButtons.ActiveDirectory)
-                {
-                script = _modulePath + "\\Active Directory\\psfile1.ps1";
-                }
-            else if(_activeButton == RadioButtons.Exchange)
-                {
-                script = _modulePath + "\\Exchange\\psfile2.ps1";
-                }
-            else if(_activeButton == RadioButtons.Skype)
-                {
-                script = _modulePath + "\\Skype\\psfile3.ps1";
-                }
-            DirectoryBrowser.Add(script);
-            }
         }
     }

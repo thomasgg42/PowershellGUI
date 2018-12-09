@@ -153,27 +153,20 @@ namespace PowershellGUI.ViewModels
                 // If a file has been chosen
                 if (FileReader.FileURI != null && !FileReader.FileURI.Equals(""))
                     {
+                    // Clear input fields and read a (new) file.
+                    FileReader.ClearFileReader();
                     FileReader.ReadFile();
-                    }
-                // Else no file chosen
-                else
-                    {
-                    /*
-                    if(FileReader.ScriptVariables.Count > 0)
-                        {
-                        FileReader.ScriptVariables.Clear();
-                        }
-                    */
                     }
                 return DirectoryReader.SelectedPsScript;
                 }
             set
                 {
                 // Clear the output when selecting a new script
-                if(value != null)
+                if (value != null)
                     {
                     ClearScriptOutput();
-                    ClearLastScriptSession();
+                    FileReader.ClearFileReader();
+                    PowershellParser.ClearPowershellParser();
                     DirectoryReader.SelectedPsScript = value;
                     }
                 }
