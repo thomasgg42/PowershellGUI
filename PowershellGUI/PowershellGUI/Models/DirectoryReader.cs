@@ -63,12 +63,15 @@ namespace PowershellGUI.Models
             TmpUpdateDirectoryBrowser(); // for testing
             }
 
+        /// <summary>
+        /// Resets the selected script back to none and
+        /// empties the list of scripts.
+        /// </summary>
         public void ClearDirectoryReader()
             {
             // Also sets script selected false
             SelectedPsScript = "";
             TmpUpdateDirectoryBrowser();
-            //directoryBrowser.Clear();
             }
 
         /// <summary>
@@ -82,8 +85,12 @@ namespace PowershellGUI.Models
                 }
             set
                 {
-                _selectedPsScript = value;
-                if(value.Equals(""))
+                if(value != null)
+                    {
+                    _selectedPsScript = value;
+                    OnPropertyChanged("SelectedPsScript");
+                    }
+                if(value != null && value.Equals(""))
                     {
                     IsScriptSelected = false;
                     }
@@ -91,7 +98,8 @@ namespace PowershellGUI.Models
                     {
                     IsScriptSelected = true;
                     }
-                OnPropertyChanged("SelectedPsScript");
+                //_selectedPsScript = value;
+                //OnPropertyChanged("SelectedPsScript");
                 }
             }
 
@@ -122,8 +130,11 @@ namespace PowershellGUI.Models
                 }
             set
                 {
-                directoryBrowser = value;
-                OnPropertyChanged("DirectoryBrowser");
+                if(value != null)
+                    {
+                    directoryBrowser = value;
+                    OnPropertyChanged("DirectoryBrowser");
+                    }
                 }
             }
 

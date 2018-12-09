@@ -130,9 +130,13 @@ namespace PowershellGUI.ViewModels
                 canExecute = false;
                 }
             // Button inactive if input field empty
-            /*
-             foreach scriptVariable, if inputValue == empty then caNExecute = false
-             */
+            foreach(ScriptArgument arg in FileReader.ScriptVariables)
+                {
+                if(arg.InputValue == null || arg.InputValue.Equals(""))
+                    {
+                    canExecute = false;
+                    }
+                }
             return canExecute;
             }
 
@@ -147,7 +151,7 @@ namespace PowershellGUI.ViewModels
                 {
                 FileReader.FileURI = DirectoryReader.SelectedPsScript;
                 // If a file has been chosen
-                if(FileReader.FileURI != null)
+                if (FileReader.FileURI != null && !FileReader.FileURI.Equals(""))
                     {
                     FileReader.ReadFile();
                     }
@@ -170,8 +174,8 @@ namespace PowershellGUI.ViewModels
                     {
                     ClearScriptOutput();
                     ClearLastScriptSession();
+                    DirectoryReader.SelectedPsScript = value;
                     }
-                DirectoryReader.SelectedPsScript = value;
                 }
             }
 

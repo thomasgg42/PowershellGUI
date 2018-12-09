@@ -16,8 +16,7 @@ namespace PowershellGUI.Models
     /// </summary>
     class FileReader : ObservableObject
         {
-        public string FileURI { get; set; }
-
+        private string _fileURI;
         private string scriptDescription;
         private string scriptHeader;
         private string scriptOutput;
@@ -74,6 +73,13 @@ namespace PowershellGUI.Models
             //OnPropertyChanged("ScriptVariables");
             }
 
+        /// <summary>
+        /// Fills the object corresponding to each command line
+        /// argument input field.
+        /// </summary>
+        /// <param name="inputKey">Name of the key, displayed for user.</param>
+        /// <param name="inputDesc">Description of the key, displayed for user.</param>
+        /// <param name="inputType">Value of the key, set by user.</param>
         private void SaveInputField(string inputKey, string inputDesc, string inputType)
             {
             ScriptArgument scriptInput = new ScriptArgument(inputKey, inputDesc, inputType);
@@ -128,16 +134,39 @@ namespace PowershellGUI.Models
         public FileReader()
             {
             _scriptVariables  = new ObservableCollection<ScriptArgument>();
+            _fileURI          = "";
             scriptDescription = "";
             scriptHeader      = "";
             scriptOutput      = "";
             }
 
+        /// <summary>
+        /// Removes all stored input variables and script information
+        /// gained from the comment field in the script.
+        /// </summary>
         public void ClearFileReader()
             {
             scriptDescription = "";
             scriptHeader      = "";
             _scriptVariables.Clear();
+            }
+
+        /// <summary>
+        /// Gets or sets the file URI.
+        /// </summary>
+        public string FileURI
+            {
+            get
+                {
+                return _fileURI;
+                }
+            set
+                {
+                if(value != null)
+                    {
+                    _fileURI = value;
+                    }
+                }
             }
 
         public ObservableCollection<ScriptArgument> ScriptVariables
