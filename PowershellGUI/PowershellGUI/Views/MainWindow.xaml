@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PowershellGUI"
         xmlns:models="clr-namespace:PowershellGUI.Models"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="450">
+        Title="PowershellGUI" Height="600" Width="450">
 
     <Window.Resources>
         <!-- Makes sure Converter={StaticResource ComparisonConverter} finds the correct class -->
@@ -15,34 +15,35 @@
 
     
     <Border Padding="10">
-        <StackPanel>
-            <!-- Category -->
-            <TextBlock Text="Kategori" FontWeight="Bold" Margin="0 0 0 10" />
-            <Grid>
-                <!-- Radio buttons row 1 -->
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+        <Grid>
+            <StackPanel>
+                <!-- Category -->
+                <TextBlock Text="Kategori" FontWeight="Bold" Margin="0 0 0 10" />
+                <Grid>
+                    <!-- Radio buttons row 1 -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <!-- Column 1 -->
-                <StackPanel Grid.Column="0" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}"/>
-                </StackPanel>
+                    <!-- Column 1 -->
+                    <StackPanel Grid.Column="0" Margin="0 0 0 0">
+                        <RadioButton GroupName="Category" Content="Active Directory" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.ActiveDirectory}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
 
-                <!-- Column 2 -->
-                <StackPanel Grid.Column="1" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Exchange}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
+                    <!-- Column 2 -->
+                    <StackPanel Grid.Column="1" Margin="0 0 0 0">
+                        <RadioButton GroupName="Category" Content="Exchange" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Exchange}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
 
-                <!-- Column 3 -->
-                <StackPanel Grid.Column="2" Margin="0 0 0 0">
-                    <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Skype}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-            </Grid>
-            
-            <!-- 
+                    <!-- Column 3 -->
+                    <StackPanel Grid.Column="2" Margin="0 0 0 0">
+                        <RadioButton GroupName="Category" Content="Skype" IsChecked="{Binding DirectoryReader.ActiveButton, ConverterParameter={x:Static models:RadioButtons.Skype}, Converter={StaticResource ComparisonConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- 
             DUE TO HARDCODED DIRECTORIES, THIS MUST BE ADDED FOR FUTURE NEW CATEGORIES
             AS WELL AS ENUMS IN DIRECTORY READER
             
@@ -59,49 +60,51 @@
                 </StackPanel>
             </Grid>
             -->
-            
-            <!-- Dropdown menu -->
-           <!-- ItemsSource=DirectoryPathBrowser--> 
-            <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryNameBrowser, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+
+                <!-- Dropdown menu -->
+                <!-- ItemsSource=DirectoryPathBrowser-->
+                <ComboBox Margin="0 10 0 0" ItemsSource="{Binding DirectoryReader.DirectoryNameBrowser, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedItem="{Binding SelectedPsScript, Mode=TwoWay}"/>
 
-            <!-- Input -->
-            <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
+                <!-- Input -->
+                <TextBlock Text="Input" FontWeight="Bold" Margin="0 10 0 10" />
 
-            <!-- Input fields -->
-            <ItemsControl ItemsSource="{Binding FileReader.ScriptVariables}">
-                <!-- ItemsPanelTemplate -->
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="2" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                <!-- Input fields -->
+                <ItemsControl ItemsSource="{Binding FileReader.ScriptVariables}">
+                    <!-- ItemsPanelTemplate -->
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <!-- ItemTemplate -->
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="0 5 5 0">
-                            <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                            <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                            <TextBox Text="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    <!-- ItemTemplate -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0 5 5 0">
+                                <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                                <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
+                                <TextBox Text="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            <!-- Run script button -->
-            <Button Content="Run script" Margin="50 20 50 0" Command="{Binding ClickCommand}"/>
+                <!-- Run script button -->
+                <Button Content="Run script" Margin="50 20 50 0" Command="{Binding ClickCommand}"/>
 
-            <!-- Output -->
-            <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                   VerticalScrollBarVisibility="Visible"
-                   CanContentScroll="True">
+                <!-- Output -->
+                <TextBlock Text="Output" FontWeight="Bold" Margin="0 10 0 10" />
                 <TextBlock MaxHeight="400" Width="385"
                    FontSize="12" 
                    TextWrapping="Wrap"
                    Text="{Binding PowershellParser.ScriptOutput}" />
-            </ScrollViewer>
-        </StackPanel>
+            </StackPanel>
+            <StackPanel 
+                        ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
+
+            </StackPanel>
+        </Grid>
     </Border>
 </Window>
