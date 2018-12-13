@@ -1,6 +1,9 @@
 <#
 Description = "beskrivelse"
 Header = "Funksjonsnavn"
-Output = "True"
+Description = "beskrivelse"
+[string]tekstfilnavn = "Mappens navn"
+[string]mappenavn = "Antall tekstfiler i mappe"
+[string]tekstfilinnhold = "Tekstfilens innhold"
 #>
 Get-Help

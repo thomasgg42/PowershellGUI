@@ -66,11 +66,20 @@ namespace PowershellGUI.Models
         /// <param name="line"></param>
         private void GetScriptVariables(string line)
             {
-            string varName = ParseVariableName(line);
-            string varType = ParseVariableType(line);
-            string varDescription = ParseQuotationContent(line);
+            string varName        = "";
+            string varType        = "";
+            string varDescription = "";
+            try
+                {
+                varName = ParseVariableName(line);
+                varType = ParseVariableType(line);
+                varDescription = ParseQuotationContent(line);
+                }
+            catch(System.Exception e)
+                {
+                System.Windows.MessageBox.Show("Error: Bad format in powershell script header");
+                }
             SaveInputField(varName, varDescription, varType);
-            //OnPropertyChanged("ScriptVariables");
             }
 
         /// <summary>
@@ -89,6 +98,7 @@ namespace PowershellGUI.Models
         /// <summary>
         /// Gets the variable name from a string from the 
         /// script header's input variables section.
+        /// Throws an exception.
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
@@ -101,6 +111,7 @@ namespace PowershellGUI.Models
 
         /// <summary>
         /// Gets the variable types defined by brackets.
+        /// Throws an exception
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
@@ -192,11 +203,10 @@ namespace PowershellGUI.Models
             string scriptHeaderEnd = "#>";
             int lineNum            = 0;
             int lastHeaderLine     = 3;
-
             foreach (string line in lines)
                 {
                 // if header is completely parsed
-                if (line == scriptHeaderEnd)   { break; }
+                if (line == scriptHeaderEnd) { break; }
                 // If description, header or output
                 if (lineNum <= lastHeaderLine) { ParseScriptHeader(lineNum, line); }
                 // else if input variables to script
