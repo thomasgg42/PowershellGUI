@@ -8,7 +8,7 @@ namespace PowershellGUI.Models
     /// Radio buttons corresponding to each module-folder. For every new
     /// folder, this list must be updated as well as the XML-file's stack panel.
     /// </summary>
-    enum RadioButtons
+    public enum RadioButtons
         {
         ActiveDirectory,
         Exchange,
@@ -20,7 +20,7 @@ namespace PowershellGUI.Models
     /// Stores information about existing script directories and the selected
     /// scripts files.
     /// </summary>
-    class DirectoryReader : ObservableObject
+    public class DirectoryReader : ObservableObject
         {
         private bool   _isScriptSelected;
         private string _modulePath;
@@ -58,14 +58,23 @@ namespace PowershellGUI.Models
                 }
 
             // Gets all the .ps1 scripts in the active directory
+            string[] scripts;
             string directoryFilePath = _modulePath + "\\" + directoryName + "\\";
-            string[] scripts = System.IO.Directory.GetFiles(directoryFilePath, "*.ps1");
             int fileExtensionLength = 4;
-            foreach(string script in scripts)
+            try
                 {
-                string fileNameWithExtension = Path.GetFileName(script);
-                string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
-                DirectoryNameBrowser.Add(Path.GetFileName(fileNameWithoutExtension));
+                scripts = System.IO.Directory.GetFiles(directoryFilePath, "*.ps1");
+                foreach (string script in scripts)
+                    {
+                    string fileNameWithExtension = Path.GetFileName(script);
+                    string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
+                    DirectoryNameBrowser.Add(Path.GetFileName(fileNameWithoutExtension));
+                    }
+                }
+            catch (System.Exception e)
+                {
+                // TODO: exception klasser?
+                System.Windows.MessageBox.Show("No \"Modules\" directory found. This application must\n be placed together with the \"Modules\" directory.");
                 }
             OnPropertyChanged("DirectoryBrowser");
             }

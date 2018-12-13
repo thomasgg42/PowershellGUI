@@ -9,7 +9,7 @@ namespace PowershellGUI.Models
     /// <summary>
     /// Dictionary-alike class providing a key and a value pair.
     /// </summary>
-    class ScriptArgument
+    public class ScriptArgument
         {
         private string _inputKey;
         private string _inputDescription;

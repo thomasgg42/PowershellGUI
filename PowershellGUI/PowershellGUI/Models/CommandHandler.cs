@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace PowershellGUI
+namespace PowershellGUI.Models
     {
     /// <summary>
     /// Handles the Click-functionality on the button

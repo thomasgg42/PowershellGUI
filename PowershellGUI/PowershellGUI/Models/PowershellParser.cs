@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PowershellGUI.Models
     {
-    class PowershellParser : ObservableObject
+    public class PowershellParser : ObservableObject
         {
         private string _scriptOutput;
         private List<string> commandLineArguments;

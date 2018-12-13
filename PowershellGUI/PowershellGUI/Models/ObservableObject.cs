@@ -6,7 +6,7 @@ namespace PowershellGUI.Models
     /// Implements INotifyPropertyChanged allowing
     /// child-classes to propagate events.
     /// </summary>
-    class ObservableObject : INotifyPropertyChanged
+    public class ObservableObject : INotifyPropertyChanged
         {
         public event PropertyChangedEventHandler PropertyChanged;
 

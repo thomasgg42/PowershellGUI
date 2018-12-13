@@ -1,11 +1,9 @@
 ﻿using PowershellGUI.Models;
-using System;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace PowershellGUI.ViewModels
     {
-    class ViewModel
+    public class ViewModel
         {
         private string              modulePath;
         private DirectoryReader     _DirectoryReader;

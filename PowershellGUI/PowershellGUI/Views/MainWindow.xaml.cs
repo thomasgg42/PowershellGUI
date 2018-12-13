@@ -12,17 +12,17 @@ namespace PowershellGUI.Views
         public MainWindow()
             {
             InitializeComponent();
-            string relModulePath = @".\..\..\..\Modules"; // utestet om denne leder til riktig mappe
-            DataContext = new ViewModel(relModulePath);
             
+            string devModulePath = @".\..\..\..\Modules"; // during developement
+            string releaseModulePath = "Modules";         // release
+            DataContext = new ViewModel(releaseModulePath);
+
             // Scan antall mapper i ModulePath
             // Opprett antall radio knapper ut ifra dette
-            
+
             // for hver valgte radio knapp
             // scan antall mapper i mappen tilhørende valgt radio knapp
             // populer dropdown med mappenes navn
-
-            
             }
         }
     }

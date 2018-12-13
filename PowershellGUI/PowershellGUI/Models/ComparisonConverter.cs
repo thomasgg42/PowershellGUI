@@ -7,7 +7,7 @@
 using System;
 using System.Windows.Data;
 
-namespace PowershellGUI
+namespace PowershellGUI.Models
     {
     /// <summary>
     /// Converts RadioButton selections to Enum values.

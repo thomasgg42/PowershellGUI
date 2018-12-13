@@ -14,7 +14,7 @@ namespace PowershellGUI.Models
     /// Builds input fields accordingly. Will also store the input field values
     /// as they're set. 
     /// </summary>
-    class FileReader : ObservableObject
+    public class FileReader : ObservableObject
         {
         private string _fileURI;
         private string scriptDescription;
