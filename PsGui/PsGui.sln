@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsGui", "PsGui\PsGui.csproj", "{BF95CCAA-049B-4A29-8C90-4D1BEF9013F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsGuiTest", "PsGuiTest\PsGuiTest.csproj", "{BE99B24A-8202-4948-9A9B-2AD151E0BBB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BF95CCAA-049B-4A29-8C90-4D1BEF9013F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF95CCAA-049B-4A29-8C90-4D1BEF9013F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF95CCAA-049B-4A29-8C90-4D1BEF9013F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE99B24A-8202-4948-9A9B-2AD151E0BBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE99B24A-8202-4948-9A9B-2AD151E0BBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE99B24A-8202-4948-9A9B-2AD151E0BBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE99B24A-8202-4948-9A9B-2AD151E0BBB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

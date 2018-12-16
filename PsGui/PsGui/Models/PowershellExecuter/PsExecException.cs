@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PsGui.Models
     {
-    class ScriptArgument
+    public class PsExecException : PsGuiExceptions
         {
         }
     }

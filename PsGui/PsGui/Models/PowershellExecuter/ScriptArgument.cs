@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsGui.Models
+namespace PsGui.Models.PowershellExecuter
     {
-    class FileReader
+    class ScriptArgument
         {
         }
     }

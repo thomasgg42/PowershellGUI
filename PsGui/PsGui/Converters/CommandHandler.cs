@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PsGui.Converters
     {
-    class CmmandHandler
+    class CommandHandler
         {
         }
     }
