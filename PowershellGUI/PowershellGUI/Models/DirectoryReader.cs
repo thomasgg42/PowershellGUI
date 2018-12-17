@@ -166,7 +166,6 @@ namespace PowershellGUI.Models
                 }
             }
 
-
         /// <summary>
         /// Gets or sets the current active radio button
         /// @see ComparisonConverter for Enum -> boolean transition

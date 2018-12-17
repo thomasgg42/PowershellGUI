@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace PsGui.Models
+namespace PsGui.Models.PowershellExecuter
     {
-    public class PsExecException : PsGuiExceptions
+    public class PsExecException : PsGuiException
         {
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PsGui.Models
+namespace PsGui.Models.PowershellExecuter
     {
     /// <summary>
     /// Validates the user input to the command line arguments.

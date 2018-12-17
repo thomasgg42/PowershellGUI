@@ -9,25 +9,31 @@ namespace PsGuiTest
     public class PowershellExecuterTest
         {
         /// <summary>
-        /// When the program launches. One shall not be able to 
+        /// When the program launches. A list of available categories 
+        /// (directories) shall be saved. One shall not be able to 
         /// execute a script. The selected script shall be set 
         /// to an empty string. A modulepath shall be set to a existing
         /// folder structure at the same directory level as the program.
+        /// The script browser list shall be empty and the IsScriptSelected
+        /// flag shall be set to false.
         /// </summary>
         [TestMethod]
         public void InitialTest()
             {
             string modulePath = ".";
             PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            Assert.AreEqual(true, DirectoryNameBrowser.IsEmpty());
-            Assert.AreEqual(false, psExec.IsScriptSelected);
-            Assert.AreEqual(false, psExec.CanExecute(this));
-            Assert.AreEqual("", psExec.SelectedScript);
+
             Assert.IsNotNull(psExec.ModulePath);
+            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
+            Assert.AreEqual(true, psExec.ScriptFileBrowser.Count == 0);
+            Assert.AreEqual(false, psExec.IsScriptSelected);
+            Assert.AreEqual("", psExec.SelectedScript);
+            Assert.AreEqual(false, psExec.CanExecute(this));
             }
 
         /// <summary>
-        /// When a category is chosen. The script shall be cleared from
+        /// When a category is chosen. The current script shall be cleared from
+        /// the dropdown menu. A new list of scripts shall then be available from
         /// the dropdown menu.
         /// </summary>
         [TestMethod]
@@ -35,10 +41,16 @@ namespace PsGuiTest
             {
             string modulePath = ".";
             PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            psExec.DirectoryNameBrowser.Add("Active Directory");
+            psExec.ScriptCategoryBrowser.Add("Active Directory");
+            psExec.ScriptCategoryBrowser.Add("Exchange Server");
+            psExec.ScriptCategoryBrowser.Add("Skype");
+            psExec.SelectedCategory = "Active Directory";
+            psExec.SelectedScript = "";
 
+            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
+            Assert.AreEqual(true, psExec.SelectedScript == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
-            Assert.AreEqual(true, psExec.ScriptVariables.IsEmpty());
+            Assert.AreEqual(true, psExec.ScriptVariables.Count == 0);
             }
 
 
@@ -57,7 +69,7 @@ namespace PsGuiTest
             // Script exists, empty input fields
             psExec.SelectedScript = "SomeTestScript.ps1";
             Assert.AreEqual(true, psExec.IsScriptSelected);
-            Assert.AreEqual(true, psExec.ScriptVariables.IsEmpty());
+            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
 
 
             // Script not exists

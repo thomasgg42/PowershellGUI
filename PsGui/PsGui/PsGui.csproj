@@ -81,13 +81,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ArgumentChecker.cs" />
+    <Compile Include="Models\PowershellExecuter\ArgumentChecker.cs" />
     <Compile Include="Models\DirectoryReader.cs" />
-    <Compile Include="Models\FileReader.cs" />
-    <Compile Include="Models\PowershellExecuter.cs" />
-    <Compile Include="Models\PsExecExceptions.cs" />
-    <Compile Include="Models\PsGuiExceptions.cs" />
-    <Compile Include="Models\ScriptArgument.cs" />
+    <Compile Include="Models\PowershellExecuter\ScriptReader.cs" />
+    <Compile Include="Models\PowershellExecuter\PowershellExecuter.cs" />
+    <Compile Include="Models\PowershellExecuter\PsExecException.cs" />
+    <Compile Include="Models\PsGuiException.cs" />
+    <Compile Include="Models\PowershellExecuter\ScriptArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
