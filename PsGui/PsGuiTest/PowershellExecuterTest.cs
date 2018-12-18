@@ -37,23 +37,72 @@ namespace PsGuiTest
         /// the dropdown menu.
         /// </summary>
         [TestMethod]
-        public void CategoryChosenEmptyListTest()
+        public void NewCategoryChosenTest()
             {
             string modulePath = ".";
             PsExecViewModel psExec = new PsExecViewModel(modulePath);
             psExec.ScriptCategoryBrowser.Add("Active Directory");
             psExec.ScriptCategoryBrowser.Add("Exchange Server");
             psExec.ScriptCategoryBrowser.Add("Skype");
-            psExec.SelectedScriptCategory = "Active Directory";
-            psExec.SelectedScriptFile = "";
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
 
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
             Assert.AreEqual(true, psExec.SelectedScriptFile == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
-            Assert.AreEqual(true, psExec.ScriptVariables.Count == 0);
+
+            // Script variabler skal beholdes (input felt), men innholdet i variablene
+            // (felt input) skal tømmes
+            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
+                {
+                Assert.AreEqual(true, arg.HasNoInput());
+                }
             }
 
+        /// <summary>
+        /// When a script file is chosen in a selected category. All input fields 
+        /// defined in the script shall be loaded into the ScriptVariables collection.
+        /// Each collection object shall contain a ScriptArgument containing information
+        /// gathered from the script file. The script argument's input field shall be empty.
+        /// </summary>
+        [TestMethod]
+        public void NewScriptFileChosenInCategoryTest()
+            {
+            string modulePath = ".";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath);
+            psExec.ScriptCategoryBrowser.Add("Active Directory");
+            psExec.ScriptCategoryBrowser.Add("Exchange Server");
+            psExec.ScriptCategoryBrowser.Add("Skype");
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+            string key = "TestKey";
+            string description = "TestDescription";
+            string type = "TestType";
 
+            // Create argument aka input field
+            PsGui.Models.PowershellExecuter.ScriptArgument arg = 
+                new PsGui.Models.PowershellExecuter.ScriptArgument(key, description, type);
+            // Add argument to ScriptVariables collection
+            psExec.ScriptVariables.Add(arg);
+            // Set the first script variable's key (name) as the chosen script
+            psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
+            }
+
+        /// <summary>
+        /// When a new script is chosen after previously selecting a script
+        /// in a previous category, all the previous script variables shall
+        /// be deleted and new script variables shall be created from the newly
+        /// chosen script.
+        /// </summary>
+        [TestMethod]
+        public void NewScriptChosenInNewCategoryTest()
+            {
+            string modulePath = ".";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath);
+            psExec.ScriptCategoryBrowser.Add("Active Directory");
+            psExec.ScriptCategoryBrowser.Add("Exchange Server");
+            psExec.ScriptCategoryBrowser.Add("Skype");
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+            //todo
+            }
 
         /// <summary>
         /// A script must be chosen before script input fields can be shown.

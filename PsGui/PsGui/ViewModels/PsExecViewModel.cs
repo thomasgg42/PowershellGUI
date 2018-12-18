@@ -19,7 +19,6 @@ namespace PsGui.ViewModels
         private ScriptArgument     scriptArgument;
 
         private string _modulePath;
-        private string _selectedPsScript;
         private bool   _isScriptSelected;
 
         /// <summary>
@@ -28,7 +27,8 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath)
             {
-            _modulePath = modulePath;
+            _modulePath     = modulePath;
+            directoryReader = new DirectoryReader();
             }
 
         /// <summary>
@@ -87,6 +87,9 @@ namespace PsGui.ViewModels
                 {
                 if(value != null)
                     {
+                    // When a new script is selected, remove values from previous input fields
+                    // but keep the fields
+                    scriptReader.ClearScriptVariableInfo();
                     directoryReader.SelectedCategory = value;
                     }
                 }
@@ -133,7 +136,7 @@ namespace PsGui.ViewModels
                     }
                 else
                     {
-                    System.Windows.MessageBox.Show("SelectedScript null");
+                    System.Windows.MessageBox.Show("SelectedScriptFile null");
                     }
                 }
             }
@@ -145,11 +148,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return _isScriptSelected;
+                return directoryReader.IsScriptSelected;
                 }
             set
                 {
-                _isScriptSelected = value;
+                directoryReader.IsScriptSelected = value; // bool never null
                 }
             }
 
@@ -157,7 +160,7 @@ namespace PsGui.ViewModels
         /// Sets or gets a collection of strings representing
         /// the script command line input variables.
         /// </summary>
-        public ObservableCollection<string> ScriptVariables
+        public ObservableCollection<ScriptArgument> ScriptVariables
             {
             get
                 {

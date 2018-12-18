@@ -7,15 +7,23 @@ using System.Threading.Tasks;
 
 namespace PsGui.Models.PowershellExecuter
     {
-    class ScriptReader
+    public class ScriptReader
         {
-        private ObservableCollection<string> _scriptVariables;
+        private ObservableCollection<ScriptArgument> _scriptVariables;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ScriptReader()
+            {
+            _scriptVariables = new ObservableCollection<ScriptArgument>();
+            }
 
         /// <summary>
         /// Sets or gets a collection of strings representing
         /// the script command line input variables.
         /// </summary>
-        public ObservableCollection<string> ScriptVariables
+        public ObservableCollection<ScriptArgument> ScriptVariables
             {
             get
                 {
@@ -26,5 +34,34 @@ namespace PsGui.Models.PowershellExecuter
                 _scriptVariables = value;
                 }
             }
+
+        /// <summary>
+        /// Returns true if there are no registered script variables.
+        /// </summary>
+        /// <returns></returns>
+        public bool ContainsVariables()
+            {
+            if(_scriptVariables != null && _scriptVariables.Count != 0)
+                {
+                return true;
+                }
+            else
+                {
+                return false;
+                }
+            }
+
+        /// <summary>
+        /// Clears all script variables (input fields) for defined
+        /// information.
+        /// </summary>
+        public void ClearScriptVariableInfo()
+            {
+            foreach(ScriptArgument arg in _scriptVariables)
+                {
+                arg.ClearUserInput();
+                }
+            }
+
         }
     }

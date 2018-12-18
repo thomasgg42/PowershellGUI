@@ -17,6 +17,17 @@ namespace PsGui.Models
         private ObservableCollection<string> _scriptFiles;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public DirectoryReader()
+            {
+            _scriptCategories = new ObservableCollection<string>();
+            _scriptFiles      = new ObservableCollection<string>();
+            _isScriptSelected = false;
+            _selectedScript   = "";
+            }
+
+        /// <summary>
         /// Returns true if a script is selected.
         /// </summary>
         public bool IsScriptSelected
@@ -95,8 +106,6 @@ namespace PsGui.Models
                 _categorySelected = value;
                 }
             }
-
-
 
         }
     }
