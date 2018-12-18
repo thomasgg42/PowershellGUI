@@ -29,6 +29,7 @@ namespace PsGui.ViewModels
             {
             _modulePath     = modulePath;
             directoryReader = new DirectoryReader();
+            // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
             }
 
         /// <summary>

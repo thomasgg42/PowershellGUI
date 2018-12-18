@@ -50,6 +50,7 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExec.SelectedScriptFile == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
 
+            // I tilfellet hvor man tidligere har valgt et script og hentet inn script variabler
             // Script variabler skal beholdes (input felt), men innholdet i variablene
             // (felt input) skal tømmes
             foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
@@ -84,6 +85,9 @@ namespace PsGuiTest
             psExec.ScriptVariables.Add(arg);
             // Set the first script variable's key (name) as the chosen script
             psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
+
+            Assert.AreEqual(true, psExec.IsScriptSelected);
+            Assert.AreEqual(false, psExec.CanExecute(this));
             }
 
         /// <summary>
@@ -100,7 +104,9 @@ namespace PsGuiTest
             psExec.ScriptCategoryBrowser.Add("Active Directory");
             psExec.ScriptCategoryBrowser.Add("Exchange Server");
             psExec.ScriptCategoryBrowser.Add("Skype");
+
             psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+            Assert.AreEqual(false, psExec.IsScriptSelected);
             //todo
             }
 
@@ -125,7 +131,6 @@ namespace PsGuiTest
             psExec.SelectedScriptFile = "";
             Assert.AreEqual(false, psExec.IsScriptSelected);
             }
-
 
         /// <summary>
         /// Before a powershell script is launched, all argument input
