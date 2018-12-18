@@ -27,7 +27,7 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
             Assert.AreEqual(true, psExec.ScriptFileBrowser.Count == 0);
             Assert.AreEqual(false, psExec.IsScriptSelected);
-            Assert.AreEqual("", psExec.SelectedScript);
+            Assert.AreEqual("", psExec.SelectedScriptFile);
             Assert.AreEqual(false, psExec.CanExecute(this));
             }
 
@@ -44,11 +44,11 @@ namespace PsGuiTest
             psExec.ScriptCategoryBrowser.Add("Active Directory");
             psExec.ScriptCategoryBrowser.Add("Exchange Server");
             psExec.ScriptCategoryBrowser.Add("Skype");
-            psExec.SelectedCategory = "Active Directory";
-            psExec.SelectedScript = "";
+            psExec.SelectedScriptCategory = "Active Directory";
+            psExec.SelectedScriptFile = "";
 
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
-            Assert.AreEqual(true, psExec.SelectedScript == "");
+            Assert.AreEqual(true, psExec.SelectedScriptFile == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
             Assert.AreEqual(true, psExec.ScriptVariables.Count == 0);
             }
@@ -67,13 +67,13 @@ namespace PsGuiTest
             PsExecViewModel psExec = new PsExecViewModel(modulePath);
 
             // Script exists, empty input fields
-            psExec.SelectedScript = "SomeTestScript.ps1";
+            psExec.SelectedScriptFile = "SomeTestScript.ps1";
             Assert.AreEqual(true, psExec.IsScriptSelected);
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
 
 
             // Script not exists
-            psExec.SelectedScript = "";
+            psExec.SelectedScriptFile = "";
             Assert.AreEqual(false, psExec.IsScriptSelected);
             }
 

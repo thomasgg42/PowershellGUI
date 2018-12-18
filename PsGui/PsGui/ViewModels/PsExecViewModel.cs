@@ -77,17 +77,17 @@ namespace PsGui.ViewModels
         /// Sets or gets the selected category in form of a 
         /// script directory and a radio button in the GUI.
         /// </summary>
-        public string SelectedCategory
+        public string SelectedScriptCategory
             {
             get
                 {
-                return directoryReader.CategorySelected;
+                return directoryReader.SelectedCategory;
                 }
             set
                 {
                 if(value != null)
                     {
-                    directoryReader.CategorySelected = value;
+                    directoryReader.SelectedCategory = value;
                     }
                 }
             }
@@ -119,7 +119,7 @@ namespace PsGui.ViewModels
         /// <summary>
         /// Sets or gets the selected powershell script.
         /// </summary>
-        public string SelectedScript
+        public string SelectedScriptFile
             {
             get
                 {
@@ -171,8 +171,6 @@ namespace PsGui.ViewModels
                     }
                 }
             }
-
-
 
         /// <summary>
         /// Returns true if a selected powershell script
