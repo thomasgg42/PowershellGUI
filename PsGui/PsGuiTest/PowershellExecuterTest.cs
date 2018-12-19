@@ -1,19 +1,15 @@
-﻿using System;
-using PsGui.ViewModels;
-using PsGui.Models;
+﻿using PsGui.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 /// <summary>
-///  DirectoryReader.SelectedScriptCategory skal bestemme kategori (finnes ikke her enda)
+///  DirectoryReader.SelectedScriptCategory skal bestemme kategori
 ///  DirectoryReader.ScriptFiles skal knyttes til dropdownmeny med ps-filer
-///  DirectoryReader.SelectedScript bestemmer nåværende valgt script
+///  DirectoryReader.SelectedScriptFile bestemmer nåværende valgt script
 ///  FileReader.ScriptVariables gir en liste over input felt
 ///  FileReader.ScriptArgument skal gi tilgang til hvert input felt sine egenskaper
 ///  ClickCommand skal kjøres ved trykk på Run Script knapp
 ///  PowershellExecuter.ScriptOutput skal vise output fra powershsell
 /// </summary>
-
-
 
 
 namespace PsGuiTest
@@ -39,7 +35,7 @@ namespace PsGuiTest
             Assert.IsNotNull(psExec.ModulePath);
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
             Assert.AreEqual(true, psExec.ScriptFileBrowser.Count == 0);
-            Assert.AreEqual(false, psExec.SelectedScriptCategory);
+            Assert.AreEqual("", psExec.SelectedScriptCategory);
             Assert.AreEqual(false, psExec.IsScriptSelected);
             Assert.AreEqual("", psExec.SelectedScriptFile);
             Assert.AreEqual(false, psExec.CanExecute(this));

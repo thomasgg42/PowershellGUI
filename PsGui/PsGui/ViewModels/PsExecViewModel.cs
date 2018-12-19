@@ -28,6 +28,7 @@ namespace PsGui.ViewModels
         public PsExecViewModel(string modulePath)
             {
             _modulePath     = modulePath;
+            scriptReader    = new ScriptReader();
             directoryReader = new DirectoryReader();
             // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
             }
@@ -133,6 +134,11 @@ namespace PsGui.ViewModels
                 {
                 if(value != null)
                     {
+                    // The setter runs when set to empty string as well as a script name
+                    if(value != "")
+                        {
+                        IsScriptSelected = true;
+                        } 
                     directoryReader.SelectedScript = value;
                     }
                 else
@@ -184,7 +190,19 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         public bool CanExecute(object parameter)
             {
-            return false;
+            bool canExec = true;
+            if(IsScriptSelected == false)
+                {
+                canExec = false;
+                }
+            foreach(ScriptArgument arg in ScriptVariables)
+                {
+                if (arg.InputValue.Equals(""))
+                    {
+                    canExec = false;
+                    }
+                }
+            return canExec;
             }
 
         }

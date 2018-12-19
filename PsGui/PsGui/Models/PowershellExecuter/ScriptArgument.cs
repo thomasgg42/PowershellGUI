@@ -8,6 +8,7 @@ namespace PsGui.Models.PowershellExecuter
     {
     public class ScriptArgument
         {
+        ArgumentChecker inputCheck;
         private string _inputKey;
         private string _inputDescription;
         private string _inputType;
@@ -19,6 +20,23 @@ namespace PsGui.Models.PowershellExecuter
             _inputDescription = description;
             _inputType        = type;
             _inputValue       = "";
+            }
+
+        /// <summary>
+        /// Checks input format based on the stored input type.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private bool IsInputOk(string input)
+            {
+            bool inputOk = false;
+            switch (_inputType)
+                {
+                case "string": inputOk = inputCheck.IsString(input); break;
+                case "int": inputOk    = inputCheck.IsInt(input); break;
+                case "bool": inputOk   = inputCheck.IsBool(input); break;
+                }
+            return inputOk;
             }
 
         /// <summary>
@@ -77,7 +95,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             set
                 {
-                if (isInputOk(value))
+                if(IsInputOk(value))
                     {
                     _inputValue = value;
                     }

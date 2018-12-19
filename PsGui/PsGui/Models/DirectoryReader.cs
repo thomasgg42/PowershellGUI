@@ -9,7 +9,7 @@ namespace PsGui.Models
     {
     public class DirectoryReader
         {
-        private string _categorySelected;
+        private string _selectedCategory;
         private bool   _isScriptSelected;
         private string _selectedScript;
 
@@ -25,6 +25,7 @@ namespace PsGui.Models
             _scriptFiles      = new ObservableCollection<string>();
             _isScriptSelected = false;
             _selectedScript   = "";
+            _selectedCategory = "";
             }
 
         /// <summary>
@@ -99,11 +100,11 @@ namespace PsGui.Models
             {
             get
                 {
-                return _categorySelected;
+                return _selectedCategory;
                 }
             set
                 {
-                _categorySelected = value;
+                _selectedCategory = value;
                 }
             }
 
