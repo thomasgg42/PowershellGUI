@@ -3,6 +3,19 @@ using PsGui.ViewModels;
 using PsGui.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+/// <summary>
+///  DirectoryReader.SelectedScriptCategory skal bestemme kategori (finnes ikke her enda)
+///  DirectoryReader.ScriptFiles skal knyttes til dropdownmeny med ps-filer
+///  DirectoryReader.SelectedScript bestemmer nåværende valgt script
+///  FileReader.ScriptVariables gir en liste over input felt
+///  FileReader.ScriptArgument skal gi tilgang til hvert input felt sine egenskaper
+///  ClickCommand skal kjøres ved trykk på Run Script knapp
+///  PowershellExecuter.ScriptOutput skal vise output fra powershsell
+/// </summary>
+
+
+
+
 namespace PsGuiTest
     {
     [TestClass]
@@ -26,6 +39,7 @@ namespace PsGuiTest
             Assert.IsNotNull(psExec.ModulePath);
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
             Assert.AreEqual(true, psExec.ScriptFileBrowser.Count == 0);
+            Assert.AreEqual(false, psExec.SelectedScriptCategory);
             Assert.AreEqual(false, psExec.IsScriptSelected);
             Assert.AreEqual("", psExec.SelectedScriptFile);
             Assert.AreEqual(false, psExec.CanExecute(this));
@@ -73,7 +87,10 @@ namespace PsGuiTest
             psExec.ScriptCategoryBrowser.Add("Active Directory");
             psExec.ScriptCategoryBrowser.Add("Exchange Server");
             psExec.ScriptCategoryBrowser.Add("Skype");
+            // category is selected
             psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+
+            // dummy script input variables
             string key = "TestKey";
             string description = "TestDescription";
             string type = "TestType";
@@ -86,18 +103,19 @@ namespace PsGuiTest
             // Set the first script variable's key (name) as the chosen script
             psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
 
+            // Script is selected 
             Assert.AreEqual(true, psExec.IsScriptSelected);
+            // but cannot execute due to empty fields
             Assert.AreEqual(false, psExec.CanExecute(this));
             }
 
         /// <summary>
-        /// When a new script is chosen after previously selecting a script
-        /// in a previous category, all the previous script variables shall
-        /// be deleted and new script variables shall be created from the newly
-        /// chosen script.
+        /// When a script file has been chosen and input fields
+        /// has been filledo ut by the user. The script shall 
+        /// become executable.
         /// </summary>
         [TestMethod]
-        public void NewScriptChosenInNewCategoryTest()
+        public void InputFieldsFilledScriptIsExecutableTest()
             {
             string modulePath = ".";
             PsExecViewModel psExec = new PsExecViewModel(modulePath);
@@ -106,42 +124,31 @@ namespace PsGuiTest
             psExec.ScriptCategoryBrowser.Add("Skype");
 
             psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
-            Assert.AreEqual(false, psExec.IsScriptSelected);
-            //todo
-            }
 
-        /// <summary>
-        /// A script must be chosen before script input fields can be shown.
-        /// There shall be a script input field matching each of the defined
-        /// script command line arguments in the script header file.
-        /// </summary>
-        [TestMethod]
-        public void ScriptChosenEmptyInputFieldsTest()
-            {
-            string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
+            // dummy script input variables
+            string key = "TestKey";
+            string description = "TestDescription";
+            string type = "TestType";
 
-            // Script exists, empty input fields
-            psExec.SelectedScriptFile = "SomeTestScript.ps1";
+            // Create argument aka input field
+            PsGui.Models.PowershellExecuter.ScriptArgument arg =
+                new PsGui.Models.PowershellExecuter.ScriptArgument(key, description, type);
+            // Add argument to ScriptVariables collection
+            psExec.ScriptVariables.Add(arg);
+            // Set the first script variable's key (name) as the chosen script
+            psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
+
+            // Script is selected 
             Assert.AreEqual(true, psExec.IsScriptSelected);
-            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
 
+            // fill all input fields
+            foreach (PsGui.Models.PowershellExecuter.ScriptArgument field in psExec.ScriptVariables)
+                {
+                field.InputValue = "input value from user";
+                }
 
-            // Script not exists
-            psExec.SelectedScriptFile = "";
-            Assert.AreEqual(false, psExec.IsScriptSelected);
-            }
-
-        /// <summary>
-        /// Before a powershell script is launched, all argument input
-        /// fields must contain legal values.
-        /// </summary>
-        [TestMethod]
-        public void ScriptArgumentTest()
-            {
-            string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
-
+            // execute is ok
+            Assert.AreEqual(true, psExec.CanExecute(this));
             }
 
         /// <summary>
