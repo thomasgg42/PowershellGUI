@@ -144,6 +144,7 @@ namespace PsGuiTest
                 }
 
             // execute is ok
+            // feiler, tomme argumentverdier
             Assert.AreEqual(true, psExec.CanExecute(this));
             }
 
