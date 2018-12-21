@@ -95,6 +95,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             set
                 {
+                _inputValue = value;
                 if(IsInputOk(value))
                     {
                     _inputValue = value;
