@@ -7,5 +7,9 @@ namespace PsGui.Models.PowershellExecuter
     {
     public class PsExecException : PsGuiException
         {
+        public PsExecException(string temp) : base(temp)
+            {
+
+            }
         }
     }

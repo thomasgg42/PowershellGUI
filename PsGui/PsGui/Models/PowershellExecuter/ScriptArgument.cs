@@ -8,7 +8,7 @@ namespace PsGui.Models.PowershellExecuter
     {
     public class ScriptArgument
         {
-        ArgumentChecker inputCheck;
+        private ArgumentChecker inputCheck;
         private string _inputKey;
         private string _inputDescription;
         private string _inputType;
@@ -16,6 +16,7 @@ namespace PsGui.Models.PowershellExecuter
 
         public ScriptArgument(string key, string description, string type)
             {
+            inputCheck        = new ArgumentChecker();
             _inputKey         = key;
             _inputDescription = description;
             _inputType        = type;
@@ -35,6 +36,7 @@ namespace PsGui.Models.PowershellExecuter
                 case "string": inputOk = inputCheck.IsString(input); break;
                 case "int": inputOk    = inputCheck.IsInt(input); break;
                 case "bool": inputOk   = inputCheck.IsBool(input); break;
+                default: throw new PsGuiException("Exception: ScriptArgument.IsInputOk");
                 }
             return inputOk;
             }
@@ -95,7 +97,6 @@ namespace PsGui.Models.PowershellExecuter
                 }
             set
                 {
-                _inputValue = value;
                 if(IsInputOk(value))
                     {
                     _inputValue = value;

@@ -8,5 +8,9 @@ namespace PsGui.Models.PowershellExecuter
     {
     public class PsGuiException : Exception
         {
+        public PsGuiException(string temp)
+            {
+            System.Windows.MessageBox.Show(temp);
+            }
         }
     }

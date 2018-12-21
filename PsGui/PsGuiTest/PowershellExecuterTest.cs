@@ -122,9 +122,9 @@ namespace PsGuiTest
             psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
 
             // dummy script input variables
-            string key = "TestKey";
+            string key = "testKey";
             string description = "TestDescription";
-            string type = "TestType";
+            string type = "string";
 
             // Create argument aka input field
             PsGui.Models.PowershellExecuter.ScriptArgument arg =
@@ -159,5 +159,25 @@ namespace PsGuiTest
            // PsExecViewModel psExec = new PsExecViewModel();
            // Assert.ThrowsException<PsExecException>();
             }
+
+
+        public void TestBadArgumentTypeException()
+            {
+            string modulePath = ".";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath);
+            psExec.ScriptCategoryBrowser.Add("Active Directory");
+            psExec.ScriptCategoryBrowser.Add("Exchange Server");
+            psExec.ScriptCategoryBrowser.Add("Skype");
+
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+
+            // dummy script input variables
+            string key = "testKey";
+            string description = "TestDescription";
+            string type = "strinngg";
+
+
+            }
         }
+
     }
