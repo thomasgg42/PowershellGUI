@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TabControl>
+            <!-- Foreach i stedet -->
+            <TabItem DataContext="{Binding Tabs[0]}" x:Name="Tab1" Header="{Binding TabName}" >
+                <!--https://www.c-sharpcorner.com/uploadfile/mahesh/user-control-in-wpf/-->
+                <!--https://stackoverflow.com/questions/1590031/tabitem-in-a-separate-xaml-->
+            </TabItem>
+        </TabControl>
+
+        <!--
+        <TabControl ItemsSource="{Binding Tabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Test" />
+                    Tabs[0].TabName
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+        -->
     </Grid>
 </Window>

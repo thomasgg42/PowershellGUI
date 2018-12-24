@@ -160,7 +160,10 @@ namespace PsGuiTest
            // Assert.ThrowsException<PsExecException>();
             }
 
-
+        /// <summary>
+        /// When a powershell script's header area has mispelled a variable
+        /// type, an exception must be thrown.
+        /// </summary>
         public void TestBadArgumentTypeException()
             {
             string modulePath = ".";
@@ -174,6 +177,7 @@ namespace PsGuiTest
             // dummy script input variables
             string key = "testKey";
             string description = "TestDescription";
+            // variable type misspelled
             string type = "strinngg";
 
 

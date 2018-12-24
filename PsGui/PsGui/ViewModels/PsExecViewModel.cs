@@ -9,17 +9,19 @@ namespace PsGui.ViewModels
     /// Executes powershell scripts with command line arguments
     /// in the form of user input.
     /// </summary>
-    public class PsExecViewModel : ObservableObject
+    public class PsExecViewModel
         {
-        private DirectoryReader    directoryReader;
-        private ScriptReader       scriptReader;
+        public string TabName { get; private set; } = "Script Executer";
+
+        private DirectoryReader directoryReader;
+        private ScriptReader scriptReader;
         private PowershellExecuter powershellExecuter;
-        private PsExecException    powershellExecptions;
-        private ArgumentChecker    argumentChecker;
-        private ScriptArgument     scriptArgument;
+        private PsExecException powershellExecptions;
+        private ArgumentChecker argumentChecker;
+        private ScriptArgument scriptArgument;
 
         private string _modulePath;
-        private bool   _isScriptSelected;
+        private bool _isScriptSelected;
 
         /// <summary>
         /// Constructor
@@ -32,6 +34,7 @@ namespace PsGui.ViewModels
             directoryReader = new DirectoryReader();
             // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
             }
+
 
         /// <summary>
         /// Sets or gets the filepath to the "Module" folder containing

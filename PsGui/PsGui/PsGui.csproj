@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Converters\ComparisonConverter.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModels\PsExecViewModel.cs" />
     <Compile Include="Views\PsExecView.xaml.cs">
