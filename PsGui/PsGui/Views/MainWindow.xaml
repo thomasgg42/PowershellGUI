@@ -5,25 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TabControl>
-            <!-- Foreach i stedet -->
-            <TabItem DataContext="{Binding Tabs[0]}" x:Name="Tab1" Header="{Binding TabName}" >
-                <!--https://www.c-sharpcorner.com/uploadfile/mahesh/user-control-in-wpf/-->
-                <!--https://stackoverflow.com/questions/1590031/tabitem-in-a-separate-xaml-->
-            </TabItem>
-        </TabControl>
-
-        <!--
-        <TabControl ItemsSource="{Binding Tabs}">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="Test" />
-                    Tabs[0].TabName
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-        </TabControl>
-        -->
-    </Grid>
+        Title="MainWindow" MaxHeight="600" MaxWidth="450">
+    <Border Padding="10">
+        <Grid>
+            <TabControl Padding="10">
+                <TabItem DataContext="{Binding Tabs[0]}" x:Name="Tab1" Header="{Binding TabName}" >
+                    <local:PowershellExecuterView />
+                    <!--https://www.c-sharpcorner.com/uploadfile/mahesh/user-control-in-wpf/-->
+                    <!--https://stackoverflow.com/questions/1590031/tabitem-in-a-separate-xaml-->
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Border>
 </Window>

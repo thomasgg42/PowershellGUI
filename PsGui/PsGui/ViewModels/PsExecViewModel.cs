@@ -11,7 +11,7 @@ namespace PsGui.ViewModels
     /// </summary>
     public class PsExecViewModel
         {
-        public string TabName { get; private set; } = "Script Executer";
+        public string TabName { get; } = "Script Executer";
 
         private DirectoryReader directoryReader;
         private ScriptReader scriptReader;

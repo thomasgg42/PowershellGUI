@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PsGui.Views
     {
     /// <summary>
-    /// Interaction logic for PsExecView.xaml
+    /// Interaction logic for PowershellExecuterView.xaml
     /// </summary>
-    public partial class PsExecView : Window
+    public partial class PowershellExecuterView : UserControl
         {
-        public PsExecView()
+        public PowershellExecuterView()
             {
             InitializeComponent();
             }
