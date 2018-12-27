@@ -9,7 +9,7 @@
     <Border Padding="10">
         <Grid>
             <TabControl Padding="10">
-                <TabItem DataContext="{Binding Tabs[0]}" x:Name="Tab1" Header="{Binding TabName}" >
+                <TabItem DataContext="{Binding Path=Tabs[0]}" x:Name="Tab1" Header="{Binding Path=TabName}">
                     <local:PowershellExecuterView />
                     <!--https://www.c-sharpcorner.com/uploadfile/mahesh/user-control-in-wpf/-->
                     <!--https://stackoverflow.com/questions/1590031/tabitem-in-a-separate-xaml-->

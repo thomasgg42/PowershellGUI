@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PsGui.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="450"
-             >
+             MaxHeight="600" MaxWidth="450"
+             d:DesignHeight="600" d:DesignWidth="450">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -26,20 +26,46 @@
         <TextBlock Text="Kategori" Grid.Row="0" 
                    Grid.Column="0" Margin=" 0 0 0 10" 
                    FontWeight="Bold" />
+        <!--Bind til ScriptCategoriesBrowser-->
         
-        <ComboBox Grid.Column="0" Grid.Row="1"
-                  Grid.ColumnSpan="3" />
+
+
+
         
-        <TextBlock Text="Input" Grid.Row="2"
+        <!--
+        <RadioButton GroupName="category" Content="Test"
+                     Grid.Column="0" Grid.Row="1"/>
+        <ItemsControl ItemsSource="{Binding ScriptCategoryBrowser}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton GroupName="category" Content="{Binding ScriptCategoryBrowser}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+-->
+        <ComboBox ItemsSource="{Binding ScriptFileBrowser}"
+                  Grid.Column="0" Grid.Row="2"
+                  Grid.ColumnSpan="3"
+                  Margin="10 0 10 0"/>
+        
+        <TextBlock Text="Input" Grid.Row="3"
                    Grid.Column="0" FontWeight="Bold" />
         
         <Button Grid.Row="4" Grid.Column="0"
-                Content="Run Script" />
+                Content="Run Script"
+                Margin="10 0 10 0"/>
 
         <TextBlock Text="Output" FontWeight="Bold"
                    Grid.Row="5" Grid.Column="0" />
 
-        <TextBlock Text="Blabla" Grid.Row="6"
-                   Grid.Column="0" />
+        <TextBlock Text="{Binding TabName}" Grid.Row="6"
+                   Grid.Column="0"
+                   Margin="10 0 10 0"/>
     </Grid>
 </UserControl>

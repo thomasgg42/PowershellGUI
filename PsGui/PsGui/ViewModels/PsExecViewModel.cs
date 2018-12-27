@@ -13,15 +13,15 @@ namespace PsGui.ViewModels
         {
         public string TabName { get; } = "Script Executer";
 
-        private DirectoryReader directoryReader;
-        private ScriptReader scriptReader;
+        private DirectoryReader    directoryReader;
+        private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
-        private PsExecException powershellExecptions;
-        private ArgumentChecker argumentChecker;
-        private ScriptArgument scriptArgument;
+        private PsExecException    powershellExecptions;
+        private ArgumentChecker    argumentChecker;
+        private ScriptArgument     scriptArgument;
 
         private string _modulePath;
-        private bool _isScriptSelected;
+        private bool  _isScriptSelected;
 
         /// <summary>
         /// Constructor
@@ -31,7 +31,12 @@ namespace PsGui.ViewModels
             {
             _modulePath     = modulePath;
             scriptReader    = new ScriptReader();
-            directoryReader = new DirectoryReader();
+            directoryReader = new DirectoryReader(modulePath);
+            // testing
+            ScriptCategoryBrowser.Add("ActiveDirectory");
+            ScriptCategoryBrowser.Add("Exchange");
+            ScriptCategoryBrowser.Add("Test3");
+            ScriptCategoryBrowser.Add("newrow");
             // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
             }
 
@@ -95,7 +100,9 @@ namespace PsGui.ViewModels
                     // When a new script is selected, remove values from previous input fields
                     // but keep the fields
                     scriptReader.ClearScriptVariableInfo();
+                    directoryReader.ClearCategories();
                     directoryReader.SelectedCategory = value;
+                    directoryReader.UpdateScriptCategories();
                     }
                 }
             }

@@ -10,6 +10,9 @@ namespace PsGui.Models.PowershellExecuter
     public class ScriptReader
         {
         private ObservableCollection<ScriptArgument> _scriptVariables;
+        private string _fileUri;
+        private string scriptDescription;
+        private string scriptHeader;
 
         /// <summary>
         /// Constructor
