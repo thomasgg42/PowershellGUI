@@ -2,6 +2,7 @@
 using PsGui.Models.PowershellExecuter;
 using PsGui.Views;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace PsGui.ViewModels
     {
@@ -27,19 +28,20 @@ namespace PsGui.ViewModels
         /// Constructor
         /// </summary>
         /// <param name="modulePath"></param>
-        public PsExecViewModel(string modulePath)
+        public PsExecViewModel(string modulePath, string moduleFolderName)
             {
-            _modulePath     = modulePath;
-            scriptReader    = new ScriptReader();
-            directoryReader = new DirectoryReader(modulePath);
-            // testing
-            ScriptCategoryBrowser.Add("ActiveDirectory");
-            ScriptCategoryBrowser.Add("Exchange");
-            ScriptCategoryBrowser.Add("Test3");
-            ScriptCategoryBrowser.Add("newrow");
+            _modulePath = modulePath;
+            scriptReader = new ScriptReader();
+            directoryReader = new DirectoryReader(modulePath, moduleFolderName);
+            UpdateScriptCategoriesList();
+            /*
+            for(int ii = 0; ii < 9; ii++)
+                {
+                ScriptCategoryBrowser.Add("ActiveDirectory" + ii);
+                }
+                */
             // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
             }
-
 
         /// <summary>
         /// Sets or gets the filepath to the "Module" folder containing
@@ -64,7 +66,7 @@ namespace PsGui.ViewModels
         /// Sets or gets a collection of strings representing
         /// the directory file paths, the script categories.
         /// </summary>
-        public ObservableCollection<string> ScriptCategoryBrowser
+        public ObservableCollection<ScriptCategory> ScriptCategoryBrowser
             {
             get
                 {
@@ -102,10 +104,22 @@ namespace PsGui.ViewModels
                     scriptReader.ClearScriptVariableInfo();
                     directoryReader.ClearCategories();
                     directoryReader.SelectedCategory = value;
-                    directoryReader.UpdateScriptCategories();
+                    //    directoryReader.UpdateScriptCategories();
+                    UpdateScriptCategoriesList();
                     }
                 }
             }
+
+        /// <summary>
+        /// Fills the list of script categories based on
+        /// the currently selected category.
+        /// @Throws PsGuiException
+        /// </summary>
+        public void UpdateScriptCategoriesList()
+            {
+            directoryReader.UpdateScriptCategoriesList();
+            }
+
 
         /// <summary>
         /// Sets or gets a collection of strings representing

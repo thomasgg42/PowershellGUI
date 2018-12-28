@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 ///  PowershellExecuter.ScriptOutput skal vise output fra powershsell
 /// </summary>
 
+    /*
 
 namespace PsGuiTest
     {
@@ -30,7 +31,8 @@ namespace PsGuiTest
         public void InitialTest()
             {
             string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
+            string moduleFolder = "Modules";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
 
             Assert.IsNotNull(psExec.ModulePath);
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
@@ -185,3 +187,5 @@ namespace PsGuiTest
         }
 
     }
+
+*/

@@ -14,58 +14,64 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="7*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-
+        
+        <!-- Header: Category -->
         <TextBlock Text="Kategori" Grid.Row="0" 
                    Grid.Column="0" Margin=" 0 0 0 10" 
                    FontWeight="Bold" />
-        <!--Bind til ScriptCategoriesBrowser-->
-        
 
-
-
-        
-        <!--
-        <RadioButton GroupName="category" Content="Test"
-                     Grid.Column="0" Grid.Row="1"/>
-        <ItemsControl ItemsSource="{Binding ScriptCategoryBrowser}">
+        <!-- Script category radio buttons  -->
+        <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" 
+                      Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
+            <!-- Script category panel setup -->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="3" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
+            <!-- Script category item setup -->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <RadioButton GroupName="category" Content="{Binding ScriptCategoryBrowser}" />
+                    <RadioButton GroupName="category" Content="{Binding Path=FriendlyName}" 
+                                 Margin="0 0 0 5" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
--->
+        
+        <!-- Script file dropdown menu -->
         <ComboBox ItemsSource="{Binding ScriptFileBrowser}"
                   Grid.Column="0" Grid.Row="2"
                   Grid.ColumnSpan="3"
-                  Margin="10 0 10 0"/>
+                  Margin="10 10 10 0"/>
         
+        <!-- Header: Input-->
         <TextBlock Text="Input" Grid.Row="3"
-                   Grid.Column="0" FontWeight="Bold" />
+                   Grid.Column="0" FontWeight="Bold"
+                   Margin="0 10 0 0" />
         
-        <Button Grid.Row="4" Grid.Column="0"
+        <!-- Execute button -->
+        <Button Grid.Row="4" Grid.Column="1"
                 Content="Run Script"
-                Margin="10 0 10 0"/>
-
+                Margin="10 10 10 0" />
+        
+        <!-- Header: Output -->
         <TextBlock Text="Output" FontWeight="Bold"
-                   Grid.Row="5" Grid.Column="0" />
-
+                   Grid.Row="5" Grid.Column="0" 
+                   Margin="0 10 0 0" />
+        
+        <!-- Output field -->
         <TextBlock Text="{Binding TabName}" Grid.Row="6"
-                   Grid.Column="0"
-                   Margin="10 0 10 0"/>
+               Grid.Column="0"
+               Margin="10 10 10 0"/>
+
     </Grid>
 </UserControl>

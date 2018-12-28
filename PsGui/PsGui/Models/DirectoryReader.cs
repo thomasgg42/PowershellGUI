@@ -7,25 +7,26 @@ namespace PsGui.Models
     public class DirectoryReader
         {
         private string modulePath;
+        private string moduleFolderName;
         private string _selectedCategory;
         private bool   _isScriptSelected;
         private string _selectedScript;
 
-        private ObservableCollection<string> _scriptCategories;
+        private ObservableCollection<ScriptCategory> _scriptCategories;
         private ObservableCollection<string> _scriptFiles;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DirectoryReader(string modulepath)
+        public DirectoryReader(string modulepath, string moduleFolderName)
             {
+            this.moduleFolderName = moduleFolderName;
             this.modulePath = modulepath;
-            _scriptCategories = new ObservableCollection<string>();
+            _scriptCategories = new ObservableCollection<ScriptCategory>();
             _scriptFiles      = new ObservableCollection<string>();
             _isScriptSelected = false;
             _selectedScript   = "";
             _selectedCategory = "";
-            UpdateScriptCategories();
             }
 
         /// <summary>
@@ -61,6 +62,32 @@ namespace PsGui.Models
             }
 
         /// <summary>
+        /// </summary>
+        public void UpdateScriptFilesList()
+            {
+            // må gjøres på nytt
+            string[] scriptList;
+            string scriptDirectoryPath = modulePath + "\\" + _selectedCategory + "\\";
+            // Todo: const
+            string fileExtension = ".ps1";
+            int fileExtensionLength = fileExtension.Length;
+            try
+                {
+                scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
+                foreach (string script in scriptList)
+                    {
+                    string fileNameWithExtension = Path.GetFileName(script);
+                    string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
+                //  ScriptCategories.Add(Path.GetFileName(fileNameWithoutExtension));
+                    }
+                }
+            catch (System.Exception e)
+                {
+                throw new PsGuiException("Models.DirectoryReader.UpdateScriptFilesList()");
+                }
+            }
+
+        /// <summary>
         /// Sets or gets the selected powershell script
         /// in the selected category.
         /// </summary>
@@ -80,7 +107,7 @@ namespace PsGui.Models
         /// Sets or gets a collection of strings representing
         /// the script categories, the script directories.
         /// </summary>
-        public ObservableCollection<string> ScriptCategories
+        public ObservableCollection<ScriptCategory> ScriptCategories
             {
             get
                 {
@@ -89,6 +116,29 @@ namespace PsGui.Models
             set
                 {
                 _scriptCategories = value;
+                }
+            }
+
+        /// <summary>
+        /// Fills the list of categories with the folders found 
+        /// in the given module path.
+        /// </summary>
+        public void UpdateScriptCategoriesList()
+            {
+            string[] categoryList;
+            string categoryDirectoryPath = modulePath + "\\" + moduleFolderName + "\\";
+            try
+                {
+                categoryList = Directory.GetDirectories(categoryDirectoryPath);
+                foreach(string category in categoryList)
+                    {
+                    ScriptCategory cat = new ScriptCategory(category);
+                    ScriptCategories.Add(cat);
+                    }
+                }
+            catch(System.Exception e)
+                {
+                throw new PsGuiException("Models.DirectoryReader.UpdateScriptCategoriesList()");
                 }
             }
 
@@ -115,34 +165,6 @@ namespace PsGui.Models
         public void ClearCategories()
             {
             _scriptCategories.Clear();
-            }
-
-        /// <summary>
-        /// Fills the list of script categories based on
-        /// the currently selected category.
-        /// @Throws PsGuiException
-        /// </summary>
-        public void UpdateScriptCategories()
-            {
-            string[] scriptList;
-            string scriptDirectoryPath = modulePath + "\\" + _selectedCategory + "\\";
-            // Todo: const
-            string fileExtension = ".ps1";
-            int fileExtensionLength = fileExtension.Length;
-            try
-                {
-                scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
-                foreach (string script in scriptList)
-                    {
-                    string fileNameWithExtension = Path.GetFileName(script);
-                    string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
-                    ScriptCategories.Add(Path.GetFileName(fileNameWithoutExtension));
-                    }
-                }
-            catch (System.Exception e)
-                {
-                throw new PsGuiException("Models.DirectoryReader.UpdateScriptcategories()");
-                }
             }
 
         }
