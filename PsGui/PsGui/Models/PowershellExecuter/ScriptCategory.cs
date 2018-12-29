@@ -14,10 +14,10 @@ namespace PsGui.Models.PowershellExecuter
         {
         public string FilePath { get; private set; }
         public string FriendlyName { get; private set; }
+        public bool   IsSelectedCategory { get; set; }
 
         /// <summary>
-        /// Removes leading and trailing slashes 
-        /// and dots from the category name.
+        /// Removes folder prefix from the file path.
         /// </summary>
         /// <param name="filePath"></param>
         private void ConvertFriendlyName(string filePath)
@@ -27,11 +27,14 @@ namespace PsGui.Models.PowershellExecuter
             FriendlyName = FilePath.Substring(prefixLength);
             }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="filePath"></param>
         public ScriptCategory(string filePath)
             {
             FilePath = filePath;
             ConvertFriendlyName(filePath);
-            System.Windows.MessageBox.Show(FriendlyName);
             }
         }
     }

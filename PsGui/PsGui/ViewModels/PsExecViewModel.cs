@@ -34,13 +34,10 @@ namespace PsGui.ViewModels
             scriptReader = new ScriptReader();
             directoryReader = new DirectoryReader(modulePath, moduleFolderName);
             UpdateScriptCategoriesList();
-            /*
-            for(int ii = 0; ii < 9; ii++)
-                {
-                ScriptCategoryBrowser.Add("ActiveDirectory" + ii);
-                }
-                */
-            // Nå skal dropdown menu kunne populeres, bekreft før fortsettelse
+            int firstCategory = 0;
+            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
+            ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
+            // selected script må bindes mot radioknappen
             }
 
         /// <summary>
@@ -104,7 +101,6 @@ namespace PsGui.ViewModels
                     scriptReader.ClearScriptVariableInfo();
                     directoryReader.ClearCategories();
                     directoryReader.SelectedCategory = value;
-                    //    directoryReader.UpdateScriptCategories();
                     UpdateScriptCategoriesList();
                     }
                 }
