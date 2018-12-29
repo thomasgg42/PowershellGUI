@@ -8,7 +8,7 @@ namespace PsGui.Models
         {
         private string modulePath;
         private string moduleFolderName;
-        private string _selectedCategory;
+ //       private string _selectedCategory;
         private bool   _isScriptSelected;
         private string _selectedScript;
 
@@ -26,7 +26,7 @@ namespace PsGui.Models
             _scriptFiles      = new ObservableCollection<string>();
             _isScriptSelected = false;
             _selectedScript   = "";
-            _selectedCategory = "";
+   //         _selectedCategory = "";
             }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PsGui.Models
 
         /// <summary>
         /// </summary>
-        public void UpdateScriptFilesList()
+/*        public void UpdateScriptFilesList()
             {
             // må gjøres på nytt
             string[] scriptList;
@@ -86,7 +86,7 @@ namespace PsGui.Models
                 throw new PsGuiException("Models.DirectoryReader.UpdateScriptFilesList()");
                 }
             }
-
+*/
         /// <summary>
         /// Sets or gets the selected powershell script
         /// in the selected category.
@@ -132,8 +132,7 @@ namespace PsGui.Models
                 categoryList = Directory.GetDirectories(categoryDirectoryPath);
                 foreach(string category in categoryList)
                     {
-                    ScriptCategory cat = new ScriptCategory(category);
-                    ScriptCategories.Add(cat);
+                    ScriptCategories.Add(new ScriptCategory(category));
                     }
                 }
             catch(System.Exception e)
@@ -146,7 +145,7 @@ namespace PsGui.Models
         /// Sets or gets the selected category in form of a 
         /// script directory and a radio button in the GUI.
         /// </summary>
-        public string SelectedCategory
+/*        public string SelectedCategory
             {
             get
                 {
@@ -157,7 +156,7 @@ namespace PsGui.Models
                 _selectedCategory = value;
                 }
             }
-
+*/
         /// <summary>
         /// Removes all stored items in the script categories
         /// list.

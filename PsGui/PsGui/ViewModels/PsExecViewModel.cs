@@ -90,17 +90,35 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return directoryReader.SelectedCategory;
+                foreach(ScriptCategory cat in ScriptCategoryBrowser)
+                    {
+                    if(cat.IsSelectedCategory)
+                        {
+                        return cat.FriendlyName;
+                        }
+                    }
+                throw new PsExecException("ViewModels.SelectedScriptCategory: No category selected");
                 }
             set
                 {
                 if(value != null)
                     {
+                    // lag en Command som sender radio button sin content (friendlyName) hit
+                    // sjekk deretter foreach category for matchende content
+                    // når match, sett active
+                    foreach(ScriptCategory cat in ScriptCategoryBrowser)
+                        {
+                        if(cat.FriendlyName.Equals(value))
+                            {
+                            cat.IsSelectedCategory = true;
+                            }
+                        }
+                    
                     // When a new script is selected, remove values from previous input fields
                     // but keep the fields
                     scriptReader.ClearScriptVariableInfo();
                     directoryReader.ClearCategories();
-                    directoryReader.SelectedCategory = value;
+         //           directoryReader.SelectedCategory = value;
                     UpdateScriptCategoriesList();
                     }
                 }
