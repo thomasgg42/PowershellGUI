@@ -43,7 +43,6 @@
                 <DataTemplate>
                     <!-- todo converter, should be bound to viewModel and not model -->
                     <RadioButton GroupName="category" Content="{Binding Path=FriendlyName}" 
-                                 IsChecked="{Binding Path=IsSelectedCategory}"
                                  Margin="0 0 0 5" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

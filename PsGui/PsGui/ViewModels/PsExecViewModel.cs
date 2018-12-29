@@ -106,6 +106,10 @@ namespace PsGui.ViewModels
                     // lag en Command som sender radio button sin content (friendlyName) hit
                     // sjekk deretter foreach category for matchende content
                     // når match, sett active
+
+                    // Pdd. så sendes "true"/"false" til ScriptCategory IsSelectedCategory
+                    // men har ingen måte å varsle (inotify) når dette utføres
+
                     foreach(ScriptCategory cat in ScriptCategoryBrowser)
                         {
                         if(cat.FriendlyName.Equals(value))
@@ -124,6 +128,21 @@ namespace PsGui.ViewModels
                 }
             }
 
+        private string _test;
+        public string Test
+            {
+            get
+                {
+                return _test;
+                }
+            set
+                {
+                System.Windows.MessageBox.Show("test" + value);
+                _test = value;
+                }
+            }
+
+
         /// <summary>
         /// Fills the list of script categories based on
         /// the currently selected category.
@@ -133,7 +152,6 @@ namespace PsGui.ViewModels
             {
             directoryReader.UpdateScriptCategoriesList();
             }
-
 
         /// <summary>
         /// Sets or gets a collection of strings representing

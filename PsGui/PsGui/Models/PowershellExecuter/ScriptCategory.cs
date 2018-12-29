@@ -14,7 +14,18 @@ namespace PsGui.Models.PowershellExecuter
         {
         public string FilePath { get; private set; }
         public string FriendlyName { get; private set; }
-        public bool   IsSelectedCategory { get; set; }
+        private bool _isSelected;
+        public bool IsSelectedCategory
+            {
+            get
+                {
+                return _isSelected;
+                }
+            set
+                {
+                _isSelected = value;
+                }
+            }
 
         /// <summary>
         /// Removes folder prefix from the file path.
