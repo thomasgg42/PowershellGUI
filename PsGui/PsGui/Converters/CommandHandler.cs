@@ -5,38 +5,26 @@ namespace PsGui.Converters
     {
     public class CommandHandler : ICommand
         {
-        private Action<object> _executeAction;
-        private Func<object, bool> _canExecuteAction;
-        private event EventHandler CanExecuteChangedInternal;
+        Action<object> _execMethod;
+        Func<object, bool> _canExecMethod;
 
-        public CommandHandler(Action<object> execAction, Func<object, bool> canExecAction)
+        public CommandHandler(Action<object> execMethod, Func<object, bool> canExecMethod)
             {
-            _executeAction = execAction;
-            _canExecuteAction = canExecAction;
+            _execMethod = execMethod;
+            _canExecMethod = canExecMethod;
             }
 
-        public event EventHandler CanExecuteChanged
-            {
-            // event logic which runs canExecute continously
-            add
-                {
-                CommandManager.RequerySuggested += value;
-                CanExecuteChangedInternal += value;
-                }
-            remove
-                {
-                CommandManager.RequerySuggested -= value;
-                CanExecuteChangedInternal += value;
-                }
-            }
-
+        /// <summary>
+        /// If CanExecute() returns true, then Execute()
+        /// fires.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public bool CanExecute(object parameter)
             {
-            // return _canExecuteAction != null && canExecute(parameter);
-            // return _canExecuteAction;
-            if (_canExecuteAction != null)
+            if (_canExecMethod != null)
                 {
-                return _canExecuteAction(parameter);
+                return true;
                 }
             else
                 {
@@ -44,20 +32,22 @@ namespace PsGui.Converters
                 }
             }
 
+        /// <summary>
+        /// Executes the supplied method.
+        /// </summary>
+        /// <param name="parameter"></param>
         public void Execute(object parameter)
             {
-            // kjøres om CanExecute returnerer true
-            // her kjøres logikken
-            _executeAction(parameter);
+            _execMethod(parameter);
             }
 
-        public void OnCanExecuteChanged()
+        /// <summary>
+        /// Runs CanExecute continously.
+        /// </summary>
+        public event EventHandler CanExecuteChanged
             {
-            EventHandler handler = CanExecuteChangedInternal;
-            if (handler != null)
-                {
-                handler.Invoke(this, EventArgs.Empty);
-                }
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
             }
         }
     }

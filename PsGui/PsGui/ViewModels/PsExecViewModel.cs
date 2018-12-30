@@ -3,6 +3,7 @@ using PsGui.Models.PowershellExecuter;
 using PsGui.Views;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Input;
 
 namespace PsGui.ViewModels
     {
@@ -10,7 +11,7 @@ namespace PsGui.ViewModels
     /// Executes powershell scripts with command line arguments
     /// in the form of user input.
     /// </summary>
-    public class PsExecViewModel
+    public class PsExecViewModel : ObservableObject
         {
         public string TabName { get; } = "Script Executer";
 
@@ -21,8 +22,30 @@ namespace PsGui.ViewModels
         private ArgumentChecker    argumentChecker;
         private ScriptArgument     scriptArgument;
 
+        public ICommand RadioButtonChecked { get; set; } 
+
         private string _modulePath;
         private bool  _isScriptSelected;
+
+        /// <summary>
+        /// Helper function for the ICommand implementation.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private bool CanExecuteRadioButtonCheck(object param)
+            {
+            return true;
+            }
+
+        /// <summary>
+        /// Helper function for the ICommand implementation. Ensures
+        /// that INotifyPropertyChanged executes.
+        /// </summary>
+        /// <param name="radioBtnContent"></param>
+        private void SetSelectedCategoryAsRadioButtonName(object radioBtnContent)
+            {
+            SelectedScriptCategory = radioBtnContent.ToString();
+            }
 
         /// <summary>
         /// Constructor
@@ -34,11 +57,15 @@ namespace PsGui.ViewModels
             scriptReader = new ScriptReader();
             directoryReader = new DirectoryReader(modulePath, moduleFolderName);
             UpdateScriptCategoriesList();
+
             int firstCategory = 0;
-            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
             ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
-            // selected script må bindes mot radioknappen
+            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
+            RadioButtonChecked = new PsGui.Converters.CommandHandler(SetSelectedCategoryAsRadioButtonName, CanExecuteRadioButtonCheck);
             }
+
+
+
 
         /// <summary>
         /// Sets or gets the filepath to the "Module" folder containing
@@ -84,64 +111,100 @@ namespace PsGui.ViewModels
 
         /// <summary>
         /// Sets or gets the selected category in form of a 
-        /// script directory and a radio button in the GUI.
+        /// ScriptCategory.FriendlyName.
         /// </summary>
         public string SelectedScriptCategory
             {
             get
                 {
-                foreach(ScriptCategory cat in ScriptCategoryBrowser)
-                    {
-                    if(cat.IsSelectedCategory)
-                        {
-                        return cat.FriendlyName;
-                        }
-                    }
-                throw new PsExecException("ViewModels.SelectedScriptCategory: No category selected");
+                return directoryReader.SelectedScript;
                 }
             set
                 {
-                if(value != null)
+                if (value != null)
                     {
-                    // lag en Command som sender radio button sin content (friendlyName) hit
-                    // sjekk deretter foreach category for matchende content
-                    // når match, sett active
-
-                    // Pdd. så sendes "true"/"false" til ScriptCategory IsSelectedCategory
-                    // men har ingen måte å varsle (inotify) når dette utføres
-
-                    foreach(ScriptCategory cat in ScriptCategoryBrowser)
-                        {
-                        if(cat.FriendlyName.Equals(value))
-                            {
-                            cat.IsSelectedCategory = true;
-                            }
-                        }
-                    
                     // When a new script is selected, remove values from previous input fields
                     // but keep the fields
                     scriptReader.ClearScriptVariableInfo();
                     directoryReader.ClearCategories();
-         //           directoryReader.SelectedCategory = value;
+                    directoryReader.SelectedCategoryName = value;
                     UpdateScriptCategoriesList();
                     }
                 }
+            
+            /*   
+             get
+                 {
+                 foreach(ScriptCategory cat in ScriptCategoryBrowser)
+                     {
+                     if(cat.IsSelectedCategory)
+                         {
+                         return cat.FriendlyName;
+                         }
+                     }
+                 throw new PsExecException("ViewModels.SelectedScriptCategory: No category selected");
+                 }
+             set
+                 {
+                 if(value != null)
+                     {
+                     // lag en Command som sender radio button sin content (friendlyName) hit
+                     // sjekk deretter foreach category for matchende content
+                     // når match, sett active
+
+                     // Pdd. så sendes "true"/"false" til ScriptCategory IsSelectedCategory
+                     // men har ingen måte å varsle (inotify) når dette utføres
+
+                     foreach(ScriptCategory cat in ScriptCategoryBrowser)
+                         {
+                         if(cat.FriendlyName.Equals(value))
+                             {
+                             cat.IsSelectedCategory = true;
+                             }
+                         }
+
+                     // When a new script is selected, remove values from previous input fields
+                     // but keep the fields
+                     scriptReader.ClearScriptVariableInfo();
+                     directoryReader.ClearCategories();
+                     directoryReader.SelectedCategoryName = value;
+                     UpdateScriptCategoriesList();
+                     }
+                 }
+             */
             }
 
-        private string _test;
-        public string Test
+        /// <summary>
+        /// When a radio button is checked, this function
+        /// checks if the radio button content (friendlyName)
+        /// matches the registered selected category name and
+        /// returns true if that is so.
+        /// </summary>
+        public bool IsSelectedScriptCategory
             {
             get
                 {
-                return _test;
+                foreach (ScriptCategory cat in ScriptCategoryBrowser)
+                    {
+                    if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName)
+                        && cat.IsSelectedCategory)
+                        {
+                        return true;
+                        }
+                    }
+                return false;
                 }
             set
                 {
-                System.Windows.MessageBox.Show("test" + value);
-                _test = value;
+                foreach (ScriptCategory cat in ScriptCategoryBrowser)
+                    {
+                    if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName))
+                        {
+                        cat.IsSelectedCategory = value;
+                        }
+                    }
                 }
             }
-
 
         /// <summary>
         /// Fills the list of script categories based on
@@ -151,7 +214,11 @@ namespace PsGui.ViewModels
         public void UpdateScriptCategoriesList()
             {
             directoryReader.UpdateScriptCategoriesList();
+         //   OnPropertyChanged("ScriptCategoryBrowser");
             }
+
+
+
 
         /// <summary>
         /// Sets or gets a collection of strings representing
@@ -244,7 +311,7 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CanExecute(object parameter)
+        public bool ScriptCanExecute(object parameter)
             {
             bool canExec = true;
             if(IsScriptSelected == false)
@@ -260,6 +327,9 @@ namespace PsGui.ViewModels
                 }
             return canExec;
             }
+
+
+
 
         }
     }

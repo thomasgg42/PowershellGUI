@@ -38,11 +38,21 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
-            <!-- Script category item setup -->
+            <!-- 
+            Bound a command to launch on each selected radio button click
+            to communicate with the view-model instead of directly with
+            the Collection in the model.
+            -->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <!-- todo converter, should be bound to viewModel and not model -->
-                    <RadioButton GroupName="category" Content="{Binding Path=FriendlyName}" 
+                    <RadioButton GroupName="category" Content="{Binding Path=FriendlyName}"
+                                 Command="{Binding DataContext.RadioButtonChecked,
+                                                   RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                  AncestorType={x:Type ItemsControl}}}"
+                                 CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
+                                 IsChecked="{Binding DataContext.IsSelectedScriptCategory,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                    AncestorType={x:Type ItemsControl}}}"
                                  Margin="0 0 0 5" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

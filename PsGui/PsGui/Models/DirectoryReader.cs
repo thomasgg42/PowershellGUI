@@ -8,7 +8,7 @@ namespace PsGui.Models
         {
         private string modulePath;
         private string moduleFolderName;
- //       private string _selectedCategory;
+        private string _selectedCategoryName;
         private bool   _isScriptSelected;
         private string _selectedScript;
 
@@ -143,20 +143,20 @@ namespace PsGui.Models
 
         /// <summary>
         /// Sets or gets the selected category in form of a 
-        /// script directory and a radio button in the GUI.
+        /// ScriptCategory.FriendlyName.
         /// </summary>
-/*        public string SelectedCategory
+        public string SelectedCategoryName
             {
             get
                 {
-                return _selectedCategory;
+                return _selectedCategoryName;
                 }
             set
                 {
-                _selectedCategory = value;
+                _selectedCategoryName = value;
                 }
             }
-*/
+
         /// <summary>
         /// Removes all stored items in the script categories
         /// list.

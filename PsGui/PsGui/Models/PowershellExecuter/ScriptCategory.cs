@@ -8,7 +8,7 @@ namespace PsGui.Models.PowershellExecuter
     {
     /// <summary>
     /// Stores each script category with a filepath and 
-    /// a friendly name.
+    /// a friendly name. 
     /// </summary>
     public class ScriptCategory
         {
