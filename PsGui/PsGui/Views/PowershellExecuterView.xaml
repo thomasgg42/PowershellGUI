@@ -53,6 +53,7 @@
                                  Command="{Binding DataContext.RadioButtonChecked,
                                                    RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                   AncestorType={x:Type ItemsControl}}}"
+                                 IsChecked="{Binding Path=IsSelectedCategory}"
                                  CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
                                  Margin="0 0 0 5" />
                 </DataTemplate>

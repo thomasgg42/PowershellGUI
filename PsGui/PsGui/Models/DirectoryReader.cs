@@ -21,12 +21,76 @@ namespace PsGui.Models
         public DirectoryReader(string modulepath, string moduleFolderName)
             {
             this.moduleFolderName = moduleFolderName;
-            this.modulePath = modulepath;
-            _scriptCategories = new ObservableCollection<ScriptCategory>();
-            _scriptFiles      = new ObservableCollection<string>();
-            _isScriptSelected = false;
-            _selectedScript   = "";
-   //         _selectedCategory = "";
+            this.modulePath       = modulepath;
+            _scriptCategories     = new ObservableCollection<ScriptCategory>();
+            _scriptFiles          = new ObservableCollection<string>();
+            _isScriptSelected     = false;
+            _selectedScript       = "";
+            _selectedCategoryName = "";
+            }
+
+        /// <summary>
+        /// Sets or gets a collection of strings representing
+        /// the script categories, the script directories.
+        /// </summary>
+        public ObservableCollection<ScriptCategory> ScriptCategories
+            {
+            get
+                {
+                return _scriptCategories;
+                }
+            set
+                {
+                _scriptCategories = value;
+                }
+            }
+
+        /// <summary>
+        /// Fills the list of categories with the folders found 
+        /// in the given module path.
+        /// @Throws PSGuiException
+        /// </summary>
+        public void UpdateScriptCategoriesList()
+            {
+            string[] categoryList;
+            string categoryDirectoryPath = modulePath + "\\" + moduleFolderName + "\\";
+            try
+                {
+                categoryList = Directory.GetDirectories(categoryDirectoryPath);
+                foreach (string category in categoryList)
+                    {
+                    _scriptCategories.Add(new ScriptCategory(category));
+                    }
+                }
+            catch (System.Exception e)
+                {
+                throw new PsGuiException("Models.DirectoryReader.UpdateScriptCategoriesList()");
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets the selected category in form of a 
+        /// ScriptCategory.FriendlyName.
+        /// </summary>
+        public string SelectedCategoryName
+            {
+            get
+                {
+                return _selectedCategoryName;
+                }
+            set
+                {
+                _selectedCategoryName = value;
+                }
+            }
+
+        /// <summary>
+        /// Removes all stored items in the script categories
+        /// list.
+        /// </summary>
+        public void ClearCategories()
+            {
+            _scriptCategories.Clear();
             }
 
         /// <summary>
@@ -62,31 +126,37 @@ namespace PsGui.Models
             }
 
         /// <summary>
+        /// Updates the list of scripts based on the currently
+        /// selected category.
+        /// Finds all files with a .ps1 file extension in the 
+        /// selected category folder and stores each file name
+        /// excluding the file extension.
+        /// @Throws PSGuiException
         /// </summary>
-/*        public void UpdateScriptFilesList()
+        public void UpdateScriptFilesList()
             {
-            // må gjøres på nytt
             string[] scriptList;
-            string scriptDirectoryPath = modulePath + "\\" + _selectedCategory + "\\";
+            string scriptDirectoryPath = modulePath + "\\" + moduleFolderName + "\\" + _selectedCategoryName + "\\";
             // Todo: const
             string fileExtension = ".ps1";
             int fileExtensionLength = fileExtension.Length;
             try
                 {
+                // TODO: scriptList gir exception?
                 scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
                 foreach (string script in scriptList)
                     {
                     string fileNameWithExtension = Path.GetFileName(script);
                     string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
-                //  ScriptCategories.Add(Path.GetFileName(fileNameWithoutExtension));
+                    _scriptFiles.Add(Path.GetFileName(fileNameWithoutExtension));
                     }
                 }
             catch (System.Exception e)
                 {
-                throw new PsGuiException("Models.DirectoryReader.UpdateScriptFilesList()");
+                throw new PsGuiException("Models.DirectoryReader.UpdateScriptFilesList(): " + e.ToString());
                 }
             }
-*/
+
         /// <summary>
         /// Sets or gets the selected powershell script
         /// in the selected category.
@@ -104,67 +174,15 @@ namespace PsGui.Models
             }
 
         /// <summary>
-        /// Sets or gets a collection of strings representing
-        /// the script categories, the script directories.
+        /// Clears the list of script files.
         /// </summary>
-        public ObservableCollection<ScriptCategory> ScriptCategories
+        public void ClearScripts()
             {
-            get
-                {
-                return _scriptCategories;
-                }
-            set
-                {
-                _scriptCategories = value;
-                }
+            _scriptFiles.Clear();
             }
 
-        /// <summary>
-        /// Fills the list of categories with the folders found 
-        /// in the given module path.
-        /// </summary>
-        public void UpdateScriptCategoriesList()
-            {
-            string[] categoryList;
-            string categoryDirectoryPath = modulePath + "\\" + moduleFolderName + "\\";
-            try
-                {
-                categoryList = Directory.GetDirectories(categoryDirectoryPath);
-                foreach(string category in categoryList)
-                    {
-                    ScriptCategories.Add(new ScriptCategory(category));
-                    }
-                }
-            catch(System.Exception e)
-                {
-                throw new PsGuiException("Models.DirectoryReader.UpdateScriptCategoriesList()");
-                }
-            }
 
-        /// <summary>
-        /// Sets or gets the selected category in form of a 
-        /// ScriptCategory.FriendlyName.
-        /// </summary>
-        public string SelectedCategoryName
-            {
-            get
-                {
-                return _selectedCategoryName;
-                }
-            set
-                {
-                _selectedCategoryName = value;
-                }
-            }
 
-        /// <summary>
-        /// Removes all stored items in the script categories
-        /// list.
-        /// </summary>
-        public void ClearCategories()
-            {
-            _scriptCategories.Clear();
-            }
 
         }
     }

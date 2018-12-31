@@ -39,14 +39,22 @@ namespace PsGui.ViewModels
 
         /// <summary>
         /// Helper function for the ICommand implementation. Ensures
-        /// that INotifyPropertyChanged executes.
+        /// that INotifyPropertyChanged executes upon using radio buttons.
         /// </summary>
         /// <param name="radioBtnContent"></param>
-        private void SetSelectedCategoryAsRadioButtonName(object radioBtnContent)
+        private void GetSelectedScriptCategoryName(object radioBtnContent)
             {
             SelectedScriptCategory = radioBtnContent.ToString();
-            // denne må kalle en bool funksjon for å kunne bindes mot
-            // radio knapper
+            }
+
+        /// <summary>
+        /// Sets the initial script category on program startup.
+        /// </summary>
+        private void SetInitialScriptCategory()
+            {
+            int firstCategory = 0;
+            ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
+            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
             }
 
         /// <summary>
@@ -55,15 +63,12 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
             {
-            _modulePath = modulePath;
-            scriptReader = new ScriptReader();
-            directoryReader = new DirectoryReader(modulePath, moduleFolderName);
+            _modulePath        = modulePath;
+            directoryReader    = new DirectoryReader(modulePath, moduleFolderName);
+            scriptReader       = new ScriptReader();
             UpdateScriptCategoriesList();
-
-            int firstCategory = 0;
-            ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
-            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
-            RadioButtonChecked = new PsGui.Converters.CommandHandler(SetSelectedCategoryAsRadioButtonName, CanExecuteRadioButtonCheck);
+            SetInitialScriptCategory();
+            RadioButtonChecked = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanExecuteRadioButtonCheck);
             }
 
         /// <summary>
@@ -88,7 +93,7 @@ namespace PsGui.ViewModels
         /// <summary>
         /// Sets or gets a collection of strings representing
         /// the directory file paths, the script categories.
-        /// </summary>
+        /// </summary>C:\Users\Thomas\Documents\4 - IT\Programmering\C#\PowershellGUI\PsGui\PsGui\ViewModels\PsExecViewModel.cs
         public ObservableCollection<ScriptCategory> ScriptCategoryBrowser
             {
             get
@@ -110,111 +115,50 @@ namespace PsGui.ViewModels
 
         /// <summary>
         /// Sets or gets the selected category in form of a 
-        /// ScriptCategory.FriendlyName.
+        /// ScriptCategory.FriendlyName. Clears existing 
+        /// input field values upon setting a new category.
+        /// Does not clear the fields themselves.
         /// </summary>
         public string SelectedScriptCategory
             {
             get
                 {
-                return directoryReader.SelectedScript;
+                return directoryReader.SelectedCategoryName;
                 }
             set
                 {
-                System.Windows.MessageBox.Show(value);
                 if (value != null)
                     {
-                    // When a new script is selected, remove values from previous input fields
-                    // but keep the fields
                     scriptReader.ClearScriptVariableInfo();
-                   // directoryReader.ClearCategories();
                     directoryReader.SelectedCategoryName = value;
-                    UpdateScriptCategoriesList();
-                    }
-                }
-            
-            /*   
-             get
-                 {
-                 foreach(ScriptCategory cat in ScriptCategoryBrowser)
-                     {
-                     if(cat.IsSelectedCategory)
-                         {
-                         return cat.FriendlyName;
-                         }
-                     }
-                 throw new PsExecException("ViewModels.SelectedScriptCategory: No category selected");
-                 }
-             set
-                 {
-                 if(value != null)
-                     {
-                     // lag en Command som sender radio button sin content (friendlyName) hit
-                     // sjekk deretter foreach category for matchende content
-                     // når match, sett active
 
-                     // Pdd. så sendes "true"/"false" til ScriptCategory IsSelectedCategory
-                     // men har ingen måte å varsle (inotify) når dette utføres
-
-                     foreach(ScriptCategory cat in ScriptCategoryBrowser)
-                         {
-                         if(cat.FriendlyName.Equals(value))
-                             {
-                             cat.IsSelectedCategory = true;
-                             }
-                         }
-
-                     // When a new script is selected, remove values from previous input fields
-                     // but keep the fields
-                     scriptReader.ClearScriptVariableInfo();
-                     directoryReader.ClearCategories();
-                     directoryReader.SelectedCategoryName = value;
-                     UpdateScriptCategoriesList();
-                     }
-                 }
-             */
-            }
-
-        /// <summary>
-        /// When a radio button is checked, this function
-        /// checks if the radio button content (friendlyName)
-        /// matches the registered selected category name and
-        /// returns true if that is so.
-        /// </summary>
-        public bool IsSelectedScriptCategory
-            {
-            get
-                {
-                foreach (ScriptCategory cat in ScriptCategoryBrowser)
-                    {
-                    if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName)
-                        && cat.IsSelectedCategory)
-                        {
-                        return true;
-                        }
-                    }
-                return false;
-                }
-            set
-                {
-                foreach (ScriptCategory cat in ScriptCategoryBrowser)
-                    {
-                    if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName))
-                        {
-                        cat.IsSelectedCategory = value;
-                        }
+                    // Hver gang en ny kategori velges,
+                    // må man oppdatere dropdown listen med scriptfiler
+                    directoryReader.ClearScripts();
+                    directoryReader.UpdateScriptFilesList();
                     }
                 }
             }
 
         /// <summary>
-        /// Fills the list of script categories based on
-        /// the currently selected category.
+        /// Fills the list of script categories based on 
+        /// the directories found in the Module-folder. Uses
+        /// the SelectedScriptCategory property value to set the
+        /// selected script boolean value in the list object.
         /// @Throws PsGuiException
         /// </summary>
         public void UpdateScriptCategoriesList()
             {
             directoryReader.UpdateScriptCategoriesList();
-         //   OnPropertyChanged("ScriptCategoryBrowser");
+            foreach (ScriptCategory cat in ScriptCategoryBrowser)
+                {
+                if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName)
+                    && cat.IsSelectedCategory != true)
+                    {
+                    cat.IsSelectedCategory = true;
+                    }
+                }
+            //   OnPropertyChanged("ScriptCategoryBrowser");
             }
 
 
@@ -271,6 +215,16 @@ namespace PsGui.ViewModels
                 }
             }
 
+        /// Updates the list of scripts based on the currently
+        /// selected category.
+        /// Finds all files with a .ps1 file extension in the 
+        /// selected category folder and stores each file name
+        /// excluding the file extension.
+        public void UpdateScriptFilesList()
+            {
+            directoryReader.UpdateScriptFilesList();
+            }
+
         /// <summary>
         /// Returns true if a powershell script has been selected.
         /// </summary>
@@ -285,6 +239,9 @@ namespace PsGui.ViewModels
                 directoryReader.IsScriptSelected = value; // bool never null
                 }
             }
+
+
+
 
         /// <summary>
         /// Sets or gets a collection of strings representing

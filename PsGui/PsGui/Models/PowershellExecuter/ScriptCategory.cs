@@ -15,6 +15,7 @@ namespace PsGui.Models.PowershellExecuter
         public string FilePath { get; private set; }
         public string FriendlyName { get; private set; }
         private bool _isSelected;
+
         public bool IsSelectedCategory
             {
             get
@@ -23,6 +24,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             set
                 {
+               // System.Windows.MessageBox.Show(FriendlyName + ": " + value);
                 _isSelected = value;
                 }
             }
