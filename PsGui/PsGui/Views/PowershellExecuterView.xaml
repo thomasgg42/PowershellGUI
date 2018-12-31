@@ -42,7 +42,11 @@
             Bound a command to launch on each selected radio button click
             to communicate with the view-model instead of directly with
             the Collection in the model.
+            IsChecked="{Binding DataContext.IsSelectedScriptCategory,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                    AncestorType={x:Type ItemsControl}}}"
             -->
+            
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <RadioButton GroupName="category" Content="{Binding Path=FriendlyName}"
@@ -50,9 +54,6 @@
                                                    RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                   AncestorType={x:Type ItemsControl}}}"
                                  CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
-                                 IsChecked="{Binding DataContext.IsSelectedScriptCategory,
-                                                     RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                    AncestorType={x:Type ItemsControl}}}"
                                  Margin="0 0 0 5" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

@@ -14,7 +14,7 @@ namespace PowershellGUI.Views
             InitializeComponent();
             string devModulePath = @".\..\..\..\Modules"; // during developement
             string releaseModulePath = "Modules";         // release
-            DataContext = new ViewModel(devModulePath);
+            DataContext = new ViewModel(releaseModulePath);
             }
         }
     }

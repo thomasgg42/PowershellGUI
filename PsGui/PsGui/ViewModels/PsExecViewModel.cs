@@ -25,7 +25,7 @@ namespace PsGui.ViewModels
         public ICommand RadioButtonChecked { get; set; } 
 
         private string _modulePath;
-        private bool  _isScriptSelected;
+        private bool   _isScriptSelected;
 
         /// <summary>
         /// Helper function for the ICommand implementation.
@@ -45,6 +45,8 @@ namespace PsGui.ViewModels
         private void SetSelectedCategoryAsRadioButtonName(object radioBtnContent)
             {
             SelectedScriptCategory = radioBtnContent.ToString();
+            // denne må kalle en bool funksjon for å kunne bindes mot
+            // radio knapper
             }
 
         /// <summary>
@@ -63,9 +65,6 @@ namespace PsGui.ViewModels
             SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
             RadioButtonChecked = new PsGui.Converters.CommandHandler(SetSelectedCategoryAsRadioButtonName, CanExecuteRadioButtonCheck);
             }
-
-
-
 
         /// <summary>
         /// Sets or gets the filepath to the "Module" folder containing
@@ -121,12 +120,13 @@ namespace PsGui.ViewModels
                 }
             set
                 {
+                System.Windows.MessageBox.Show(value);
                 if (value != null)
                     {
                     // When a new script is selected, remove values from previous input fields
                     // but keep the fields
                     scriptReader.ClearScriptVariableInfo();
-                    directoryReader.ClearCategories();
+                   // directoryReader.ClearCategories();
                     directoryReader.SelectedCategoryName = value;
                     UpdateScriptCategoriesList();
                     }
