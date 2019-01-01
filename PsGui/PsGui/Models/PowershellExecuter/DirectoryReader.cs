@@ -10,6 +10,7 @@ namespace PsGui.Models.PowershellExecuter
         private string _selectedCategoryName;
         private bool   _isScriptSelected;
         private string _selectedScript;
+        private string _selectedScriptPath;
 
         private ObservableCollection<ScriptCategory> _scriptCategories;
         private ObservableCollection<string> _scriptFiles;
@@ -24,6 +25,7 @@ namespace PsGui.Models.PowershellExecuter
             _scriptFiles          = new ObservableCollection<string>();
             _isScriptSelected     = false;
             _selectedScript       = "";
+            _selectedScriptPath   = "";
             _selectedCategoryName = "";
             }
 
@@ -155,6 +157,22 @@ namespace PsGui.Models.PowershellExecuter
             set
                 {
                 _selectedScript = value;
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets the full filepath
+        /// to the selected script.
+        /// </summary>
+        public string SelectedScriptPath
+            {
+            get
+                {
+                return _selectedScriptPath;
+                }
+            set
+                {
+                _selectedScriptPath = value;
                 }
             }
 

@@ -176,9 +176,9 @@ namespace PsGui.Models.PowershellExecuter
         /// relevant information.
         /// </summary>
         /// <param name="script"></param>
-        public void ReadSelectedScript(string script)
+        public void ReadSelectedScript(string scriptPath)
             {
-            string[] lines            = System.IO.File.ReadAllLines(script);
+            string[] lines            = System.IO.File.ReadAllLines(scriptPath);
             string scriptHeaderEndTag = "#>";
             int lineNum               = 0;
             int lastHeaderLine        = 3;

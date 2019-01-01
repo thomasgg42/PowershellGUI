@@ -23,9 +23,14 @@ namespace PsGui.ViewModels
 
         private string _modulePath;
 
+        /// <summary>
+        /// Executes a powershell script at the supplied path with the supplied
+        /// input variables.
+        /// </summary>
+        /// <param name="obj"></param>
         private void ExecutePowershellScript(object obj)
             {
-            powershellExecuter.test();
+            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
             }
 
         /// <summary>
@@ -91,12 +96,12 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
             {
-            _modulePath        = modulePath + "\\" + moduleFolderName + "\\";
-            directoryReader    = new DirectoryReader(_modulePath);
-            scriptReader       = new ScriptReader();
+            _modulePath         = modulePath + "\\" + moduleFolderName + "\\";
+            directoryReader     = new DirectoryReader(_modulePath);
+            scriptReader        = new ScriptReader();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
-            powershellExecuter = new PowershellExecuter();
+            powershellExecuter  = new PowershellExecuter();
 
             RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanExecuteRadioButtonCheck);
             ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
@@ -158,10 +163,6 @@ namespace PsGui.ViewModels
                     {
                     scriptReader.ClearScriptVariableInfo();
                     directoryReader.SelectedCategoryName = value;
-
-                    // Hver gang en ny kategori velges,
-                    // må man tømme nåværende liste med scripts
-                    // og oppdatere listen med nye scripts
                     directoryReader.ClearScripts();
                     directoryReader.UpdateScriptFilesList();
                     }
@@ -186,7 +187,6 @@ namespace PsGui.ViewModels
                     cat.IsSelectedCategory = true;
                     }
                 }
-            //   OnPropertyChanged("ScriptCategoryBrowser");
             }
 
 
@@ -216,7 +216,7 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Sets or gets the selected powershell script. Also
+        /// Sets or gets the selected powershell script and its path. Also
         /// calls functions responsible to read contents of a 
         /// selected powershell script and functions responsible
         /// of cleaning up previous script input fields.
@@ -236,14 +236,32 @@ namespace PsGui.ViewModels
                         {
                         ScriptVariables.Clear();
                         IsScriptSelected = true;
-                        string script    = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
-                        scriptReader.ReadSelectedScript(script);
+                        SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
+                        scriptReader.ReadSelectedScript(SelectedScriptPath);
                         }
                     else
                         {
                         IsScriptSelected = false;
                         }
-                    directoryReader.SelectedScript = value;
+                    }
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets the file path to the selected
+        /// powershell script.
+        /// </summary>
+        public string SelectedScriptPath
+            {
+            get
+                {
+                return directoryReader.SelectedScriptPath;
+                }
+            set
+                {
+                if(value != null)
+                    {
+                    directoryReader.SelectedScriptPath = value;
                     }
                 }
             }
@@ -284,11 +302,6 @@ namespace PsGui.ViewModels
                 return scriptReader.ScriptVariables;
                 }
             }
-
-
-
-
-
 
         }
     }
