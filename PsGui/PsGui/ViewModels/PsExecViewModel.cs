@@ -1,8 +1,5 @@
-﻿using PsGui.Models;
-using PsGui.Models.PowershellExecuter;
-using PsGui.Views;
+﻿using PsGui.Models.PowershellExecuter;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows.Input;
 
 namespace PsGui.ViewModels
@@ -20,12 +17,43 @@ namespace PsGui.ViewModels
         private PowershellExecuter powershellExecuter;
         private PsExecException    powershellExecptions;
         private ArgumentChecker    argumentChecker;
-        private ScriptArgument     scriptArgument;
 
-        public ICommand RadioButtonChecked { get; set; } 
+        public ICommand RadioButtonChecked  { get; set; }
+        public ICommand ExecuteButtonPushed { get; set; }
 
         private string _modulePath;
-        private bool   _isScriptSelected;
+
+        private void ExecutePowershellScript(object obj)
+            {
+            powershellExecuter.test();
+            }
+
+        /// <summary>
+        /// Returns true if a selected powershell script
+        /// is ready to be executed. False otherwise.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        private bool CanExecuteScript(object parameter)
+            {
+            bool canExec = true;
+            if (IsScriptSelected == false)
+                {
+                canExec = false;
+                }
+            else
+                {
+                foreach (ScriptArgument arg in ScriptVariables)
+                    {
+                    if (arg.InputValue.Equals(""))
+                        {
+                        canExec = false;
+                        }
+                    }
+                }
+
+            return canExec;
+            }
 
         /// <summary>
         /// Helper function for the ICommand implementation.
@@ -68,7 +96,10 @@ namespace PsGui.ViewModels
             scriptReader       = new ScriptReader();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
-            RadioButtonChecked = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanExecuteRadioButtonCheck);
+            powershellExecuter = new PowershellExecuter();
+
+            RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanExecuteRadioButtonCheck);
+            ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
             }
 
         /// <summary>
@@ -105,10 +136,6 @@ namespace PsGui.ViewModels
                 if (value != null)
                     {
                     directoryReader.ScriptCategories = value;
-                    }
-                else
-                    {
-                    System.Windows.MessageBox.Show("ScriptCategoryBrowser null");
                     }
                 }
             }
@@ -167,8 +194,7 @@ namespace PsGui.ViewModels
 
         /// <summary>
         /// Sets or gets a collection of strings representing
-        /// the script files in each category. The script files in 
-        /// each directory.
+        /// the script files in each category.
         /// </summary>
         public ObservableCollection<string> ScriptFileBrowser
             {
@@ -190,7 +216,10 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Sets or gets the selected powershell script.
+        /// Sets or gets the selected powershell script. Also
+        /// calls functions responsible to read contents of a 
+        /// selected powershell script and functions responsible
+        /// of cleaning up previous script input fields.
         /// </summary>
         public string SelectedScriptFile
             {
@@ -205,13 +234,16 @@ namespace PsGui.ViewModels
                     // The setter runs when set to empty string as well as a script name
                     if(value != "")
                         {
+                        ScriptVariables.Clear();
                         IsScriptSelected = true;
-                        } 
+                        string script    = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
+                        scriptReader.ReadSelectedScript(script);
+                        }
+                    else
+                        {
+                        IsScriptSelected = false;
+                        }
                     directoryReader.SelectedScript = value;
-                    }
-                else
-                    {
-                    System.Windows.MessageBox.Show("SelectedScriptFile null");
                     }
                 }
             }
@@ -229,7 +261,7 @@ namespace PsGui.ViewModels
         /// <summary>
         /// Returns true if a powershell script has been selected.
         /// </summary>
-        public bool IsScriptSelected
+        public bool IsScriptSelected 
             {
             get
                 {
@@ -237,12 +269,9 @@ namespace PsGui.ViewModels
                 }
             set
                 {
-                directoryReader.IsScriptSelected = value; // bool never null
+                directoryReader.IsScriptSelected = value;
                 }
             }
-
-
-
 
         /// <summary>
         /// Sets or gets a collection of strings representing
@@ -254,37 +283,9 @@ namespace PsGui.ViewModels
                 {
                 return scriptReader.ScriptVariables;
                 }
-            set
-                {
-                if(value != null)
-                    {
-                    scriptReader.ScriptVariables = value;
-                    }
-                }
             }
 
-        /// <summary>
-        /// Returns true if a selected powershell script
-        /// is ready to be executed. False otherwise.
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        public bool ScriptCanExecute(object parameter)
-            {
-            bool canExec = true;
-            if(IsScriptSelected == false)
-                {
-                canExec = false;
-                }
-            foreach(ScriptArgument arg in ScriptVariables)
-                {
-                if (arg.InputValue.Equals(""))
-                    {
-                    canExec = false;
-                    }
-                }
-            return canExec;
-            }
+
 
 
 

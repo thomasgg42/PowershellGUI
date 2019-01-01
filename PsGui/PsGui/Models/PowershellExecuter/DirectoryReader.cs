@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.ObjectModel;
 
-namespace PsGui.Models
+namespace PsGui.Models.PowershellExecuter
     {
     public class DirectoryReader
         {
@@ -93,20 +93,6 @@ namespace PsGui.Models
                 }
             }
 
-        /// <summary>
-        /// Returns true if a script is selected.
-        /// </summary>
-        public bool IsScriptSelected
-            {
-            get
-                {
-                return _isScriptSelected;
-                }
-            set
-                {
-                _isScriptSelected = value;
-                }
-            }
 
         /// <summary>
         /// Sets or gets a collection of strings representing
@@ -142,7 +128,6 @@ namespace PsGui.Models
             int fileExtensionLength = fileExtension.Length;
             try
                 {
-                // TODO: scriptList gir exception?
                 scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
                 foreach (string script in scriptList)
                     {
@@ -186,6 +171,20 @@ namespace PsGui.Models
                 }
             }
 
+        /// <summary>
+        /// Returns true if a script is selected.
+        /// </summary>
+        public bool IsScriptSelected
+            {
+            get
+                {
+                return _isScriptSelected;
+                }
+            set
+                {
+                _isScriptSelected = value;
+                }
+            }
 
 
 

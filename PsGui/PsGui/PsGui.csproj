@@ -58,7 +58,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
-    <Compile Include="Converters\ComparisonConverter.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
@@ -86,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\PowershellExecuter\ArgumentChecker.cs" />
-    <Compile Include="Models\DirectoryReader.cs" />
+    <Compile Include="Models\PowershellExecuter\DirectoryReader.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptReader.cs" />
     <Compile Include="Models\PowershellExecuter\PowershellExecuter.cs" />
     <Compile Include="Models\PowershellExecuter\PsExecException.cs" />

@@ -13,9 +13,7 @@ namespace PsGui.Models.PowershellExecuter
         {
 
         public ArgumentChecker()
-            {
-
-            }
+            {}
 
         /// <summary>
         /// Returns true if input can be translated to a string value.

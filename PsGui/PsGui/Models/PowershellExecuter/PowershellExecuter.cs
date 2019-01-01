@@ -8,5 +8,6 @@ namespace PsGui.Models.PowershellExecuter
     {
     class PowershellExecuter
         {
+        public void test() { System.Windows.MessageBox.Show("TEST"); }
         }
     }

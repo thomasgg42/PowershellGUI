@@ -16,6 +16,10 @@ namespace PsGui.Models.PowershellExecuter
         public string FriendlyName { get; private set; }
         private bool _isSelected;
 
+        /// <summary>
+        /// Sets or gets true or false if the category
+        /// is considered the selected category.
+        /// </summary>
         public bool IsSelectedCategory
             {
             get
@@ -24,7 +28,6 @@ namespace PsGui.Models.PowershellExecuter
                 }
             set
                 {
-               // System.Windows.MessageBox.Show(FriendlyName + ": " + value);
                 _isSelected = value;
                 }
             }

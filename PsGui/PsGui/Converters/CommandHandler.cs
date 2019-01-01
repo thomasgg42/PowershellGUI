@@ -5,9 +5,14 @@ namespace PsGui.Converters
     {
     public class CommandHandler : ICommand
         {
-        Action<object> _execMethod;
-        Func<object, bool> _canExecMethod;
+        Action<object>             _execMethod;
+        Func<object, bool>         _canExecMethod;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="execMethod"></param>
+        /// <param name="canExecMethod"></param>
         public CommandHandler(Action<object> execMethod, Func<object, bool> canExecMethod)
             {
             _execMethod = execMethod;
@@ -22,9 +27,9 @@ namespace PsGui.Converters
         /// <returns></returns>
         public bool CanExecute(object parameter)
             {
-            if (_canExecMethod != null)
+            if(_canExecMethod != null)
                 {
-                return true;
+                return _canExecMethod(parameter);
                 }
             else
                 {
@@ -46,8 +51,14 @@ namespace PsGui.Converters
         /// </summary>
         public event EventHandler CanExecuteChanged
             {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add
+                {
+                CommandManager.RequerySuggested += value;
+                }
+            remove
+                {
+                CommandManager.RequerySuggested -= value;
+                }
             }
         }
     }

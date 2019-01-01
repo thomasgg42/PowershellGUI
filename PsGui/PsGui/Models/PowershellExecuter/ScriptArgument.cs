@@ -34,9 +34,9 @@ namespace PsGui.Models.PowershellExecuter
             switch (_inputType)
                 {
                 case "string": inputOk = inputCheck.IsString(input); break;
-                case "int": inputOk    = inputCheck.IsInt(input); break;
-                case "bool": inputOk   = inputCheck.IsBool(input); break;
-                default: throw new PsGuiException("Exception: ScriptArgument.IsInputOk");
+                case "int": inputOk    = inputCheck.IsInt(input);    break;
+                case "bool": inputOk   = inputCheck.IsBool(input);   break;
+                default: throw new PsExecException("Exception: ScriptArgument.IsInputOk");
                 }
             return inputOk;
             }

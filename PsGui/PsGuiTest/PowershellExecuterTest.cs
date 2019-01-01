@@ -47,7 +47,6 @@ namespace PsGuiTest
             Assert.AreEqual("ActiveDirectory", psExec.SelectedScriptCategory);
             Assert.AreEqual( false, psExec.IsScriptSelected);
             Assert.AreEqual("", psExec.SelectedScriptFile);
-            Assert.AreEqual(false, psExec.ScriptCanExecute(this));
             }
 
 
@@ -91,7 +90,6 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
             Assert.AreEqual(true, psExec.SelectedScriptFile == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
-            Assert.AreEqual(false, psExec.ScriptCanExecute(this));
             foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
                 {
                 Assert.AreEqual(true, arg.HasNoInput());
@@ -127,8 +125,6 @@ namespace PsGuiTest
             psExec.ScriptVariables[0].InputValue = "Testbert";
             psExec.ScriptVariables[1].InputValue = "80";
 
-            // execute is ok
-            Assert.AreEqual(true, psExec.ScriptCanExecute(this));
             }
 
         /// <summary>
