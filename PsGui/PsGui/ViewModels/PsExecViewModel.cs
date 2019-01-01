@@ -63,8 +63,8 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
             {
-            _modulePath        = modulePath;
-            directoryReader    = new DirectoryReader(modulePath, moduleFolderName);
+            _modulePath        = modulePath + "\\" + moduleFolderName + "\\";
+            directoryReader    = new DirectoryReader(_modulePath);
             scriptReader       = new ScriptReader();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
@@ -93,7 +93,7 @@ namespace PsGui.ViewModels
         /// <summary>
         /// Sets or gets a collection of strings representing
         /// the directory file paths, the script categories.
-        /// </summary>C:\Users\Thomas\Documents\4 - IT\Programmering\C#\PowershellGUI\PsGui\PsGui\ViewModels\PsExecViewModel.cs
+        /// </summary>
         public ObservableCollection<ScriptCategory> ScriptCategoryBrowser
             {
             get
@@ -133,7 +133,8 @@ namespace PsGui.ViewModels
                     directoryReader.SelectedCategoryName = value;
 
                     // Hver gang en ny kategori velges,
-                    // må man oppdatere dropdown listen med scriptfiler
+                    // må man tømme nåværende liste med scripts
+                    // og oppdatere listen med nye scripts
                     directoryReader.ClearScripts();
                     directoryReader.UpdateScriptFilesList();
                     }

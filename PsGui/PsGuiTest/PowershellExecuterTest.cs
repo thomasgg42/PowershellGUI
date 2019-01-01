@@ -1,4 +1,5 @@
 ﻿using PsGui.ViewModels;
+using PsGui.Models.PowershellExecuter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 /// <summary>
@@ -11,16 +12,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 ///  PowershellExecuter.ScriptOutput skal vise output fra powershsell
 /// </summary>
 
-    /*
+
 
 namespace PsGuiTest
     {
+    /// <summary>
+    /// Tests the PowershellExecuter program. Expects a Modules folder
+    /// with 3 categories; ActiveDirectory, Exchange, Skype, where 
+    /// ActiveDirectory contains 3 scripts.
+    /// </summary>
     [TestClass]
     public class PowershellExecuterTest
         {
         /// <summary>
         /// When the program launches. A list of available categories 
-        /// (directories) shall be saved. One shall not be able to 
+        /// (directories) shall be saved. A list of available scripts from
+        /// the default chosen category shall be saved. One shall not be able to 
         /// execute a script. The selected script shall be set 
         /// to an empty string. A modulepath shall be set to a existing
         /// folder structure at the same directory level as the program.
@@ -35,119 +42,93 @@ namespace PsGuiTest
             PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
 
             Assert.IsNotNull(psExec.ModulePath);
-            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 0);
-            Assert.AreEqual(true, psExec.ScriptFileBrowser.Count == 0);
-            Assert.AreEqual("", psExec.SelectedScriptCategory);
-            Assert.AreEqual(false, psExec.IsScriptSelected);
+            Assert.AreEqual(false, psExec.ScriptCategoryBrowser.Count == 0);
+            Assert.AreEqual(false, psExec.ScriptFileBrowser.Count == 0);
+            Assert.AreEqual("ActiveDirectory", psExec.SelectedScriptCategory);
+            Assert.AreEqual( false, psExec.IsScriptSelected);
             Assert.AreEqual("", psExec.SelectedScriptFile);
-            Assert.AreEqual(false, psExec.CanExecute(this));
+            Assert.AreEqual(false, psExec.ScriptCanExecute(this));
             }
+
 
         /// <summary>
         /// When a category is chosen. The current script shall be cleared from
         /// the dropdown menu. A new list of scripts shall then be available from
         /// the dropdown menu.
-        /// </summary>
-        [TestMethod]
-        public void NewCategoryChosenTest()
-            {
-            string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            psExec.ScriptCategoryBrowser.Add("Active Directory");
-            psExec.ScriptCategoryBrowser.Add("Exchange Server");
-            psExec.ScriptCategoryBrowser.Add("Skype");
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
-
-            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
-            Assert.AreEqual(true, psExec.SelectedScriptFile == "");
-            Assert.AreEqual(false, psExec.IsScriptSelected);
-
-            // I tilfellet hvor man tidligere har valgt et script og hentet inn script variabler
-            // Script variabler skal beholdes (input felt), men innholdet i variablene
-            // (felt input) skal tømmes
-            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
-                {
-                Assert.AreEqual(true, arg.HasNoInput());
-                }
-            }
-
-        /// <summary>
         /// When a script file is chosen in a selected category. All input fields 
         /// defined in the script shall be loaded into the ScriptVariables collection.
         /// Each collection object shall contain a ScriptArgument containing information
         /// gathered from the script file. The script argument's input field shall be empty.
         /// </summary>
         [TestMethod]
-        public void NewScriptFileChosenInCategoryTest()
+        public void NewCategoryChosenTest()
             {
             string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            psExec.ScriptCategoryBrowser.Add("Active Directory");
-            psExec.ScriptCategoryBrowser.Add("Exchange Server");
-            psExec.ScriptCategoryBrowser.Add("Skype");
-            // category is selected
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+            string moduleFolder = "Modules";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
 
-            // dummy script input variables
-            string key = "TestKey";
-            string description = "TestDescription";
-            string type = "TestType";
+            // Select a script category
+            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = true;
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0].FriendlyName;
+            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[0];
 
-            // Create argument aka input field
-            PsGui.Models.PowershellExecuter.ScriptArgument arg = 
-                new PsGui.Models.PowershellExecuter.ScriptArgument(key, description, type);
-            // Add argument to ScriptVariables collection
-            psExec.ScriptVariables.Add(arg);
-            // Set the first script variable's key (name) as the chosen script
-            psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
+            // Select a script in the category, containing two input fields
+            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[1];
+            psExec.IsScriptSelected = true;
+            psExec.ScriptVariables.Add(new ScriptArgument("name", "First name", "string"));
+            psExec.ScriptVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
 
-            // Script is selected 
-            Assert.AreEqual(true, psExec.IsScriptSelected);
-            // but cannot execute due to empty fields
-            Assert.AreEqual(false, psExec.CanExecute(this));
+            // Add value to input fields
+            psExec.ScriptVariables[0].InputValue = "Testbert";
+            psExec.ScriptVariables[1].InputValue = "80";
+
+            // Select a new script category
+            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = false;
+            psExec.ScriptCategoryBrowser[1].IsSelectedCategory = true;
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[1].FriendlyName;
+
+
+            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
+            Assert.AreEqual(true, psExec.SelectedScriptFile == "");
+            Assert.AreEqual(false, psExec.IsScriptSelected);
+            Assert.AreEqual(false, psExec.ScriptCanExecute(this));
+            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
+                {
+                Assert.AreEqual(true, arg.HasNoInput());
+                }
             }
+
+
 
         /// <summary>
         /// When a script file has been chosen and input fields
         /// has been filledo ut by the user. The script shall 
         /// become executable.
-        /// </summary>
+        /// </summary
         [TestMethod]
         public void InputFieldsFilledScriptIsExecutableTest()
             {
             string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            psExec.ScriptCategoryBrowser.Add("Active Directory");
-            psExec.ScriptCategoryBrowser.Add("Exchange Server");
-            psExec.ScriptCategoryBrowser.Add("Skype");
+            string moduleFolder = "Modules";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
 
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
+            // Select a script category
+            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = true;
+            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0].FriendlyName;
+            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[0];
 
-            // dummy script input variables
-            string key = "testKey";
-            string description = "TestDescription";
-            string type = "string";
+            // Select a script in the category, containing two input fields
+            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[1];
+            psExec.IsScriptSelected = true;
+            psExec.ScriptVariables.Add(new ScriptArgument("name", "First name", "string"));
+            psExec.ScriptVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
 
-            // Create argument aka input field
-            PsGui.Models.PowershellExecuter.ScriptArgument arg =
-                new PsGui.Models.PowershellExecuter.ScriptArgument(key, description, type);
-            // Add argument to ScriptVariables collection
-            psExec.ScriptVariables.Add(arg);
-            // Set the first script variable's key (name) as the chosen script
-            psExec.SelectedScriptFile = psExec.ScriptVariables[0].InputKey;
-
-            // Script is selected 
-            Assert.AreEqual(true, psExec.IsScriptSelected);
-
-            // fill all input fields
-            foreach (PsGui.Models.PowershellExecuter.ScriptArgument field in psExec.ScriptVariables)
-                {
-                field.InputValue = "input value from user";
-                }
+            // Add value to input fields
+            psExec.ScriptVariables[0].InputValue = "Testbert";
+            psExec.ScriptVariables[1].InputValue = "80";
 
             // execute is ok
-            // feiler, tomme argumentverdier
-            Assert.AreEqual(true, psExec.CanExecute(this));
+            Assert.AreEqual(true, psExec.ScriptCanExecute(this));
             }
 
         /// <summary>
@@ -157,35 +138,21 @@ namespace PsGuiTest
         [TestMethod]
         public void BadModulepathTest()
             {
-            // test senere
-           // PsExecViewModel psExec = new PsExecViewModel();
-           // Assert.ThrowsException<PsExecException>();
+            string modulePath = ".//..//";
+            string moduleFolder = "Modules";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
             }
 
         /// <summary>
         /// When a powershell script's header area has mispelled a variable
         /// type, an exception must be thrown.
         /// </summary>
+        [TestMethod]
         public void TestBadArgumentTypeException()
             {
             string modulePath = ".";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath);
-            psExec.ScriptCategoryBrowser.Add("Active Directory");
-            psExec.ScriptCategoryBrowser.Add("Exchange Server");
-            psExec.ScriptCategoryBrowser.Add("Skype");
-
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0];
-
-            // dummy script input variables
-            string key = "testKey";
-            string description = "TestDescription";
-            // variable type misspelled
-            string type = "strinngg";
-
-
+            string moduleFolder = "Modules";
+            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
             }
         }
-
     }
-
-*/

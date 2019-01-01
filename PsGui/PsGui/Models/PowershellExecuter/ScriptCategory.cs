@@ -43,7 +43,7 @@ namespace PsGui.Models.PowershellExecuter
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="filePath">Filepath including the modulePath and moduleFOlder.</param>
         public ScriptCategory(string filePath)
             {
             FilePath = filePath;

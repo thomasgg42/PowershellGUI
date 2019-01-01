@@ -7,7 +7,6 @@ namespace PsGui.Models
     public class DirectoryReader
         {
         private string modulePath;
-        private string moduleFolderName;
         private string _selectedCategoryName;
         private bool   _isScriptSelected;
         private string _selectedScript;
@@ -18,9 +17,8 @@ namespace PsGui.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        public DirectoryReader(string modulepath, string moduleFolderName)
+        public DirectoryReader(string modulepath)
             {
-            this.moduleFolderName = moduleFolderName;
             this.modulePath       = modulepath;
             _scriptCategories     = new ObservableCollection<ScriptCategory>();
             _scriptFiles          = new ObservableCollection<string>();
@@ -53,10 +51,9 @@ namespace PsGui.Models
         public void UpdateScriptCategoriesList()
             {
             string[] categoryList;
-            string categoryDirectoryPath = modulePath + "\\" + moduleFolderName + "\\";
             try
                 {
-                categoryList = Directory.GetDirectories(categoryDirectoryPath);
+                categoryList = Directory.GetDirectories(modulePath);
                 foreach (string category in categoryList)
                     {
                     _scriptCategories.Add(new ScriptCategory(category));
@@ -90,7 +87,10 @@ namespace PsGui.Models
         /// </summary>
         public void ClearCategories()
             {
-            _scriptCategories.Clear();
+            if(_scriptCategories.Count > 0)
+                {
+                _scriptCategories.Clear();
+                }
             }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace PsGui.Models
         public void UpdateScriptFilesList()
             {
             string[] scriptList;
-            string scriptDirectoryPath = modulePath + "\\" + moduleFolderName + "\\" + _selectedCategoryName + "\\";
+            string scriptDirectoryPath = modulePath + _selectedCategoryName + "\\";
             // Todo: const
             string fileExtension = ".ps1";
             int fileExtensionLength = fileExtension.Length;
@@ -178,7 +178,12 @@ namespace PsGui.Models
         /// </summary>
         public void ClearScripts()
             {
-            _scriptFiles.Clear();
+            if(_scriptFiles.Count > 0)
+                {
+                _scriptFiles.Clear();
+                _selectedScript   = "";
+                _isScriptSelected = false;
+                }
             }
 
 
