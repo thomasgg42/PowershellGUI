@@ -231,5 +231,15 @@ namespace PsGui.Models.PowershellExecuter
                     }
                 }
             }
+
+        /// <summary>
+        /// Clears the stored data.
+        /// </summary>
+        public void ClearSession()
+            {
+            ScriptVariables.Clear();
+            _scriptDescription = "";
+            _scriptHeader = "";
+            }
         }
     }

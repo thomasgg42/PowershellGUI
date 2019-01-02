@@ -22,6 +22,7 @@ namespace PsGui.ViewModels
         public ICommand ExecuteButtonPushed { get; set; }
 
         private string _modulePath;
+        private string _scriptOutput;
 
         /// <summary>
         /// Executes a powershell script at the supplied path with the supplied
@@ -31,6 +32,8 @@ namespace PsGui.ViewModels
         private void ExecutePowershellScript(object obj)
             {
             powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
+            ClearScriptSession();
             }
 
         /// <summary>
@@ -238,6 +241,10 @@ namespace PsGui.ViewModels
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
+                        if(ScriptExecutionOutput.Length > 0)
+                            {
+                            ScriptExecutionOutput = "";
+                            }
                         }
                     else
                         {
@@ -303,5 +310,36 @@ namespace PsGui.ViewModels
                 }
             }
 
+        /// <summary>
+        /// Clears the script session, and resets the program state 
+        /// back to the initial state.
+        /// </summary>
+        public void ClearScriptSession()
+            {
+            directoryReader.ClearSesssion();
+            scriptReader.ClearSession();
+            powershellExecuter.ClearSession();
+            UpdateScriptCategoriesList();
+            SetInitialScriptCategory();
+            }
+
+        /// <summary>
+        /// Gets the output from the executed powershell script.
+        /// </summary>
+        public string ScriptExecutionOutput
+            {
+            get
+                {
+                return _scriptOutput;
+                }
+            set
+                {
+                if(value != null)
+                    {
+                    _scriptOutput = value;
+                    OnPropertyChanged("ScriptExecutionOutput");
+                    }
+                }
+            }
         }
     }

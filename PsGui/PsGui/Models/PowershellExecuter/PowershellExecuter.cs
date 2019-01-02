@@ -10,9 +10,13 @@ namespace PsGui.Models.PowershellExecuter
     {
     class PowershellExecuter
         {
-        private string       _scriptOutput;
         private List<string> commandLineArguments;
         private List<string> commandLineArgKeys;
+
+        /// <summary>
+        /// Gets the script execution output.
+        /// </summary>
+        public string ScriptOutput { get; private set; }
 
         /// <summary>
         /// Gets the script argument data from the supplied collection.
@@ -34,24 +38,18 @@ namespace PsGui.Models.PowershellExecuter
         /// file path. Saves the output.
         /// </summary>
         /// <param name="scriptPath"></param>
-        private void ExecuteScriptCommands(string scriptPath)
+        public void ExecuteScriptCommands(string scriptPath)
             {
             using (PowerShell psInstance = PowerShell.Create())
                 {
-                // Add command
                 psInstance.AddCommand(scriptPath);
-
-                // Add arguments to command
                 int argLength = commandLineArguments.Count;
                 for (int ii = 0; ii < argLength; ii++)
                     {
                     psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
                     }
 
-                // Execute script
                 Collection<PSObject> psOutput = psInstance.Invoke();
-
-                // Get output from execution
                 StringBuilder tmp = new StringBuilder();
                 foreach (PSObject output in psOutput)
                     {
@@ -60,7 +58,7 @@ namespace PsGui.Models.PowershellExecuter
                         tmp.Append(output.ToString());
                         }
                     }
-                ScriptExecutionOutput = tmp.ToString();
+                ScriptOutput = tmp.ToString();
                 }
             }
 
@@ -69,27 +67,9 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public PowershellExecuter()
             {
-            _scriptOutput        = "";
+            ScriptOutput         = "";
             commandLineArguments = new List<string>();
             commandLineArgKeys   = new List<string>();
-            }
-
-        /// <summary>
-        /// Sets or gets the powershell execution output.
-        /// </summary>
-        public string ScriptExecutionOutput
-            {
-            get
-                {
-                return _scriptOutput;
-                }
-            set
-                {
-                if(value != null)
-                    {
-                    _scriptOutput = value;
-                    }
-                }
             }
 
         /// <summary>
@@ -102,6 +82,24 @@ namespace PsGui.Models.PowershellExecuter
             GetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
             }
+
+        /// <summary>
+        /// Clears the script output.
+        /// </summary>
+        public void ClearScriptOutput()
+            {
+            ScriptOutput = "";
+            }
+
+        /// <summary>
+        /// Clears stored data, excludes the scriptoutput.
+        /// </summary>
+        public void ClearSession()
+            {
+            commandLineArgKeys.Clear();
+            commandLineArguments.Clear();
+            }
+
 
         }
     }

@@ -92,6 +92,7 @@ namespace PsGui.Models.PowershellExecuter
             if(_scriptCategories.Count > 0)
                 {
                 _scriptCategories.Clear();
+                _selectedCategoryName = "";
                 }
             }
 
@@ -204,7 +205,14 @@ namespace PsGui.Models.PowershellExecuter
                 }
             }
 
-
+        /// <summary>
+        /// Clears the stored data.
+        /// </summary>
+        public void ClearSesssion()
+            {
+            ClearCategories();
+            ClearScripts();
+            }
 
         }
     }
