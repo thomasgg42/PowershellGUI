@@ -16,7 +16,6 @@ namespace PsGui.ViewModels
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
         private PsExecException    powershellExecptions;
-        private ArgumentChecker    argumentChecker;
 
         public ICommand RadioButtonChecked  { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }

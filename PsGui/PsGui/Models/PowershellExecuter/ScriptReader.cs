@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PsGui.Models.PowershellExecuter
     {
@@ -195,9 +190,9 @@ namespace PsGui.Models.PowershellExecuter
                     lineNum++;
                     }
                 }
-            catch
+            catch (Exception e)
                 {
-                throw new PsExecException("ScriptReader.ReadSelectedScript: bad script header");
+                throw new PsExecException("Bad script header!", e.ToString());
                 }
             }
 

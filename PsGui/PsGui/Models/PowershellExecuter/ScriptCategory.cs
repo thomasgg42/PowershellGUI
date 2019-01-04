@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PsGui.Models.PowershellExecuter
+﻿namespace PsGui.Models.PowershellExecuter
     {
     /// <summary>
     /// Stores each script category with a filepath and 

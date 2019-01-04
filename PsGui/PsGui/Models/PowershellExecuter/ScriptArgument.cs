@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PsGui.Models.PowershellExecuter
+﻿namespace PsGui.Models.PowershellExecuter
     {
     public class ScriptArgument
         {
@@ -36,7 +30,7 @@ namespace PsGui.Models.PowershellExecuter
                 case "string": inputOk = inputCheck.IsString(input); break;
                 case "int": inputOk    = inputCheck.IsInt(input);    break;
                 case "bool": inputOk   = inputCheck.IsBool(input);   break;
-                default: throw new PsExecException("Exception: ScriptArgument.IsInputOk");
+                default: throw new PsExecException("Bad script file variable type definition: " + _inputType);
                 }
             return inputOk;
             }

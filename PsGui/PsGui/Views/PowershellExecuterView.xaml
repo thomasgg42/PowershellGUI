@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PsGui.Views"
+             xmlns:p="clr-namespace:PsGui.Properties"
              mc:Ignorable="d" 
              MaxHeight="600" MaxWidth="450"
              d:DesignHeight="600" d:DesignWidth="450">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -95,7 +97,7 @@
         <!-- Execute button -->
         <Button Command="{Binding Path=ExecuteButtonPushed}"
                 Grid.Row="5" Grid.Column="1"
-                Content="Run Script"
+                Content="Kjør"
                 Margin="10 10 10 0" />
         
         <!-- Header: Output -->
@@ -106,6 +108,6 @@
         <!-- Output field -->
         <TextBlock Text="{Binding Path=ScriptExecutionOutput}"
                    Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
-                   Margin="0 10 0 0"/>
+                   Margin="0 10 0 0" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

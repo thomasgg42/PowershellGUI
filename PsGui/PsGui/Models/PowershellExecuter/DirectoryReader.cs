@@ -1,5 +1,4 @@
-﻿using PsGui.Models.PowershellExecuter;
-using System.IO;
+﻿using System.IO;
 using System.Collections.ObjectModel;
 
 namespace PsGui.Models.PowershellExecuter
@@ -63,7 +62,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             catch (System.Exception e)
                 {
-                throw new PsGuiException("Models.DirectoryReader.UpdateScriptCategoriesList()");
+                throw new PsExecException("No directory folders found!", e.ToString());
                 }
             }
 
@@ -120,7 +119,6 @@ namespace PsGui.Models.PowershellExecuter
         /// Finds all files with a .ps1 file extension in the 
         /// selected category folder and stores each file name
         /// excluding the file extension.
-        /// @Throws PSGuiException
         /// </summary>
         public void UpdateScriptFilesList()
             {
@@ -129,19 +127,12 @@ namespace PsGui.Models.PowershellExecuter
             // Todo: const
             string fileExtension = ".ps1";
             int fileExtensionLength = fileExtension.Length;
-            try
+            scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
+            foreach (string script in scriptList)
                 {
-                scriptList = Directory.GetFiles(scriptDirectoryPath, "*" + fileExtension);
-                foreach (string script in scriptList)
-                    {
-                    string fileNameWithExtension = Path.GetFileName(script);
-                    string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
-                    _scriptFiles.Add(Path.GetFileName(fileNameWithoutExtension));
-                    }
-                }
-            catch (System.Exception e)
-                {
-                throw new PsGuiException("Models.DirectoryReader.UpdateScriptFilesList(): " + e.ToString());
+                string fileNameWithExtension = Path.GetFileName(script);
+                string fileNameWithoutExtension = (Path.GetFileName(script)).Substring(0, fileNameWithExtension.Length - fileExtensionLength);
+                _scriptFiles.Add(Path.GetFileName(fileNameWithoutExtension));
                 }
             }
 

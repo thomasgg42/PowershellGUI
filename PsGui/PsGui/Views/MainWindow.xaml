@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
         Title="MainWindow" MaxHeight="600" MaxWidth="450">
+
     <Border Padding="10">
         <Grid>
             <TabControl Padding="10">
