@@ -45,8 +45,10 @@ namespace PsGui.Models.PowershellExecuter
                     {
                     psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
                     }
-
+                // Prevents displaying objects as objects
+                psInstance.AddCommand("Out-String");
                 Collection<PSObject> psOutput = psInstance.Invoke();
+                // powershell error handling?
                 StringBuilder tmp = new StringBuilder();
                 foreach (PSObject output in psOutput)
                     {

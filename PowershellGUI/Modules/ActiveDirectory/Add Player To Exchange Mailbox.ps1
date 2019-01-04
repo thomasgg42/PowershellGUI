@@ -6,4 +6,4 @@ Description = "beskrivelse"
 [string]mappenavn = "Antall tekstfiler i mappe"
 [string]tekstfilinnhold = "Tekstfilens innhold"
 #>
-Get-Help
+Write-Host "$tekstfilnavn - $mappenavn - $tekstfilinnhold

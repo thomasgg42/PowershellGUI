@@ -1,4 +1,5 @@
 ﻿using PsGui.Models.PowershellExecuter;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,7 +16,6 @@ namespace PsGui.ViewModels
         private DirectoryReader    directoryReader;
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
-        private PsExecException    powershellExecptions;
 
         public ICommand RadioButtonChecked  { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
@@ -88,8 +88,15 @@ namespace PsGui.ViewModels
         private void SetInitialScriptCategory()
             {
             int firstCategory = 0;
-            ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
-            SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
+            try
+                {
+                ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
+                SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
+                }
+            catch(Exception e)
+                {
+                throw new PsExecException("Finner ingen kategorimapper i Modules-mappen!", e.ToString());
+                }
             }
 
         /// <summary>
@@ -190,8 +197,6 @@ namespace PsGui.ViewModels
                     }
                 }
             }
-
-
 
 
         /// <summary>
