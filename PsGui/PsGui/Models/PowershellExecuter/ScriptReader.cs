@@ -193,7 +193,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             catch (Exception e)
                 {
-                throw new PsExecException("Bad script header!", e.ToString());
+                throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
                 }
             }
 
