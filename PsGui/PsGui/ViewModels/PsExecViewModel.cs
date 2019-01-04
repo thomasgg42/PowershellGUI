@@ -26,13 +26,14 @@ namespace PsGui.ViewModels
 
         /// <summary>
         /// Executes a powershell script at the supplied path with the supplied
-        /// input variables.
+        /// input variables. Saves normal and error output from the script.
         /// </summary>
         /// <param name="obj"></param>
         private void ExecutePowershellScript(object obj)
             {
             powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
+            ScriptExecutionOutput      = powershellExecuter.ScriptOutput;
+            ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
             }
 
@@ -246,9 +247,11 @@ namespace PsGui.ViewModels
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
-                        if(ScriptExecutionOutput != null && ScriptExecutionOutput.Length > 0)
+                        if((ScriptExecutionOutput != null && ScriptExecutionOutput.Length > 0) ||
+                           (ScriptExecutionErrorOutput != null && ScriptExecutionErrorOutput.Length > 0))
                             {
-                            ScriptExecutionOutput = "";
+                            ScriptExecutionOutput      = "";
+                            ScriptExecutionErrorOutput = "";
                             }
                         }
                     else

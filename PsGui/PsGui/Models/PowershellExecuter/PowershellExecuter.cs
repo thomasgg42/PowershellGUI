@@ -32,10 +32,24 @@ namespace PsGui.Models.PowershellExecuter
                 StringBuilder tmp = new StringBuilder();
                 foreach (ErrorRecord err in instance.Streams.Error)
                     {
-                    tmp.Append(err.ToString());
+                    tmp.Append("**General message**");
+                    tmp.Append('\n' + err.ToString());
+                    tmp.Append("\n\n**Fully Qualified Error ID**");
+                    tmp.Append('\n' + err.FullyQualifiedErrorId.ToString());
+                    tmp.Append("\n\n**Stack trace**");
+                    tmp.Append('\n' + err.ScriptStackTrace.ToString());
                     }
-                //ScriptErrors = tmp.ToString();
-                ScriptOutput += tmp.ToString();
+                ScriptErrors = tmp.ToString();
+                }
+            else
+                {
+                // If a previous script has generated errors
+                // But a new script does not generate errors
+                // Then remove the previously recorded error
+                if(ScriptErrors != null && ScriptErrors.Length > 0)
+                    {
+                    ScriptErrors = "";
+                    }
                 }
             }
 
@@ -54,7 +68,7 @@ namespace PsGui.Models.PowershellExecuter
                     tmp.Append(output.ToString());
                     }
                 }
-            ScriptOutput += tmp.ToString();
+            ScriptOutput = tmp.ToString();
             }
 
         /// <summary>
