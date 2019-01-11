@@ -37,7 +37,8 @@ namespace PsGui.Models.PowershellExecuter
                     tmp.Append("\n\n**Fully Qualified Error ID**");
                     tmp.Append('\n' + err.FullyQualifiedErrorId.ToString());
                     tmp.Append("\n\n**Stack trace**");
-                    tmp.Append('\n' + err.ScriptStackTrace.ToString() + '\n');
+                    tmp.Append('\n' + err.ScriptStackTrace.ToString());
+                    tmp.Append('\n' + "------------------------------\n\n");
                     }
                 ScriptErrors = tmp.ToString();
                 }
