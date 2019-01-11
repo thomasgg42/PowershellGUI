@@ -180,6 +180,10 @@ namespace PowershellGUI.Models
                 }
             }
 
+        /// <summary>
+        /// Gets or sets the collection of input script variables 
+        /// from the user.
+        /// </summary>
         public ObservableCollection<ScriptArgument> ScriptVariables
             {
             get

@@ -9,7 +9,6 @@ namespace PsGui.Models.PowershellExecuter
         private ObservableCollection<ScriptArgument> _scriptVariables;
         private string _scriptDescription;
         private string _scriptHeader;
-        private string _scriptOutput;
 
         /// <summary>
         /// Reads the powershell script header's top section.
@@ -18,10 +17,8 @@ namespace PsGui.Models.PowershellExecuter
         /// <param name="line"></param>
         private void ReadScriptHeader(int lineNum, string line)
             {
-            // logic to separate variable names from variable content
             const int description = 1;
             const int header = 2;
-            const int output = 3;
 
             switch (lineNum)
                 {
@@ -33,11 +30,6 @@ namespace PsGui.Models.PowershellExecuter
                 case header:
                     {
                     _scriptHeader = line;
-                    break;
-                    }
-                case output:
-                    {
-                    _scriptOutput = line;
                     break;
                     }
                 }
@@ -115,7 +107,6 @@ namespace PsGui.Models.PowershellExecuter
             _scriptVariables   = new ObservableCollection<ScriptArgument>();
             _scriptDescription = "";
             _scriptHeader      = "";
-            _scriptOutput      = "";
             }
 
         /// <summary>
@@ -177,7 +168,7 @@ namespace PsGui.Models.PowershellExecuter
             string[] lines            = System.IO.File.ReadAllLines(scriptPath);
             string scriptHeaderEndTag = "#>";
             int lineNum               = 0;
-            int lastHeaderLine        = 3;
+            int lastHeaderLine        = 2;
             try
                 {
                 foreach (string line in lines)

@@ -62,13 +62,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
+    <Compile Include="Models\ActiveDirectoryInfo\ADInfoException.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
+    <Compile Include="ViewModels\ActiveDirectoryInfo.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModels\PsExecViewModel.cs" />
+    <Compile Include="Views\ActiveDirectoryInfo.xaml.cs">
+      <DependentUpon>ActiveDirectoryInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PowershellExecuterView.xaml.cs">
       <DependentUpon>PowershellExecuterView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ActiveDirectoryInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -200,7 +200,6 @@ namespace PsGui.ViewModels
                 }
             }
 
-
         /// <summary>
         /// Sets or gets a collection of strings representing
         /// the script files in each category.

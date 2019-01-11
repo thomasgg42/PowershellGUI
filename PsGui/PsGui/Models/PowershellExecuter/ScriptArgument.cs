@@ -18,6 +18,15 @@
             }
 
         /// <summary>
+        ///  Removes leading and trailing spaces from the input
+        ///  and returns it.
+        /// </summary>
+        private string TrimInput(string input)
+            {
+            return input.Trim();
+            }
+
+        /// <summary>
         /// Checks input format based on the stored input type.
         /// </summary>
         /// <param name="input"></param>

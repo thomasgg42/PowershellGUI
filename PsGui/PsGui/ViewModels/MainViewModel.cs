@@ -13,6 +13,7 @@ namespace PsGui.ViewModels
             {
             Tabs = new ObservableCollection<object>();
             Tabs.Add(new PsExecViewModel(powershellScriptModulePath, powershellScriptModuleFolderName));
+            Tabs.Add(new ActiveDirectoryInfo());
             }
 
         }
