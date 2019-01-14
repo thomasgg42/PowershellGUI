@@ -2,17 +2,6 @@
 using PsGui.Models.PowershellExecuter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-/// <summary>
-///  DirectoryReader.SelectedScriptCategory skal bestemme kategori
-///  DirectoryReader.ScriptFiles skal knyttes til dropdownmeny med ps-filer
-///  DirectoryReader.SelectedScriptFile bestemmer nåværende valgt script
-///  FileReader.ScriptVariables gir en liste over input felt
-///  FileReader.ScriptArgument skal gi tilgang til hvert input felt sine egenskaper
-///  ClickCommand skal kjøres ved trykk på Run Script knapp
-///  PowershellExecuter.ScriptOutput skal vise output fra powershsell
-/// </summary>
-
-
 
 namespace PsGuiTest
     {
@@ -48,7 +37,6 @@ namespace PsGuiTest
             Assert.AreEqual( false, psExec.IsScriptSelected);
             Assert.AreEqual("", psExec.SelectedScriptFile);
             }
-
 
         /// <summary>
         /// When a category is chosen. The current script shall be cleared from
@@ -94,61 +82,6 @@ namespace PsGuiTest
                 {
                 Assert.AreEqual(true, arg.HasNoInput());
                 }
-            }
-
-
-
-        /// <summary>
-        /// When a script file has been chosen and input fields
-        /// has been filledo ut by the user. The script shall 
-        /// become executable.
-        /// </summary
-        [TestMethod]
-        public void InputFieldsFilledScriptIsExecutableTest()
-            {
-            string modulePath = ".";
-            string moduleFolder = "Modules";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
-
-            // Select a script category
-            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = true;
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0].FriendlyName;
-            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[0];
-
-            // Select a script in the category, containing two input fields
-            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[1];
-            psExec.IsScriptSelected = true;
-            psExec.ScriptVariables.Add(new ScriptArgument("name", "First name", "string"));
-            psExec.ScriptVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
-
-            // Add value to input fields
-            psExec.ScriptVariables[0].InputValue = "Testbert";
-            psExec.ScriptVariables[1].InputValue = "80";
-
-            }
-
-        /// <summary>
-        /// A module path leading to a non-existing folder structure
-        /// will produce a PsExecException
-        /// </summary>
-        [TestMethod]
-        public void BadModulepathTest()
-            {
-            string modulePath = ".//..//";
-            string moduleFolder = "Modules";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
-            }
-
-        /// <summary>
-        /// When a powershell script's header area has mispelled a variable
-        /// type, an exception must be thrown.
-        /// </summary>
-        [TestMethod]
-        public void TestBadArgumentTypeException()
-            {
-            string modulePath = ".";
-            string moduleFolder = "Modules";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
             }
         }
     }
