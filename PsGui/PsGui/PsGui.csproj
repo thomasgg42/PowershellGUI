@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,6 +67,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Models\ActiveDirectoryInfo\ADInfoException.cs" />
+    <Compile Include="Models\ActiveDirectoryInfo\ADUser.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
     <Compile Include="ViewModels\ActiveDirectoryInfo.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
