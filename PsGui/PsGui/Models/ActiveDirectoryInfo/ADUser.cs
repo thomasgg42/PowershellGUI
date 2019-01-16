@@ -19,10 +19,29 @@ namespace PsGui.Models.ActiveDirectoryInfo
         private string _extensionAttribute10;
         private string _extensionAttribute8;
 
-
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ADUser()
             {
 
+            }
+
+        /// <summary>
+        /// Clears all user data.
+        /// </summary>
+        public void ClearData()
+            {
+            _title = "";
+            _mail = "";
+            _surName = "";
+            _givenName = "";
+            _homeDirectory = "";
+            _department = "";
+            _extensionAttribute8 = "";
+            _extensionAttribute10 = "";
+            _principalName = "";
+            _phone = "";
             }
 
         public string Title

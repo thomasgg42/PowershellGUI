@@ -69,7 +69,7 @@
     <Compile Include="Models\ActiveDirectoryInfo\ADInfoException.cs" />
     <Compile Include="Models\ActiveDirectoryInfo\ADUser.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
-    <Compile Include="ViewModels\ActiveDirectoryInfo.cs" />
+    <Compile Include="ViewModels\ADInfoViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModels\PsExecViewModel.cs" />
