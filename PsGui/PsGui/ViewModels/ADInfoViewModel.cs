@@ -234,8 +234,6 @@ namespace PsGui.ViewModels
             ldapCon.AuthenticationType = AuthenticationTypes.Secure;
 
             DirectorySearcher search = new DirectorySearcher(ldapCon);
-            // search.Filter = "CN=Thomas Gundersen,OU=Users,OU=KO-ESS,OU=Konsern,OU=Customers,OU=SKALA,DC=EIKANETT,DC=eika,DC=no";
-            // search.Filter = "OU=KO-ESS,OU=Konsern,OU=Customers,OU=SKALA,DC=EIKANETT,DC=eika,DC=no";
             search.Filter = "(samaccountname=<hbruker>)";
             SearchResult result = search.FindOne();
             if (result != null)
