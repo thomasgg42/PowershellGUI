@@ -14,9 +14,9 @@ namespace PsGui.ViewModels
 
         public ADInfoViewModel(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
             {
-            connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
-            user       = new ADUser();
-            ClearUserData();
+       //     connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
+       //     user       = new ADUser();
+       //     ClearUserData();
             }
 
         /// <summary>
