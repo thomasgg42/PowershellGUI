@@ -4,6 +4,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
     {
     class ADUser
         {
+        private string _lockedOut;
         private string _phone;
         private string _principalName;
         private string _department;
@@ -14,6 +15,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
         private string _title;
         private string _extensionAttribute10;
         private string _extensionAttribute8;
+        private string _samAccountName;
 
         /// <summary>
         /// Constructor.
@@ -29,6 +31,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
         /// </summary>
         public void ClearData()
             {
+            _lockedOut = "false";
             _title = "";
             _mail = "";
             _surName = "";
@@ -39,6 +42,19 @@ namespace PsGui.Models.ActiveDirectoryInfo
             _extensionAttribute10 = "";
             _principalName = "";
             _phone = "";
+            _samAccountName = "";
+            }
+
+        public string samAccountName
+            {
+            get
+                {
+                return _samAccountName;
+                }
+            set
+                {
+                _samAccountName = value;
+                }
             }
 
         public string Title
@@ -51,6 +67,18 @@ namespace PsGui.Models.ActiveDirectoryInfo
             set
                 {
                 _title = value;
+                }
+            }
+
+        public string LockedOut
+            {
+            get
+                {
+                return _lockedOut;
+                }
+            set
+                {
+                _lockedOut = value;
                 }
             }
 

@@ -31,15 +31,21 @@ namespace PsGui.Models.ActiveDirectoryInfo
             //     DirectoryEntry ldapConnection = new DirectoryEntry("eikdc201.eikanett.eika.no", "<brukernavn>", "<pw>");
             // ldapConnection.Path = "LDAP://OU=Customers,OU=SKALA,DC=EIKANETT,DC=eika,DC=no";
             InitiateConnection(serverURI, priviledgedUserName, priviledgedUserPw, LDAPPath);
+            }
+
+        public SearchResult FindUserObject(string samAccountName)
+            {
+            DirectorySearcher searchResult = new DirectorySearcher(LDAPConnection);
+            searchResult.Filter = "(samaccountname=" + samAccountName + ")";
+            return searchResult.FindOne();
+            }
 
 
-          //  DirectorySearcher search = new DirectorySearcher(ldapConnection);
-          //  search.Filter = "(samaccountname=<hbruker>)";
-           // SearchResult result = search.FindOne();
-           /*
-            if (result != null)
+        public void SetUserProperties(SearchResult user)
+            {
+            if (user != null)
                 {
-                ResultPropertyCollection fields = result.Properties;
+                ResultPropertyCollection fields = user.Properties;
                 foreach (string ldapField in fields.PropertyNames)
                     {
                     foreach (Object myColl in fields[ldapField])
@@ -48,18 +54,6 @@ namespace PsGui.Models.ActiveDirectoryInfo
                         }
                     }
                 }
-            else
-                {
-                //  tmp = "fail";
-                }
-                */
-            }
-
-        public SearchResult FindUserObject()
-            {
-            DirectorySearcher searchResult = new DirectorySearcher(LDAPConnection);
-            searchResult.Filter = "";
-            return searchResult.FindOne();
             }
 
         }

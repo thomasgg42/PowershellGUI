@@ -1,5 +1,6 @@
 ﻿using PsGui.Models.ActiveDirectoryInfo;
-
+using System;
+using System.DirectoryServices;
 
 namespace PsGui.ViewModels
     {
@@ -9,14 +10,66 @@ namespace PsGui.ViewModels
 
         private ADUser user;
         private ADConnection connection;
+        private string _samAccountName;
+
+        private void GetUserProperties(SearchResult user)
+            {
+            if (user != null)
+                {
+                ResultPropertyCollection fields = user.Properties;
+                foreach (string ldapField in fields.PropertyNames)
+                    {
+                    foreach (Object myColl in fields[ldapField])
+                        {
+                        SetUserProperty(myColl.ToString());
+                        }
+                    }
+                }
+            }
+
+        private void SetUserProperty(string property)
+            {
+            // logikk for å skille ut hvert felt
+            // key:value 
+            // split på : og ta [0] for key
+
+            string key = "";
 
 
+            switch (key)
+                {
+                case "mobile": break;
+                case "company": break;
+                case "samaccountname": break;
+                case "extensionAttribute8": break;
+                case "extensionattribute10": break;
+                }
+            }
 
         public ADInfoViewModel(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
             {
-       //     connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
-       //     user       = new ADUser();
-       //     ClearUserData();
+            connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
+            user       = new ADUser();
+            ClearUserData();
+            }
+
+        /// <summary>
+        /// Stores the SamAccountName and calls the function
+        /// responsible for finding the AD-object matching
+        /// the given SamAccountName and parsing the object's
+        /// properties.
+        /// </summary>
+        public string SamAccountName
+            {
+            get
+                {
+                return _samAccountName;
+                }
+            set
+                {
+                GetUserProperties(connection.FindUserObject(value));
+                _samAccountName = value;
+                }
             }
 
         /// <summary>
