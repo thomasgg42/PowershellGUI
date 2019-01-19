@@ -1,5 +1,6 @@
 ﻿using PsGui.Models.ActiveDirectoryInfo;
 using System;
+using System.Collections.Generic;
 using System.DirectoryServices;
 
 namespace PsGui.ViewModels
@@ -8,33 +9,45 @@ namespace PsGui.ViewModels
         {
         public string TabName { get; } = "AD Info";
 
-        private ADUser user;
+        private const int MAXUSERS = 3;
+
+        private ADUser[] users;
         private ADConnection connection;
         private string _samAccountName;
 
+        private int currentUserNumber;
+        private int lastUserNumber;
+
+        /// <summary>
+        /// Gets the user properties from the user search result.
+        /// </summary>
+        /// <param name="user"></param>
         private void GetUserProperties(SearchResult user)
             {
-            if (user != null)
+            // TODO: handle empty result
+            ResultPropertyCollection fields = user.Properties;
+            foreach (string ldapField in fields.PropertyNames)
                 {
-                ResultPropertyCollection fields = user.Properties;
-                foreach (string ldapField in fields.PropertyNames)
+                foreach (Object myColl in fields[ldapField])
                     {
-                    foreach (Object myColl in fields[ldapField])
-                        {
-                        SetUserProperty(myColl.ToString());
-                        }
+                    SetUserProperty(myColl.ToString());
                     }
                 }
             }
 
+        /// <summary>
+        /// Filters out each property and stores the values
+        /// in the user object.
+        /// </summary>
+        /// <param name="property"></param>
         private void SetUserProperty(string property)
             {
-            // logikk for å skille ut hvert felt
-            // key:value 
-            // split på : og ta [0] for key
-
             string key = "";
             string value = "";
+            string[] keyValuePair = property.Split(':');
+            key = keyValuePair[0];
+            value = keyValuePair[1];
+
 
             switch (key)
                 {
@@ -46,35 +59,58 @@ namespace PsGui.ViewModels
                 case "department": Department = value;  break;
                 case "userprincipalname": PrincipalName = value; break;
                 case "mobile": Phone = value; break;
-                case "samaccountname": user.SamAccountName = "value"; break;
+                case "samaccountname": SamAccountName = "value"; break;
                 case "extensionAttribute8": break;
                 case "extensionattribute10": break;
+                default: break;
                 }
-            }
-
-        public ADInfoViewModel(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
-            {
-            connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
-            user       = new ADUser();
-            ClearUserData();
             }
 
         /// <summary>
-        /// Stores the SamAccountName and calls the function
-        /// responsible for finding the AD-object matching
-        /// the given SamAccountName and parsing the object's
-        /// properties.
+        /// Constructor initiates a new AD connection and the user
+        /// array.
         /// </summary>
-        public string SamAccountName
+        /// <param name="serverURI"></param>
+        /// <param name="ldapPath"></param>
+        /// <param name="priviledgedUserName"></param>
+        /// <param name="priviledgedUserPw"></param>
+        public ADInfoViewModel(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
             {
-            get
+            try
                 {
-                return _samAccountName;
+                connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
                 }
-            set
+            catch (Exception e)
                 {
-                GetUserProperties(connection.FindUserObject(value));
-                _samAccountName = value;
+                throw new ADInfoException("Tilkobling til AD-server feilet!", e.ToString());
+                }
+            
+            users = new ADUser[MAXUSERS];
+            // Create empty initial user to prevent GUI fields
+            // from reading uninitialized object properties
+            currentUserNumber = -1;
+            NewUser();
+            }
+
+
+
+
+        /// <summary>
+        /// Increments the last user number, creates a new, empty user object
+        /// and adds it to the user list. Sets the current user number to the 
+        /// newly created user.
+        /// </summary>
+        public void NewUser()
+            {
+            if (lastUserNumber < MAXUSERS)
+                {
+                users[++lastUserNumber] = new ADUser();
+                currentUserNumber = lastUserNumber;
+                }
+            else
+                {
+                // bruke throw?
+                new ADInfoException("Max number of users reached (" + MAXUSERS + ")");
                 }
             }
 
@@ -84,7 +120,7 @@ namespace PsGui.ViewModels
         /// </summary>
         public void ClearUserData()
             {
-            user.ClearData();
+            users[currentUserNumber].ClearData();
             }
 
         /// <summary>
@@ -100,18 +136,50 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
+        /// Stores the SamAccountName and calls the functions
+        /// responsible for finding the AD-object matching
+        /// the given SamAccountName and parsing the object's
+        /// properties.
+        /// </summary>
+        public string SamAccountName
+            {
+            get
+                {
+                return users[currentUserNumber].SamAccountName;
+                }
+            set
+                {
+                // if value.length = "h90xxxx".length 
+                // og utfør on propertyChanged?
+                // kun ved if GETUserProperties == true? 
+                // dårlig ide å lagre om du skrev feil?
+                // bruke lagre-knapp som lagrer info for sammenlikning
+                // Man skal kun lagre et objekt om man ønsker å sammenlikne det
+                // kan dermed hente inn en ny user onpropertychanged om dette ikke er en 
+                // tidskrevende prossess
+                
+                if (value != null)
+                    {
+                    NewUser();
+                    GetUserProperties(connection.FindUserObject(value));
+                    _samAccountName = value;
+                    }
+                }
+            }
+
+        /// <summary>
         /// Gets or set sthe user title.
         /// </summary>
         public string Title
             {
             get
                 {
-                return user.Title;
+                return users[currentUserNumber].Title;
                 }
 
             set
                 {
-                user.Title = value;
+                users[currentUserNumber].Title = value;
                 }
             }
         
@@ -122,11 +190,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.Mail;
+                return users[currentUserNumber].Mail;
                 }
             set
                 {
-                user.Mail = value;
+                users[currentUserNumber].Mail = value;
                 }
             }
 
@@ -137,11 +205,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.SurName;
+                return users[currentUserNumber].SurName;
                 }
             set
                 {
-                user.SurName = value;
+                users[currentUserNumber].SurName = value;
                 }
             }
 
@@ -152,11 +220,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.GivenName;
+                return users[currentUserNumber].GivenName;
                 }
             set
                 {
-                user.GivenName = value;
+                users[currentUserNumber].GivenName = value;
                 }
             }
 
@@ -167,11 +235,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.HomeDirectory;
+                return users[currentUserNumber].HomeDirectory;
                 }
             set
                 {
-                user.HomeDirectory = value;
+                users[currentUserNumber].HomeDirectory = value;
                 }
             }
 
@@ -182,11 +250,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.Department;
+                return users[currentUserNumber].Department;
                 }
             set
                 {
-                user.Department = value;
+                users[currentUserNumber].Department = value;
                 }
             }
 
@@ -197,11 +265,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.ExtensionAttribute8;
+                return users[currentUserNumber].ExtensionAttribute8;
                 }
             set
                 {
-                user.ExtensionAttribute8 = value;
+                users[currentUserNumber].ExtensionAttribute8 = value;
                 }
             }
 
@@ -212,11 +280,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.ExtensionAttribute10;
+                return users[currentUserNumber].ExtensionAttribute10;
                 }
             set
                 {
-                user.ExtensionAttribute10 = value;
+                users[currentUserNumber].ExtensionAttribute10 = value;
                 }
             }
 
@@ -227,11 +295,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.PrincipalName;
+                return users[currentUserNumber].PrincipalName;
                 }
             set
                 {
-                user.PrincipalName = value;
+                users[currentUserNumber].PrincipalName = value;
                 }
             }
 
@@ -242,11 +310,11 @@ namespace PsGui.ViewModels
             {
             get
                 {
-                return user.Phone;
+                return users[currentUserNumber].Phone;
                 }
             set
                 {
-                user.Phone = value;
+                users[currentUserNumber].Phone = value;
                 }
             }
 

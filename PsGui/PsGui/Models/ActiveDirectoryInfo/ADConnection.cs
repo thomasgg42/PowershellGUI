@@ -21,18 +21,26 @@ namespace PsGui.Models.ActiveDirectoryInfo
             LDAPConnection.Path = LDAPPath;
             LDAPConnection.AuthenticationType = AuthenticationTypes.Secure;
             }
-
+        
+        /// <summary>
+        /// Constructor iniates AD-connection.
+        /// </summary>
+        /// <param name="serverURI"></param>
+        /// <param name="LDAPPath"></param>
+        /// <param name="priviledgedUserName"></param>
+        /// <param name="priviledgedUserPw"></param>
         public ADConnection(string serverURI, string LDAPPath, string priviledgedUserName, string priviledgedUserPw)
             {
-            // Føler at denne ikke passer til ADUser - kanskje bedre med egen klasse?
-            // Her bør det benyttes en config fil
-            // For tungvindt å skrive inn manuelt 
-            // hardcode er nogo
-            //     DirectoryEntry ldapConnection = new DirectoryEntry("eikdc201.eikanett.eika.no", "<brukernavn>", "<pw>");
-            // ldapConnection.Path = "LDAP://OU=Customers,OU=SKALA,DC=EIKANETT,DC=eika,DC=no";
             InitiateConnection(serverURI, priviledgedUserName, priviledgedUserPw, LDAPPath);
             }
 
+        /// <summary>
+        /// Searches Active Directory for a user object with
+        /// the provided samAccountName. Returns a SearchResult
+        /// if found.
+        /// </summary>
+        /// <param name="samAccountName"></param>
+        /// <returns></returns>
         public SearchResult FindUserObject(string samAccountName)
             {
             DirectorySearcher searchResult = new DirectorySearcher(LDAPConnection);

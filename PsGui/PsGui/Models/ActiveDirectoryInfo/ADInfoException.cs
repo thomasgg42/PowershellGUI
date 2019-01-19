@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PsGui.Models;
 
 namespace PsGui.Models.ActiveDirectoryInfo
     {
-    class ADInfoException
+    class ADInfoException : PsGuiException
         {
+        public ADInfoException(string temp1, string temp2) : base(temp1, temp2)
+            {
+
+            }
+        public ADInfoException(string temp1) : base(temp1)
+            {
+
+            }
         }
     }

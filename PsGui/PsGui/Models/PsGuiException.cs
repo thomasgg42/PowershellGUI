@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace PsGui.Models.PowershellExecuter
+namespace PsGui.Models
     {
     public class PsGuiException : Exception
         {
@@ -17,8 +17,9 @@ namespace PsGui.Models.PowershellExecuter
             }
         public PsGuiException(string temp1)
             {
+            // Non-critical errors?
             System.Windows.MessageBox.Show(temp1);
-            CloseApp();
+            //CloseApp();
             }
 
         public void CloseApp()

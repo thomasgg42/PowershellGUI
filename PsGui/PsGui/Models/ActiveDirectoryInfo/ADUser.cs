@@ -4,26 +4,25 @@ namespace PsGui.Models.ActiveDirectoryInfo
     {
     class ADUser
         {
-        private string _lockedOut;
-        private string _phone;
-        private string _principalName;
-        private string _department;
-        private string _homeDirectory;
-        private string _givenName;
-        private string _surName;
-        private string _mail;
-        private string _title;
-        private string _extensionAttribute10;
-        private string _extensionAttribute8;
-        private string _samAccountName;
+        public string LockedOut { get; set; }
+        public string Phone { get; set; }
+        public string PrincipalName { get; set; }
+        public string Department { get; set; }
+        public string HomeDirectory { get; set; }
+        public string GivenName { get; set; }
+        public string SurName { get; set; }
+        public string Mail { get; set; }
+        public string Title { get; set; }
+        public string ExtensionAttribute10 { get; set; }
+        public string ExtensionAttribute8 { get; set; }
+        public string SamAccountName { get; set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public ADUser()
             {
-
-
+            ClearData();
             }
 
         /// <summary>
@@ -31,6 +30,20 @@ namespace PsGui.Models.ActiveDirectoryInfo
         /// </summary>
         public void ClearData()
             {
+            // Temp values while testing 
+            LockedOut = "True";
+            Title = "IT-ansvarlig (Vikar)";
+            Mail = "loffe.lofferud@oink.doink.com";
+            SurName = "Lofferud";
+            GivenName = "Loffe";
+            HomeDirectory = @"\\oink.doink\buker\home\h905050";
+            Department = "13348";
+            ExtensionAttribute8 = "1905";
+            ExtensionAttribute10 = "adfaejih9h_dkjf";
+            PrincipalName = "h905050@oink.doink.com";
+            Phone = "+47 492582592";
+            SamAccountName = "h905050";
+            /*
             _lockedOut = "false";
             _title = "";
             _mail = "";
@@ -43,8 +56,14 @@ namespace PsGui.Models.ActiveDirectoryInfo
             _principalName = "";
             _phone = "";
             _samAccountName = "";
+            */
             }
 
+        /*
+
+        /// <summary>
+        /// Sets or gets the samAccountName
+        /// </summary>
         public string SamAccountName
             {
             get
@@ -57,6 +76,9 @@ namespace PsGui.Models.ActiveDirectoryInfo
                 }
             }
 
+        /// <summary>
+        /// Sets or gets the title.
+        /// </summary>
         public string Title
             {
             get
@@ -70,6 +92,9 @@ namespace PsGui.Models.ActiveDirectoryInfo
                 }
             }
 
+        /// <summary>
+        /// Sets or gets the boolean lockedout-value as a string.
+        /// </summary>
         public string LockedOut
             {
             get
@@ -216,5 +241,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
                 _phone = value;
                 }
             }
+
+        */
         }
     }
