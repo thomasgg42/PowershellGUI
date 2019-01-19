@@ -45,7 +45,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
             _samAccountName = "";
             }
 
-        public string samAccountName
+        public string SamAccountName
             {
             get
                 {

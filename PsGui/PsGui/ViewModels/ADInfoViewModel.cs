@@ -34,13 +34,19 @@ namespace PsGui.ViewModels
             // split på : og ta [0] for key
 
             string key = "";
-
+            string value = "";
 
             switch (key)
                 {
-                case "mobile": break;
-                case "company": break;
-                case "samaccountname": break;
+                case "givenname": GivenName = value; break;
+                case "surname": SurName = value; break;
+                case "title": Title = value;  break;
+                case "mail": Mail = value;  break;
+                case "homedirectory": HomeDirectory = value; break;
+                case "department": Department = value;  break;
+                case "userprincipalname": PrincipalName = value; break;
+                case "mobile": Phone = value; break;
+                case "samaccountname": user.SamAccountName = "value"; break;
                 case "extensionAttribute8": break;
                 case "extensionattribute10": break;
                 }

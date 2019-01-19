@@ -41,20 +41,6 @@ namespace PsGui.Models.ActiveDirectoryInfo
             }
 
 
-        public void SetUserProperties(SearchResult user)
-            {
-            if (user != null)
-                {
-                ResultPropertyCollection fields = user.Properties;
-                foreach (string ldapField in fields.PropertyNames)
-                    {
-                    foreach (Object myColl in fields[ldapField])
-                        {
-                        //  tmp += ldapField + ": " + myColl.ToString() + "\n";
-                        }
-                    }
-                }
-            }
 
         }
 }
