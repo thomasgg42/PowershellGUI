@@ -5,7 +5,7 @@ namespace PsGui.ViewModels
     {
     public class MainViewModel : ObservableObject
         {
-        private const string relConfigFilePath = "config.ini";
+        private const string relConfigFilePath = @".\config.ini";
    
         public ObservableCollection<object> Tabs { get; private set; }
 
@@ -34,22 +34,19 @@ namespace PsGui.ViewModels
         /// </summary>
         private void GetConfig()
             {
-            if(System.IO.File.Exists(relConfigFilePath))
+            if(!(System.IO.File.Exists(relConfigFilePath)))
                 {
-                string[] lines = System.IO.File.ReadAllLines(relConfigFilePath);
-                foreach (string line in lines)
-                    {
-                    // if not blank line or comment
-                    if ((line != null && line != "") && !(line.Trim().StartsWith("#")))
-                        {
-                        ParseConfig(line);
-                        }
-                    }
-                }
-            else
-                {
-                // Generate new file if it doesn't exist
                 GenerateNewConfigFile();
+                }
+
+            string[] lines = System.IO.File.ReadAllLines(relConfigFilePath);
+            foreach (string line in lines)
+                {
+                // if not blank line or comment
+                if ((line != null && line != "") && !(line.Trim().StartsWith("#")))
+                    {
+                    ParseConfig(line);
+                    }
                 }
 
             }
