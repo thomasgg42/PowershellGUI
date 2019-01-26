@@ -15,9 +15,9 @@ namespace PsGui.Models.ActiveDirectoryInfo
         /// <param name="priviledgedUserName"></param>
         /// <param name="priviledgedUserPw"></param>
         /// <param name="LDAPPath"></param>
-        private void InitiateConnection(string serverURI, string priviledgedUserName, string priviledgedUserPw, string LDAPPath)
+        private void InitiateConnection(string domainURI, string priviledgedUserName, string priviledgedUserPw, string LDAPPath)
             {
-            LDAPConnection = new DirectoryEntry(serverURI, priviledgedUserName, priviledgedUserPw);
+            LDAPConnection = new DirectoryEntry(domainURI, priviledgedUserName, priviledgedUserPw);
             LDAPConnection.Path = LDAPPath;
             LDAPConnection.AuthenticationType = AuthenticationTypes.Secure;
             }
@@ -45,6 +45,7 @@ namespace PsGui.Models.ActiveDirectoryInfo
             {
             DirectorySearcher searchResult = new DirectorySearcher(LDAPConnection);
             searchResult.Filter = "(samaccountname=" + samAccountName + ")";
+            // findOne() will throw an exception if domain cannot be found
             return searchResult.FindOne();
             }
 

@@ -81,7 +81,7 @@ namespace PsGui.Models.PowershellExecuter
             foreach (ScriptArgument var in scriptVariables)
                 {
                 string argKey = var.InputKey.ToString().ToLower();
-                string argValue = var.InputValue.ToString().ToLower();
+                string argValue = var.InputValue.ToString();
                 commandLineArgKeys.Add(argKey);
                 commandLineArguments.Add(argValue);
                 }
@@ -107,6 +107,7 @@ namespace PsGui.Models.PowershellExecuter
                 psInstance.AddCommand("Out-String");
 
                 Collection<PSObject> psOutput = psInstance.Invoke();
+
                 CollectPowershellScriptoutput(psOutput);
                 CollectPowershellScriptErrors(psInstance);
                 }

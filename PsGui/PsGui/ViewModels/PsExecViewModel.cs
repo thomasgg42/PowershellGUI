@@ -31,7 +31,18 @@ namespace PsGui.ViewModels
         /// <param name="obj"></param>
         private void ExecutePowershellScript(object obj)
             {
-            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+            // if else logic to not clear field if execution failed?
+            // script failed flag in powershellExecuter?
+            // on fail: red border in GUI ?
+            try
+                {
+                powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+                }
+            catch (Exception e)
+                {
+                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString());
+                }
+
             ScriptExecutionOutput      = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();

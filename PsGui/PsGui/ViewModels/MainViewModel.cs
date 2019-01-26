@@ -18,8 +18,7 @@ namespace PsGui.ViewModels
             {
             Tabs = new ObservableCollection<object>();
             Tabs.Add(new PsExecViewModel(powershellScriptModulePath, powershellScriptModuleFolderName));
-            Tabs.Add(new ADInfoViewModel(ADServerURI, ADldapPath, ADpriviledgedUserName, ADpriviledgedPassword));
+        //    Tabs.Add(new ADInfoViewModel(ADServerURI, ADldapPath, ADpriviledgedUserName, ADpriviledgedPassword));
             }
-
         }
     }

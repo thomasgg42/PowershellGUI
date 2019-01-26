@@ -59,7 +59,7 @@ namespace PsGui.ViewModels
                 case "department": Department = value;  break;
                 case "userprincipalname": PrincipalName = value; break;
                 case "mobile": Phone = value; break;
-                case "samaccountname": SamAccountName = "value"; break;
+                case "samaccountname": SamAccountName = value; break;
                 case "extensionAttribute8": break;
                 case "extensionattribute10": break;
                 default: break;
@@ -76,6 +76,8 @@ namespace PsGui.ViewModels
         /// <param name="priviledgedUserPw"></param>
         public ADInfoViewModel(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
             {
+
+            /*
             try
                 {
                 connection = new ADConnection(serverURI, ldapPath, priviledgedUserName, priviledgedUserPw);
@@ -89,11 +91,35 @@ namespace PsGui.ViewModels
             // Create empty initial user to prevent GUI fields
             // from reading uninitialized object properties
             currentUserNumber = -1;
+            lastUserNumber = currentUserNumber;
             NewUser();
+            SamAccountName = "H804602";
+
+            */
+              Test(serverURI, ldapPath,  priviledgedUserName,  priviledgedUserPw);
             }
 
 
+        public void Test(string serverURI, string ldapPath, string priviledgedUserName, string priviledgedUserPw)
+            {
+            DirectoryEntry LDAPConnection = new DirectoryEntry(serverURI, priviledgedUserName, priviledgedUserPw);
+            LDAPConnection.Path = ldapPath;
+            LDAPConnection.AuthenticationType = AuthenticationTypes.Secure;
 
+            string samAccountName = "H804602";
+            DirectorySearcher searchResult = new DirectorySearcher(LDAPConnection);
+            searchResult.Filter = "(samaccountname=" + samAccountName + ")";
+            SearchResult res = searchResult.FindOne();
+
+            ResultPropertyCollection fields = res.Properties;
+            foreach (string ldapField in fields.PropertyNames)
+                {
+                foreach (Object myColl in fields[ldapField])
+                    {
+                    SetUserProperty(myColl.ToString());
+                    }
+                }
+            }
 
         /// <summary>
         /// Increments the last user number, creates a new, empty user object
@@ -160,9 +186,30 @@ namespace PsGui.ViewModels
                 
                 if (value != null)
                     {
-                    NewUser();
-                    GetUserProperties(connection.FindUserObject(value));
-                    _samAccountName = value;
+                    SearchResult adUser = null;
+                    
+                    try
+                        {
+                        adUser = connection.FindUserObject(value);
+                        }
+                    catch (Exception e)
+                        {
+                        // throw?
+                        throw new ADInfoException("There's a problem with the connection to the domain.", e.ToString());
+                        }
+                
+                    // If user is found, allocate memory for new user
+                    // and save the user properties.
+                    if(adUser != null)
+                        {
+                        NewUser();
+                        GetUserProperties(adUser);
+                        _samAccountName = value;
+                        }
+                    else
+                        {
+                        System.Windows.MessageBox.Show("AD user null");
+                        }
                     }
                 }
             }
