@@ -63,8 +63,8 @@ namespace PsGui.ViewModels
 
             switch (key)
                 {
-                case "ps_rel_scriptfolder_path": powershellScriptFolderPath = value; break;
-                case "ps_scriptfolder_name": powershellScriptModuleFolderName = value; break;
+                case "psgui_rel_scriptfolder_path": powershellScriptFolderPath = value; break;
+                case "psgui_scriptfolder_name": powershellScriptModuleFolderName = value; break;
                 case "ad_server_uri": adServerUri = value; break;
                 case "ad_ldap_path": adLdapPath = value; break;
                 case "ad_priviledged_username": adPriviledgedUserName = value; break;
@@ -102,8 +102,8 @@ namespace PsGui.ViewModels
                 "# generate a new, empty config.ini file.",
                 "",
                 "# Powershell executer relative file paths",
-                "ps_rel_scriptfolder_path = \".\"",
-                "ps_scriptfolder_name = \"Scripts\"",
+                "psgui_rel_scriptfolder_path = \".\"",
+                "psgui_scriptfolder_name = \"Scripts\"",
                 "",
                 "# Active Directory info",
                 "ad_server_uri = \"\"",
