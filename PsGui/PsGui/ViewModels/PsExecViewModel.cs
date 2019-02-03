@@ -1,6 +1,7 @@
 ﻿using PsGui.Models.PowershellExecuter;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace PsGui.ViewModels
@@ -34,16 +35,19 @@ namespace PsGui.ViewModels
             // if else logic to not clear field if execution failed?
             // script failed flag in powershellExecuter?
             // on fail: red border in GUI ?
-            try
-                {
-                powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-                }
-            catch (Exception e)
-                {
-                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString());
-                }
 
-            ScriptExecutionOutput      = powershellExecuter.ScriptOutput;
+
+
+            //  try
+            //     {
+            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptTextVariables);
+            //     }
+            // catch (Exception e)
+            //     {
+            //     throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString());
+            //     }
+
+            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
             }
@@ -56,23 +60,42 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
             {
-            bool canExec = true;
+            // bool canExec = true;
             if (IsScriptSelected == false)
                 {
-                canExec = false;
+                return false;
+                // canExec = false;
                 }
             else
                 {
-                foreach (ScriptArgument arg in ScriptVariables)
+                foreach (ScriptArgument arg in ScriptTextVariables)
                     {
                     if (arg.InputValue.Equals(""))
                         {
-                        canExec = false;
+                        return false;
+                        // canExec = false;
+                        }
+                    }
+                foreach (ScriptArgument arg in ScriptPasswordVariables)
+                    {
+                    if (arg.InputValue.Equals(""))
+                        {
+                        return false;
+                        // canExec = false;
+                        }
+                    }
+                foreach (ScriptArgument arg in ScriptMultiLineVariables)
+                    {
+                    if (arg.InputValue.Equals(""))
+                        {
+                        return false;
+                        // canExec = false;
                         }
                     }
                 }
 
-            return canExec;
+            return true;
+           // return canExec;
             }
 
         /// <summary>
@@ -253,14 +276,17 @@ namespace PsGui.ViewModels
                     // The setter runs when set to empty string as well as a script name
                     if(value != "")
                         {
-                        ScriptVariables.Clear();
+                        // If new script selected, clear previous session
+                        ScriptTextVariables.Clear();
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
+
                         if((ScriptExecutionOutput != null && ScriptExecutionOutput.Length > 0) ||
                            (ScriptExecutionErrorOutput != null && ScriptExecutionErrorOutput.Length > 0))
                             {
-                            ScriptExecutionOutput      = "";
+                            // If previous session output/errors, clear them
+                            ScriptExecutionOutput = "";
                             ScriptExecutionErrorOutput = "";
                             }
                         }
@@ -317,14 +343,65 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Sets or gets a collection of strings representing
-        /// the script command line input variables.
+        /// Gets a collection of collections represnting the different
+        /// types of script input variables and their values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptVariables
+        public CompositeCollection ScriptVariables
             {
             get
                 {
                 return scriptReader.ScriptVariables;
+                }
+            }
+
+        /// <summary>
+        /// Gets a collection of strings representing the 
+        /// script input text values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptTextVariables
+            {
+            get
+                {
+                return scriptReader.ScriptTextVariables;
+                }
+            }
+
+        /// <summary>
+        /// Gets a collection of strings representing the
+        /// script input username values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptUsernameVariables
+            {
+            get
+                {
+                return scriptReader.ScriptUsernameVariables;
+                }
+            }
+
+        /// <summary>
+        /// Gets a collection of strings representing the
+        /// script input password values.
+        /// Security note: This leaves the clear text password in memory
+        /// which is considered a security issue. However, if your
+        /// RAM is accessible to attackers, you have bigger issues.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptPasswordVariables
+            {
+            get
+                {
+                return scriptReader.ScriptPasswordVariables;
+                }
+            }
+
+        /// <summary>
+        /// Gets a collection of strings representing
+        /// script input multi line text values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptMultiLineVariables
+            {
+            get
+                {
+                return scriptReader.ScriptMultiLineVariables;
                 }
             }
 

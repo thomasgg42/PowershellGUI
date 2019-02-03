@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
     {
     public class ScriptReader
         {
-        private ObservableCollection<ScriptArgument> _scriptVariables;
+
+        private CompositeCollection                  _scriptVariables;
+        private ObservableCollection<ScriptArgument> _scriptTextVariables;
+        private ObservableCollection<ScriptArgument> _scriptPasswordVariables;
+        private ObservableCollection<ScriptArgument> _scriptUsernameVariables;
+        private ObservableCollection<ScriptArgument> _scriptMultiLineVariables;
+
         private string _scriptDescription;
         private string _scriptHeader;
 
@@ -75,20 +82,27 @@ namespace PsGui.Models.PowershellExecuter
             }
 
         /// <summary>
-        /// Fills the object corresponding to each command line
-        /// argument input field.
+        /// Adds a new script argument to the collection matching the argument's
+        /// type.
         /// </summary>
         /// <param name="inputKey">Name of the key, displayed for user.</param>
         /// <param name="inputDesc">Description of the key, displayed for user.</param>
         /// <param name="inputType">Value of the key, set by user.</param>
         private void SaveInputField(string inputKey, string inputDesc, string inputType)
             {
-            _scriptVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType));
+            inputType = inputType.ToLower();
+            switch(inputType)
+                {
+                case "password": _scriptPasswordVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
+                case "username": _scriptUsernameVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
+                case "multiline": _scriptMultiLineVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
+                default: _scriptTextVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
+                }
             }
 
         /// <summary>
-        /// Parses the Powershell script header's variable area. The variable values
-        /// are bound directly to the View.
+        /// Parses the Powershell script header's variable area and
+        /// saves each input field to the member collections.
         /// </summary>
         /// <param name="line"></param>
         private void ReadScriptVariables(string line)
@@ -100,20 +114,40 @@ namespace PsGui.Models.PowershellExecuter
             }
 
         /// <summary>
+        /// Returns true if there are no registered script variables.
+        /// </summary>
+        /// <returns></returns>
+        private bool ContainsVariables(ObservableCollection<ScriptArgument> collection)
+            {
+            if (collection != null && collection.Count > 0)
+                {
+                return true;
+                }
+            else
+                {
+                return false;
+                }
+            }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ScriptReader()
             {
-            _scriptVariables   = new ObservableCollection<ScriptArgument>();
-            _scriptDescription = "";
-            _scriptHeader      = "";
+            _scriptVariables          = new CompositeCollection();
+            _scriptTextVariables      = new ObservableCollection<ScriptArgument>();
+            _scriptUsernameVariables  = new ObservableCollection<ScriptArgument>();
+            _scriptPasswordVariables  = new ObservableCollection<ScriptArgument>();
+            _scriptMultiLineVariables = new ObservableCollection<ScriptArgument>();
+            _scriptDescription        = "";
+            _scriptHeader             = "";
             }
 
         /// <summary>
-        /// Sets or gets a collection of strings representing
-        /// the script command line input variables.
+        /// Gets a collection of collections represnting the different
+        /// types of script input variables and their values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptVariables
+        public CompositeCollection ScriptVariables
             {
             get
                 {
@@ -122,6 +156,69 @@ namespace PsGui.Models.PowershellExecuter
             private set
                 {
                 _scriptVariables = value;
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets a collection of strings representing the 
+        /// script input text values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptTextVariables
+            {
+            get
+                {
+                return _scriptTextVariables;
+                }
+            private set
+                {
+                _scriptTextVariables = value;
+                }
+            }
+
+        /// <summary>
+        /// Gets a collection of strings representing the
+        /// script input username values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptUsernameVariables
+            {
+            get
+                {
+                return _scriptUsernameVariables;
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets a collection of strings representing the
+        /// script input password values.
+        /// Security note: This leaves the clear text password in memory
+        /// which is considered a security issue. However, if your
+        /// RAM is accessible to attackers, you have bigger issues.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptPasswordVariables
+            {
+            get
+                {
+                return _scriptPasswordVariables;
+                }
+            private set
+                {
+                _scriptPasswordVariables = value;
+                }
+            }
+
+        /// <summary>
+        /// Sets or gets a collection of strings representing
+        /// script input multi line text values.
+        /// </summary>
+        public ObservableCollection<ScriptArgument> ScriptMultiLineVariables
+            {
+            get
+                {
+                return _scriptMultiLineVariables;
+                }
+            private set
+                {
+                _scriptMultiLineVariables = value;
                 }
             }
 
@@ -157,10 +254,10 @@ namespace PsGui.Models.PowershellExecuter
                 }
             }
 
-
         /// <summary>
-        /// Reads the selected powershell script and stores
-        /// relevant information.
+        /// Reads the selected powershell script and calls the functions
+        /// responsible to parse and store the information. Adds 
+        /// all the gathered information to the ScriptVariables collection.
         /// </summary>
         /// <param name="script"></param>
         public void ReadSelectedScript(string scriptPath)
@@ -186,33 +283,56 @@ namespace PsGui.Models.PowershellExecuter
                 {
                 throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
                 }
+            
+            // Add each collection to the main collection
+            if(ContainsVariables(ScriptTextVariables))
+                {
+                ScriptVariables.Add(ScriptTextVariables);
+                }
+            if(ContainsVariables(ScriptUsernameVariables))
+                {
+                ScriptVariables.Add(ScriptUsernameVariables);
+                }
+            if(ContainsVariables(ScriptPasswordVariables))
+                {
+                ScriptVariables.Add(ScriptPasswordVariables);
+                }
+            if(ContainsVariables(ScriptMultiLineVariables))
+                {
+                ScriptVariables.Add(ScriptMultiLineVariables);
+                }
             }
 
-        /// <summary>
-        /// Returns true if there are no registered script variables.
-        /// </summary>
-        /// <returns></returns>
-        public bool ContainsVariables()
-            {
-            if(_scriptVariables != null && _scriptVariables.Count != 0)
-                {
-                return true;
-                }
-            else
-                {
-                return false;
-                }
-            }
 
         /// <summary>
-        /// Clears all script variables (input fields) for defined
-        /// information.
+        /// Clears all script variables (input fields).
         /// </summary>
         public void ClearScriptVariableInfo()
             {
-            if(_scriptVariables.Count > 0)
+            if (ContainsVariables(_scriptTextVariables))
                 {
-                foreach (ScriptArgument arg in _scriptVariables)
+                foreach (ScriptArgument arg in _scriptTextVariables)
+                    {
+                    arg.ClearUserInput();
+                    }
+                }
+            if (ContainsVariables(_scriptUsernameVariables))
+                {
+                foreach (ScriptArgument arg in _scriptUsernameVariables)
+                    {
+                    arg.ClearUserInput();
+                    }
+                }
+            if (ContainsVariables(_scriptPasswordVariables))
+                {
+                foreach (ScriptArgument arg in _scriptPasswordVariables)
+                    {
+                    arg.ClearUserInput();
+                    }
+                }
+            if (ContainsVariables(_scriptMultiLineVariables))
+                {
+                foreach (ScriptArgument arg in _scriptMultiLineVariables)
                     {
                     arg.ClearUserInput();
                     }
@@ -224,6 +344,10 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public void ClearSession()
             {
+            ScriptTextVariables.Clear();
+            ScriptUsernameVariables.Clear();
+            ScriptPasswordVariables.Clear();
+            ScriptMultiLineVariables.Clear();
             ScriptVariables.Clear();
             _scriptDescription = "";
             _scriptHeader = "";

@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
+    <Compile Include="Converters\PasswordBoxAssistant.cs" />
     <Compile Include="Models\ActiveDirectoryInfo\ADConnection.cs" />
     <Compile Include="Models\ActiveDirectoryInfo\ADInfoException.cs" />
     <Compile Include="Models\ActiveDirectoryInfo\ADUser.cs" />

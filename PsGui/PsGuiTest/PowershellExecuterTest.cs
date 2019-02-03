@@ -43,7 +43,7 @@ namespace PsGuiTest
         /// the dropdown menu. A new list of scripts shall then be available from
         /// the dropdown menu.
         /// When a script file is chosen in a selected category. All input fields 
-        /// defined in the script shall be loaded into the ScriptVariables collection.
+        /// defined in the script shall be loaded into the ScriptTextVariables collection.
         /// Each collection object shall contain a ScriptArgument containing information
         /// gathered from the script file. The script argument's input field shall be empty.
         /// </summary>
@@ -62,12 +62,12 @@ namespace PsGuiTest
             // Select a script in the category, containing two input fields
             psExec.SelectedScriptFile = psExec.ScriptFileBrowser[1];
             psExec.IsScriptSelected = true;
-            psExec.ScriptVariables.Add(new ScriptArgument("name", "First name", "string"));
-            psExec.ScriptVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
+            psExec.ScriptTextVariables.Add(new ScriptArgument("name", "First name", "string"));
+            psExec.ScriptTextVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
 
             // Add value to input fields
-            psExec.ScriptVariables[0].InputValue = "Testbert";
-            psExec.ScriptVariables[1].InputValue = "80";
+            psExec.ScriptTextVariables[0].InputValue = "Testbert";
+            psExec.ScriptTextVariables[1].InputValue = "80";
 
             // Select a new script category
             psExec.ScriptCategoryBrowser[0].IsSelectedCategory = false;
@@ -78,7 +78,7 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
             Assert.AreEqual(true, psExec.SelectedScriptFile == "");
             Assert.AreEqual(false, psExec.IsScriptSelected);
-            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptVariables)
+            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptTextVariables)
                 {
                 Assert.AreEqual(true, arg.HasNoInput());
                 }

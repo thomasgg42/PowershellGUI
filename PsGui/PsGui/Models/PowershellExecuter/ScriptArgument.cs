@@ -36,9 +36,12 @@
             bool inputOk = false;
             switch (_inputType)
                 {
-                case "string": inputOk = inputCheck.IsString(input); break;
-                case "int": inputOk    = inputCheck.IsInt(input);    break;
-                case "bool": inputOk   = inputCheck.IsBool(input);   break;
+                case "string": inputOk    = inputCheck.IsString(input); break;
+                case "int": inputOk       = inputCheck.IsInt(input);    break;
+                case "bool": inputOk      = inputCheck.IsBool(input);   break;
+                case "username": inputOk  = inputCheck.IsString(input); break;
+                case "password": inputOk  = inputCheck.IsString(input); break;
+                case "multiline": inputOk = inputCheck.IsString(input); break;
                 default: throw new PsExecException("Bad script file variable type definition: " + _inputType);
                 }
             return inputOk;
