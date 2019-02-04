@@ -75,6 +75,8 @@
         <!-- Input fields -->
         <!-- Finn først ut hvordan DataTemplate mot forskjellige observableObjects fungerer -->
         <!-- Finn deretter ut hvordan bruke PasswordBoxAssistance mot observablecollection for pw -->
+
+        
         <ItemsControl ItemsSource="{Binding Path=ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
@@ -85,27 +87,25 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.Resources>
-                <!--
-                <DataTemplate DataType="{}">
+
+                <DataTemplate DataType="{ScriptTextVariables}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </DataTemplate>
-                -->
-                
-                
+       <!--     
                 <DataTemplate DataType="{x:Type local:ScriptPasswordVariables}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
                         <PasswordBox pw:PasswordBoxAssistant.BindPassword="True"
                                      pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue}"/>
                     </StackPanel>
                 </DataTemplate>
+        -->
             </ItemsControl.Resources>
         </ItemsControl>
-        
+        -->
 <!--
         <ItemsControl ItemsSource="{Binding Path=ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
