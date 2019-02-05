@@ -108,7 +108,7 @@
                 }
             set
                 {
-                if(IsInputOk(value))
+                if (IsInputOk(value))
                     {
                     _inputValue = value;
                     }

@@ -91,7 +91,7 @@ namespace PsGui.Models.PowershellExecuter
         private void SaveInputField(string inputKey, string inputDesc, string inputType)
             {
             inputType = inputType.ToLower();
-            switch(inputType)
+            switch (inputType)
                 {
                 case "password": _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType)); break;
                 case "username": _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType)); break;
@@ -289,27 +289,31 @@ namespace PsGui.Models.PowershellExecuter
                 throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
                 }
 
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
+            // TODO: SCRIPTARGUMENT CHILDREN FIX 
             // Add each collection to the main collection
             if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
                 {
+                //ScriptVariables.Add(ScriptTextVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
                 }
            
             if(ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
+                //ScriptVariables.Add(ScriptUsernameVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptUsernameVariables });
                 }
-            
-           if(ScriptPasswordVariables != null && ScriptUsernameVariables.Count > 0)
+
+            if (ScriptPasswordVariables != null && ScriptPasswordVariables.Count > 0)
                {
-               ScriptVariables.Add(ScriptPasswordVariables);
-               }
-               
-            if (ScriptMultiLineVariables != null && ScriptUsernameVariables.Count > 0)
+                //ScriptVariables.Add(ScriptPasswordVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptPasswordVariables });
+                }
+
+            if (ScriptMultiLineVariables != null && ScriptMultiLineVariables.Count > 0)
                {
-               ScriptVariables.Add(ScriptMultiLineVariables);
-               }
+                //ScriptVariables.Add(ScriptMultiLineVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
+                }
             }
 
 

@@ -76,15 +76,15 @@ namespace PsGui.Models.PowershellExecuter
         // TODO: SCRIPTARGUMENT CHILDREN FIX
         private void GetScriptParameters(CompositeCollection scriptVariables)
             {
-            foreach(CollectionContainer arg in scriptVariables)
+            foreach(CollectionContainer collection in scriptVariables)
                 {
-               // foreach(ScriptArgument arg in argCollection)
-                /*
-                string argKey = arg.InputKey.ToString().ToLower();
-                string argValue = arg.InputValue.ToString();
-                commandLineArgKeys.Add(argKey);
-                commandLineArguments.Add(argValue);
-                */
+                foreach(ScriptArgument arg in collection.Collection)
+                    {
+                    string argKey = arg.InputKey.ToString().ToLower();
+                    string argValue = arg.InputValue.ToString();
+                    commandLineArgKeys.Add(argKey);
+                    commandLineArguments.Add(argValue);
+                    }
                 }
             }
 
