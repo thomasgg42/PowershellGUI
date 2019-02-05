@@ -76,9 +76,9 @@ namespace PsGui.Models.PowershellExecuter
         // TODO: SCRIPTARGUMENT CHILDREN FIX
         private void GetScriptParameters(CompositeCollection scriptVariables)
             {
-            foreach(ObservableCollection<ScriptArgument> arg in scriptVariables)
+            foreach(CollectionContainer arg in scriptVariables)
                 {
-                System.Windows.MessageBox.Show(arg.ToString());
+               // foreach(ScriptArgument arg in argCollection)
                 /*
                 string argKey = arg.InputKey.ToString().ToLower();
                 string argValue = arg.InputValue.ToString();
