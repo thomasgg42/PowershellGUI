@@ -1,7 +1,11 @@
 ﻿namespace PsGui.Models.PowershellExecuter
     {
     /// <summary>
-    /// Stores each script category with a filepath and 
+    /// A base class for each of the argument types made by the 
+    /// user input for the powershell script.
+    /// Inheritance is used to be able to separate different types
+    /// of script argument into different WPF Controls in the view
+    /// by the use of CompositeCollection and multiple ObservableCollections.
     /// a friendly name. 
     /// </summary>
     public class ScriptCategory

@@ -40,7 +40,11 @@ namespace PsGui.ViewModels
 
             //  try
             //     {
-            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptTextVariables);
+
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
+
+            //  powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptTextVariables);
+            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
             //     }
             // catch (Exception e)
             //     {
@@ -60,6 +64,8 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
+
             // bool canExec = true;
             if (IsScriptSelected == false)
                 {
@@ -69,6 +75,14 @@ namespace PsGui.ViewModels
             else
                 {
                 foreach (ScriptArgument arg in ScriptTextVariables)
+                    {
+                    if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                        return false;
+                        // canExec = false;
+                        }
+                    }
+                foreach (ScriptArgument arg in ScriptUsernameVariables)
                     {
                     if (arg.InputValue.Equals(""))
                         {
@@ -358,7 +372,7 @@ namespace PsGui.ViewModels
         /// Gets a collection of strings representing the 
         /// script input text values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptTextVariables
+        public ObservableCollection<TextArgument> ScriptTextVariables
             {
             get
                 {
@@ -370,7 +384,7 @@ namespace PsGui.ViewModels
         /// Gets a collection of strings representing the
         /// script input username values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptUsernameVariables
+        public ObservableCollection<UsernameArgument> ScriptUsernameVariables
             {
             get
                 {
@@ -385,7 +399,7 @@ namespace PsGui.ViewModels
         /// which is considered a security issue. However, if your
         /// RAM is accessible to attackers, you have bigger issues.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptPasswordVariables
+        public ObservableCollection<PasswordArgument> ScriptPasswordVariables
             {
             get
                 {
@@ -397,7 +411,7 @@ namespace PsGui.ViewModels
         /// Gets a collection of strings representing
         /// script input multi line text values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptMultiLineVariables
+        public ObservableCollection<MultiLineArgument> ScriptMultiLineVariables
             {
             get
                 {

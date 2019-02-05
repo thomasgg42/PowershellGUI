@@ -6,7 +6,9 @@
         private string _inputKey;
         private string _inputDescription;
         private string _inputType;
-        private string _inputValue;
+
+        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        protected string _inputValue;
 
         public ScriptArgument(string key, string description, string type)
             {
@@ -14,7 +16,9 @@
             _inputKey         = key;
             _inputDescription = description;
             _inputType        = type;
-            _inputValue       = "";
+
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
+            _inputValue = "";
             }
 
         /// <summary>
@@ -31,7 +35,7 @@
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private bool IsInputOk(string input)
+        protected bool IsInputOk(string input)
             {
             bool inputOk = false;
             switch (_inputType)
@@ -97,6 +101,7 @@
         /// </summary>
         public string InputValue
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _inputValue;
@@ -109,6 +114,7 @@
                     }
                 }
             }
+ 
 
         /// <summary>
         /// Returns true if a script argument contains information.
@@ -116,7 +122,8 @@
         /// <returns></returns>
         public bool HasNoInput()
             {
-            if(_inputValue == "")
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
+            if (_inputValue == "")
                 {
                 return true;
                 }
@@ -131,8 +138,9 @@
         /// </summary>
         public void ClearUserInput()
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             _inputValue = "";
             }
-
+       
         }
     }

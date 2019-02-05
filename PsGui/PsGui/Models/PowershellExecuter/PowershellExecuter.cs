@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Text;
+using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
     {
@@ -72,6 +73,22 @@ namespace PsGui.Models.PowershellExecuter
             ScriptOutput = tmp.ToString();
             }
 
+        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        private void GetScriptParameters(CompositeCollection scriptVariables)
+            {
+            foreach(ObservableCollection<ScriptArgument> arg in scriptVariables)
+                {
+                System.Windows.MessageBox.Show(arg.ToString());
+                /*
+                string argKey = arg.InputKey.ToString().ToLower();
+                string argValue = arg.InputValue.ToString();
+                commandLineArgKeys.Add(argKey);
+                commandLineArguments.Add(argValue);
+                */
+                }
+            }
+
+        /*
         /// <summary>
         /// Gets the script argument data from the supplied collection.
         /// </summary>
@@ -86,6 +103,7 @@ namespace PsGui.Models.PowershellExecuter
                 commandLineArguments.Add(argValue);
                 }
             }
+        */
 
         /// <summary>
         /// Executes the powershell script in the provided
@@ -123,6 +141,15 @@ namespace PsGui.Models.PowershellExecuter
             commandLineArgKeys   = new List<string>();
             }
 
+
+        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
+            {
+            GetScriptParameters(scriptVars);
+            ExecuteScriptCommands(scriptPath);
+            }
+
+        /*
         /// <summary>
         /// Executes a provided scripts and handles cleanup
         /// for the next script execution.
@@ -133,6 +160,8 @@ namespace PsGui.Models.PowershellExecuter
             GetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
             }
+
+        */
 
         /// <summary>
         /// Clears the script output.

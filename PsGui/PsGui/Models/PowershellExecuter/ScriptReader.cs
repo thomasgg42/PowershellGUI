@@ -9,10 +9,10 @@ namespace PsGui.Models.PowershellExecuter
         {
 
         private CompositeCollection                  _scriptVariables;
-        private ObservableCollection<ScriptArgument> _scriptTextVariables;
-        private ObservableCollection<ScriptArgument> _scriptPasswordVariables;
-        private ObservableCollection<ScriptArgument> _scriptUsernameVariables;
-        private ObservableCollection<ScriptArgument> _scriptMultiLineVariables;
+        private ObservableCollection<TextArgument> _scriptTextVariables;
+        private ObservableCollection<PasswordArgument> _scriptPasswordVariables;
+        private ObservableCollection<UsernameArgument> _scriptUsernameVariables;
+        private ObservableCollection<MultiLineArgument> _scriptMultiLineVariables;
 
         private string _scriptDescription;
         private string _scriptHeader;
@@ -93,10 +93,10 @@ namespace PsGui.Models.PowershellExecuter
             inputType = inputType.ToLower();
             switch(inputType)
                 {
-                case "password": _scriptPasswordVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
-                case "username": _scriptUsernameVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
-                case "multiline": _scriptMultiLineVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
-                default: _scriptTextVariables.Add(new ScriptArgument(inputKey, inputDesc, inputType)); break;
+                case "password": _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType)); break;
+                case "username": _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType)); break;
+                case "multiline": _scriptMultiLineVariables.Add(new MultiLineArgument(inputKey, inputDesc, inputType)); break;
+                default: _scriptTextVariables.Add(new TextArgument(inputKey, inputDesc, inputType)); break;
                 }
             }
 
@@ -119,6 +119,7 @@ namespace PsGui.Models.PowershellExecuter
         /// <returns></returns>
         private bool ContainsVariables(ObservableCollection<ScriptArgument> collection)
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             if (collection != null && collection.Count > 0)
                 {
                 return true;
@@ -135,10 +136,10 @@ namespace PsGui.Models.PowershellExecuter
         public ScriptReader()
             {
             _scriptVariables          = new CompositeCollection();
-            _scriptTextVariables      = new ObservableCollection<ScriptArgument>();
-            _scriptUsernameVariables  = new ObservableCollection<ScriptArgument>();
-            _scriptPasswordVariables  = new ObservableCollection<ScriptArgument>();
-            _scriptMultiLineVariables = new ObservableCollection<ScriptArgument>();
+            _scriptTextVariables      = new ObservableCollection<TextArgument>();
+            _scriptUsernameVariables  = new ObservableCollection<UsernameArgument>();
+            _scriptPasswordVariables  = new ObservableCollection<PasswordArgument>();
+            _scriptMultiLineVariables = new ObservableCollection<MultiLineArgument>();
             _scriptDescription        = "";
             _scriptHeader             = "";
             }
@@ -163,8 +164,9 @@ namespace PsGui.Models.PowershellExecuter
         /// Sets or gets a collection of strings representing the 
         /// script input text values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptTextVariables
+        public ObservableCollection<TextArgument> ScriptTextVariables
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptTextVariables;
@@ -179,8 +181,9 @@ namespace PsGui.Models.PowershellExecuter
         /// Gets a collection of strings representing the
         /// script input username values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptUsernameVariables
+        public ObservableCollection<UsernameArgument> ScriptUsernameVariables
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptUsernameVariables;
@@ -194,8 +197,9 @@ namespace PsGui.Models.PowershellExecuter
         /// which is considered a security issue. However, if your
         /// RAM is accessible to attackers, you have bigger issues.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptPasswordVariables
+        public ObservableCollection<PasswordArgument> ScriptPasswordVariables
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptPasswordVariables;
@@ -210,8 +214,9 @@ namespace PsGui.Models.PowershellExecuter
         /// Sets or gets a collection of strings representing
         /// script input multi line text values.
         /// </summary>
-        public ObservableCollection<ScriptArgument> ScriptMultiLineVariables
+        public ObservableCollection<MultiLineArgument> ScriptMultiLineVariables
             {
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptMultiLineVariables;
@@ -283,24 +288,29 @@ namespace PsGui.Models.PowershellExecuter
                 {
                 throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
                 }
-            
+
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
             // Add each collection to the main collection
-            if(ContainsVariables(ScriptTextVariables))
+            if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
                 {
                 ScriptVariables.Add(ScriptTextVariables);
                 }
-            if(ContainsVariables(ScriptUsernameVariables))
+           
+            if(ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
                 ScriptVariables.Add(ScriptUsernameVariables);
                 }
-            if(ContainsVariables(ScriptPasswordVariables))
-                {
-                ScriptVariables.Add(ScriptPasswordVariables);
-                }
-            if(ContainsVariables(ScriptMultiLineVariables))
-                {
-                ScriptVariables.Add(ScriptMultiLineVariables);
-                }
+            
+           if(ScriptPasswordVariables != null && ScriptUsernameVariables.Count > 0)
+               {
+               ScriptVariables.Add(ScriptPasswordVariables);
+               }
+               
+            if (ScriptMultiLineVariables != null && ScriptUsernameVariables.Count > 0)
+               {
+               ScriptVariables.Add(ScriptMultiLineVariables);
+               }
+           
             }
 
 
@@ -309,28 +319,30 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public void ClearScriptVariableInfo()
             {
-            if (ContainsVariables(_scriptTextVariables))
+            // TODO: SCRIPTARGUMENT CHILDREN FIX
+            if (_scriptTextVariables != null && _scriptTextVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptTextVariables)
                     {
                     arg.ClearUserInput();
                     }
                 }
-            if (ContainsVariables(_scriptUsernameVariables))
+            
+            if (_scriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptUsernameVariables)
                     {
                     arg.ClearUserInput();
                     }
                 }
-            if (ContainsVariables(_scriptPasswordVariables))
+            if (_scriptPasswordVariables != null && ScriptUsernameVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptPasswordVariables)
                     {
                     arg.ClearUserInput();
                     }
                 }
-            if (ContainsVariables(_scriptMultiLineVariables))
+            if (_scriptMultiLineVariables != null && ScriptUsernameVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptMultiLineVariables)
                     {

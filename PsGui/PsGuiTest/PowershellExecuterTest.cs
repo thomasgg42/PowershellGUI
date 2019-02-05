@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PsGuiTest
     {
+    /*
     /// <summary>
     /// Tests the PowershellExecuter program. Expects a Modules folder
     /// with 3 categories; ActiveDirectory, Exchange, Skype, where 
@@ -84,4 +85,5 @@ namespace PsGuiTest
                 }
             }
         }
+        */
     }
