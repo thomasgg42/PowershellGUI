@@ -147,36 +147,7 @@
             </ItemsControl.Resources>
         </ItemsControl>
 
-        <!--
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-
-                <DataTemplate DataType="{}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </DataTemplate>
-              
-                
-                
-                <DataTemplate DataType="{x:Type local:ScriptPasswordVariables}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <PasswordBox pw:PasswordBoxAssistant.BindPassword="True"
-                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.Resources>
-        </ItemsControl>
-        -->
-
-        <!--
+<!--
         <ItemsControl ItemsSource="{Binding Path=ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">

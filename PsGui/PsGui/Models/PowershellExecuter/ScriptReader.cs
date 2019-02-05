@@ -293,12 +293,12 @@ namespace PsGui.Models.PowershellExecuter
             // Add each collection to the main collection
             if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
                 {
-                ScriptVariables.Add(ScriptTextVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
                 }
            
             if(ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
-                ScriptVariables.Add(ScriptUsernameVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptUsernameVariables });
                 }
             
            if(ScriptPasswordVariables != null && ScriptUsernameVariables.Count > 0)
@@ -310,7 +310,6 @@ namespace PsGui.Models.PowershellExecuter
                {
                ScriptVariables.Add(ScriptMultiLineVariables);
                }
-           
             }
 
 
