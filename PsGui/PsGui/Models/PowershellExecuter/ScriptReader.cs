@@ -82,6 +82,37 @@ namespace PsGui.Models.PowershellExecuter
             }
 
         /// <summary>
+        /// Adds each of the stored collections of input objects
+        /// to the main collection of input objects.
+        /// </summary>
+        private void AddScriptArgumentsToMainCollection()
+            {
+            if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
+                {
+                //ScriptVariables.Add(ScriptTextVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
+                }
+
+            if (ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
+                {
+                //ScriptVariables.Add(ScriptUsernameVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptUsernameVariables });
+                }
+
+            if (ScriptPasswordVariables != null && ScriptPasswordVariables.Count > 0)
+                {
+                //ScriptVariables.Add(ScriptPasswordVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptPasswordVariables });
+                }
+
+            if (ScriptMultiLineVariables != null && ScriptMultiLineVariables.Count > 0)
+                {
+                //ScriptVariables.Add(ScriptMultiLineVariables);
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
+                }
+            }
+
+        /// <summary>
         /// Adds a new script argument to the collection matching the argument's
         /// type.
         /// </summary>
@@ -117,9 +148,8 @@ namespace PsGui.Models.PowershellExecuter
         /// Returns true if there are no registered script variables.
         /// </summary>
         /// <returns></returns>
-        private bool ContainsVariables(ObservableCollection<ScriptArgument> collection)
+        private bool ContainsVariables(ObservableCollection<object> collection)
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             if (collection != null && collection.Count > 0)
                 {
                 return true;
@@ -166,7 +196,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public ObservableCollection<TextArgument> ScriptTextVariables
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptTextVariables;
@@ -183,7 +212,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public ObservableCollection<UsernameArgument> ScriptUsernameVariables
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptUsernameVariables;
@@ -199,7 +227,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public ObservableCollection<PasswordArgument> ScriptPasswordVariables
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptPasswordVariables;
@@ -216,7 +243,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public ObservableCollection<MultiLineArgument> ScriptMultiLineVariables
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _scriptMultiLineVariables;
@@ -289,40 +315,15 @@ namespace PsGui.Models.PowershellExecuter
                 throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
                 }
 
-            // TODO: SCRIPTARGUMENT CHILDREN FIX 
-            // Add each collection to the main collection
-            if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
-                {
-                //ScriptVariables.Add(ScriptTextVariables);
-                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
-                }
-           
-            if(ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
-                {
-                //ScriptVariables.Add(ScriptUsernameVariables);
-                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptUsernameVariables });
-                }
-
-            if (ScriptPasswordVariables != null && ScriptPasswordVariables.Count > 0)
-               {
-                //ScriptVariables.Add(ScriptPasswordVariables);
-                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptPasswordVariables });
-                }
-
-            if (ScriptMultiLineVariables != null && ScriptMultiLineVariables.Count > 0)
-               {
-                //ScriptVariables.Add(ScriptMultiLineVariables);
-                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
-                }
+            AddScriptArgumentsToMainCollection();
             }
-
 
         /// <summary>
         /// Clears all script variables (input fields).
         /// </summary>
         public void ClearScriptVariableInfo()
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
+            // TODO: create function to check if conditoins
             if (_scriptTextVariables != null && _scriptTextVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptTextVariables)
@@ -330,7 +331,6 @@ namespace PsGui.Models.PowershellExecuter
                     arg.ClearUserInput();
                     }
                 }
-            
             if (_scriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
                 foreach (ScriptArgument arg in _scriptUsernameVariables)

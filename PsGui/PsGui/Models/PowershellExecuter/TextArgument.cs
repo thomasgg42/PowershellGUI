@@ -6,56 +6,21 @@ using System.Threading.Tasks;
 
 namespace PsGui.Models.PowershellExecuter
     {
+    /// <summary>
+    /// A class with currently no functionality. Provides
+    /// a scalable solution for input logic.
+    /// @Inherits from ScriptArgument.
+    /// </summary>
     public class TextArgument : ScriptArgument
         {
-        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="description"></param>
+        /// <param name="type"></param>
         public TextArgument(string key, string description, string type) : base(key, description, type)
             {
             }
-
-        /*
-
-        /// <summary>
-        /// Returns true if a script argument contains information.
-        /// </summary>
-        /// <returns></returns>
-        public bool HasNoInput()
-            {
-            if (_inputValue == "")
-                {
-                return true;
-                }
-            else
-                {
-                return false;
-                }
-            }
-
-        /// <summary>
-        /// Clears input from the user in the object.
-        /// </summary>
-        public void ClearUserInput()
-            {
-            _inputValue = "";
-            }
-
-        /// <summary>
-        /// Sets or gets the script argument's value.
-        /// </summary>
-        public string InputValue
-            {
-            get
-                {
-                return _inputValue;
-                }
-            set
-                {
-                if(IsInputOk(value))
-                    {
-                    _inputValue = value;
-                    }
-                }
-            }
-        */
         }
     }

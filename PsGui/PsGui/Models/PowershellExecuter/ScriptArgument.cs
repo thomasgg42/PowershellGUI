@@ -1,14 +1,20 @@
 ﻿namespace PsGui.Models.PowershellExecuter
     {
+    /// <summary>
+    /// A base class for each of the argument types made by the 
+    /// user input for the powershell script.
+    /// Inheritance is used to be able to separate different types
+    /// of script argument into different WPF Controls in the view
+    /// by the use of CompositeCollection and multiple ObservableCollections.
+    /// a friendly name. 
+    /// </summary>
     public class ScriptArgument
         {
         private ArgumentChecker inputCheck;
         private string _inputKey;
         private string _inputDescription;
         private string _inputType;
-
-        // TODO: SCRIPTARGUMENT CHILDREN FIX
-        protected string _inputValue;
+        private string _inputValue;
 
         public ScriptArgument(string key, string description, string type)
             {
@@ -16,9 +22,7 @@
             _inputKey         = key;
             _inputDescription = description;
             _inputType        = type;
-
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
-            _inputValue = "";
+            ClearUserInput();
             }
 
         /// <summary>
@@ -101,7 +105,6 @@
         /// </summary>
         public string InputValue
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             get
                 {
                 return _inputValue;
@@ -114,7 +117,6 @@
                     }
                 }
             }
- 
 
         /// <summary>
         /// Returns true if a script argument contains information.
@@ -122,8 +124,7 @@
         /// <returns></returns>
         public bool HasNoInput()
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
-            if (_inputValue == "")
+            if (_inputValue.Equals(""))
                 {
                 return true;
                 }
@@ -138,7 +139,6 @@
         /// </summary>
         public void ClearUserInput()
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
             _inputValue = "";
             }
        

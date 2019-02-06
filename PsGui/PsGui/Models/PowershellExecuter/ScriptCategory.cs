@@ -1,12 +1,8 @@
 ﻿namespace PsGui.Models.PowershellExecuter
     {
     /// <summary>
-    /// A base class for each of the argument types made by the 
-    /// user input for the powershell script.
-    /// Inheritance is used to be able to separate different types
-    /// of script argument into different WPF Controls in the view
-    /// by the use of CompositeCollection and multiple ObservableCollections.
-    /// a friendly name. 
+    /// A class representing each of the script categories 
+    /// which forms radio buttons in the graphical interface.
     /// </summary>
     public class ScriptCategory
         {
@@ -31,24 +27,24 @@
             }
 
         /// <summary>
-        /// Removes folder prefix from the file path.
+        /// Removes folder prefix from the file path. So the 
+        /// remaining string can be shown to the user as the 
+        /// script category.
         /// </summary>
-        /// <param name="filePath"></param>
-        private void ConvertFriendlyName(string filePath)
+        /// <param name="filePath"></param
+       private void ConvertFriendlyName(string filePath, int modulePathLength)
             {
-            string prefix = ".\\Modules\\";
-            int prefixLength = prefix.Length;
-            FriendlyName = FilePath.Substring(prefixLength);
+            FriendlyName = FilePath.Substring(modulePathLength);
             }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="filePath">Filepath including the modulePath and moduleFOlder.</param>
-        public ScriptCategory(string filePath)
+        public ScriptCategory(string filePath, int modulePathLength)
             {
             FilePath = filePath;
-            ConvertFriendlyName(filePath);
+            ConvertFriendlyName(filePath, modulePathLength);
             }
         }
     }

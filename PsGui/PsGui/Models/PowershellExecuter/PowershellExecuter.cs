@@ -6,6 +6,10 @@ using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
     {
+    /// <summary>
+    /// A class responsible for executing a powershell 
+    /// script at a provided path with provided arguments.
+    /// </summary>
     class PowershellExecuter
         {
         private List<string> commandLineArguments;
@@ -73,7 +77,12 @@ namespace PsGui.Models.PowershellExecuter
             ScriptOutput = tmp.ToString();
             }
 
-        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        /// <summary>
+        /// Gets the script argument data from the supplied composite collection
+        /// consisting of multiple collection containers consisting of 
+        /// observable objects.
+        /// </summary>
+        /// <param name="scriptVariables"></param>
         private void GetScriptParameters(CompositeCollection scriptVariables)
             {
             foreach(CollectionContainer collection in scriptVariables)
@@ -141,8 +150,13 @@ namespace PsGui.Models.PowershellExecuter
             commandLineArgKeys   = new List<string>();
             }
 
-
-        // TODO: SCRIPTARGUMENT CHILDREN FIX
+        /// <summary>
+        /// Executes the powershell script at the provided file path
+        /// with the provided Composite collection consiting of the
+        /// different types of input values.
+        /// </summary>
+        /// <param name="scriptPath"></param>
+        /// <param name="scriptVars"></param>
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
             {
             GetScriptParameters(scriptVars);

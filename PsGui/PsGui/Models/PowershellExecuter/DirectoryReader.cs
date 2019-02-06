@@ -3,9 +3,14 @@ using System.Collections.ObjectModel;
 
 namespace PsGui.Models.PowershellExecuter
     {
+    /// <summary>
+    /// Handles reading of directories to find
+    /// powershell scripts to be executed.
+    /// </summary>
     public class DirectoryReader
         {
         private string modulePath;
+        private int    modulePathLength;
         private string _selectedCategoryName;
         private bool   _isScriptSelected;
         private string _selectedScript;
@@ -20,6 +25,7 @@ namespace PsGui.Models.PowershellExecuter
         public DirectoryReader(string modulepath)
             {
             this.modulePath       = modulepath;
+            modulePathLength      = this.modulePath.Length;
             _scriptCategories     = new ObservableCollection<ScriptCategory>();
             _scriptFiles          = new ObservableCollection<string>();
             _isScriptSelected     = false;
@@ -57,7 +63,7 @@ namespace PsGui.Models.PowershellExecuter
                 categoryList = Directory.GetDirectories(modulePath);
                 foreach (string category in categoryList)
                     {
-                    _scriptCategories.Add(new ScriptCategory(category));
+                    _scriptCategories.Add(new ScriptCategory(category, modulePathLength));
                     }
                 }
             catch (System.Exception e)
