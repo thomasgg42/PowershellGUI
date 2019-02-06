@@ -18,7 +18,6 @@
         
         <!-- Combine the collection view into a single composite collection -->
         <CompositeCollection x:Key="ScriptVariables">
-            <!-- Dynamic resource ? -->
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
@@ -92,8 +91,6 @@
                    Margin="0 10 0 0" />
         
         <!-- Input fields -->
-        <!-- Finn først ut hvordan DataTemplate mot forskjellige observableObjects fungerer -->
-        <!-- Finn deretter ut hvordan bruke PasswordBoxAssistance mot observablecollection for pw -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
@@ -106,7 +103,8 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type models:TextArgument}">
+
+                <DataTemplate DataType="{x:Type models:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
@@ -114,7 +112,17 @@
                     </StackPanel>
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type models:UsernameArgument}">
+                <DataTemplate DataType="{x:Type models:PasswordArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
+                        <PasswordBox x:Name="PasswordBox"
+                                     pw:PasswordBoxAssistant.BindPassword="True"
+                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </StackPanel>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type models:TextArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
@@ -132,17 +140,6 @@
                                  VerticalScrollBarVisibility="Visible" />
                     </StackPanel>
                 </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:PasswordArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                        <PasswordBox x:Name="PasswordBox"
-                                     pw:PasswordBoxAssistant.BindPassword="True"
-                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    </StackPanel>
-                </DataTemplate>
-
 
             </ItemsControl.Resources>
         </ItemsControl>

@@ -331,23 +331,23 @@ namespace PsGui.Models.PowershellExecuter
                     arg.ClearUserInput();
                     }
                 }
-            if (_scriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
+            if (_scriptUsernameVariables != null && _scriptUsernameVariables.Count > 0)
                 {
-                foreach (ScriptArgument arg in _scriptUsernameVariables)
+                foreach (UsernameArgument arg in _scriptUsernameVariables)
                     {
                     arg.ClearUserInput();
                     }
                 }
-            if (_scriptPasswordVariables != null && ScriptUsernameVariables.Count > 0)
+            if (_scriptPasswordVariables != null && _scriptPasswordVariables.Count > 0)
                 {
-                foreach (ScriptArgument arg in _scriptPasswordVariables)
+                foreach (PasswordArgument arg in _scriptPasswordVariables)
                     {
                     arg.ClearUserInput();
                     }
                 }
-            if (_scriptMultiLineVariables != null && ScriptUsernameVariables.Count > 0)
+            if (_scriptMultiLineVariables != null && _scriptMultiLineVariables.Count > 0)
                 {
-                foreach (ScriptArgument arg in _scriptMultiLineVariables)
+                foreach (MultiLineArgument arg in _scriptMultiLineVariables)
                     {
                     arg.ClearUserInput();
                     }

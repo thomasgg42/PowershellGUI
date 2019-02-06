@@ -12,18 +12,18 @@ namespace PsGui.ViewModels
     /// </summary>
     public class PsExecViewModel : ObservableObject
         {
-        public string TabName { get; } = "Script Executer";
-
         private DirectoryReader    directoryReader;
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
 
-        public ICommand RadioButtonChecked  { get; set; }
-        public ICommand ExecuteButtonPushed { get; set; }
-
         private string _modulePath;
         private string _scriptOutput;
         private string _scriptErrorOutput;
+
+        public ICommand RadioButtonChecked { get; set; }
+        public ICommand ExecuteButtonPushed { get; set; }
+
+        public string TabName { get; } = "Script Executer";
 
         /// <summary>
         /// Executes a powershell script at the supplied path with the supplied
@@ -292,6 +292,9 @@ namespace PsGui.ViewModels
                         {
                         // If new script selected, clear previous session
                         ScriptTextVariables.Clear();
+                        ScriptUsernameVariables.Clear();
+                        ScriptPasswordVariables.Clear();
+                        ScriptMultiLineVariables.Clear();
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);

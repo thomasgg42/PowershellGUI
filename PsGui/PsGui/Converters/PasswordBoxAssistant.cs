@@ -1,5 +1,6 @@
 ﻿/*
- *  Credits: Samuel Jack, http://blog.functionalfun.net/2008/06/wpf-passwordbox-and-data-binding.html
+ *  Credits: Samuel Jack
+ *  URL: http://blog.functionalfun.net/2008/06/wpf-passwordbox-and-data-binding.html
  */
 
 using System.Windows;
@@ -7,6 +8,11 @@ using System.Windows.Controls;
 
 namespace PsGui.Converters
     {
+    /// <summary>
+    /// A class repsonsible of allowing easy data binding
+    /// against password boxes with the cost of reduced security.
+    /// The reduced security should not matter 
+    /// </summary>
     public static class PasswordBoxAssistant
         {
         public static readonly DependencyProperty BoundPassword =

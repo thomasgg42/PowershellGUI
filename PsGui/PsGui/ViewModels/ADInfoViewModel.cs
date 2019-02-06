@@ -7,16 +7,15 @@ namespace PsGui.ViewModels
     {
     class ADInfoViewModel
         {
-        public string TabName { get; } = "AD Info";
-
         private const int MAXUSERS = 3;
 
         private ADUser[] users;
         private ADConnection connection;
         private string _samAccountName;
-
         private int currentUserNumber;
         private int lastUserNumber;
+
+        public string TabName { get; } = "AD Info";
 
         /// <summary>
         /// Gets the user properties from the user search result.

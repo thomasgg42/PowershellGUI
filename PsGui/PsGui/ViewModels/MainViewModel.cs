@@ -6,18 +6,15 @@ namespace PsGui.ViewModels
     public class MainViewModel : ObservableObject
         {
         private const string relConfigFilePath = @".\config.ini";
-   
-        public ObservableCollection<object> Tabs { get; private set; }
 
         private string powershellScriptFolderPath;
         private string powershellScriptModuleFolderName;
-
         private string adServerUri;
         private string adLdapPath;
         private string adPriviledgedUserName;
         private string adPriviledgedPassword;
 
-        
+        public ObservableCollection<object> Tabs { get; private set; }
 
         public MainViewModel()
             {
