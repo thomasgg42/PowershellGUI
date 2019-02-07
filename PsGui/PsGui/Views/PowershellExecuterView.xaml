@@ -54,7 +54,7 @@
             <!-- Script category panel setup -->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="3" />
+                    <UniformGrid />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -94,8 +94,8 @@
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
-            
-            <!-- Make an exception for multiline textbox? -->
+
+
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="2" />
@@ -103,7 +103,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.Resources>
-
+                
                 <DataTemplate DataType="{x:Type models:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
@@ -128,6 +128,7 @@
                         <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
+
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type models:MultiLineArgument}">
@@ -135,7 +136,7 @@
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 TextWrapping="Wrap"
+                                 TextWrapping="NoWrap"
                                  AcceptsReturn="True"
                                  VerticalScrollBarVisibility="Visible" />
                     </StackPanel>
