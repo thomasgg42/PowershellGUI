@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
-        Title="PSGUI" MaxHeight="600" MaxWidth="450">
+        Title="PSGUI"
+        Height="600" Width="450"
+        MinHeight="600" MinWidth="450"
+        MaxHeight="900" MaxWidth="450">
 
     <Border Padding="10">
         <Grid>

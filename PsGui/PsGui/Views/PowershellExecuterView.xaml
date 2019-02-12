@@ -14,14 +14,21 @@
         <CollectionViewSource x:Key="ScriptTextVariables" Source="{Binding ScriptTextVariables}" />
         <CollectionViewSource x:Key="ScriptUsernameVariables" Source="{Binding ScriptUsernameVariables}" />
         <CollectionViewSource x:Key="ScriptPasswordVariables" Source="{Binding ScriptPasswordVariables}" />
+
+       <!-- TODO: remove multiline, rename compositecollection -->
         <CollectionViewSource x:Key="ScriptMultiLineVariables" Source="{Binding ScriptMultiLineVariables}" />
         
-        <!-- Combine the collection view into a single composite collection -->
+        <!-- 
+             Combine the collection view into a single composite collection.
+             Excluding the multiline collection
+        -->
         <CompositeCollection x:Key="ScriptVariables">
-            <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
+            <!-- Order matters for user interface -->
+            <!-- TODO: remove multiline, rename compositecollection -->
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
-            <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" />
+            <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
+            <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
         
     </UserControl.Resources>
@@ -33,6 +40,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -91,62 +99,9 @@
                    Margin="0 10 0 0" />
         
         <!-- Input fields -->
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
-                      Grid.Column="0" Grid.Row="4"
-                      Grid.ColumnSpan="3">
-
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.Resources>
-                
-                <DataTemplate DataType="{x:Type models:UsernameArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:PasswordArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                        <PasswordBox x:Name="PasswordBox"
-                                     pw:PasswordBoxAssistant.BindPassword="True"
-                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                    </StackPanel>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:TextArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type models:MultiLineArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <!-- UpdateSourceTrigger will in real time prevent wrong type of input -->
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 TextWrapping="NoWrap"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Visible" />
-                    </StackPanel>
-                </DataTemplate>
-
-            </ItemsControl.Resources>
-        </ItemsControl>
-
+        <!-- TODO: remove multiline, rename compositecollection -->
 <!--
-        <ItemsControl ItemsSource="{Binding Path=ScriptVariables}"
+        <ItemsControl ItemsSource="{Binding Path=ScriptUsernameVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
@@ -159,27 +114,100 @@
                 <DataTemplate>
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                         UpdateSourceTrigger will in real time prevent wrong type of input
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 -->
+       
+        <!-- Single line input fields -->
+        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
+                      Grid.Column="0" Grid.Row="4"
+                      Grid.ColumnSpan="3">
+            
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.Resources>
+
+                <DataTemplate DataType="{x:Type models:UsernameArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type models:PasswordArgument}">
+                    <StackPanel Margin="0 5 5 0" >
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <PasswordBox x:Name="PasswordBox"
+                                     pw:PasswordBoxAssistant.BindPassword="True"
+                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </StackPanel>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type models:TextArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </DataTemplate>
+<!--         
+                <DataTemplate DataType="{x:Type models:MultiLineArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 TextWrapping="NoWrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Visible" />
+                    </StackPanel>
+                </DataTemplate>
+-->
+            </ItemsControl.Resources>
+        </ItemsControl>
+
+        <!-- Multiline input fields -->
+        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}"
+                      Grid.Column="0" Grid.Row="5"
+                      Grid.ColumnSpan="3">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Visible" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+
         <!-- Execute button -->
         <Button Command="{Binding Path=ExecuteButtonPushed}"
-                Grid.Row="5" Grid.Column="1"
+                Grid.Row="6" Grid.Column="1"
                 Content="Kjør"
                 Margin="10 10 10 0"
                 IsDefault="True" />
         
         <!-- Header: Output -->
         <TextBlock Text="Output" FontWeight="Bold"
-                   Grid.Row="6" Grid.Column="0" 
+                   Grid.Row="7" Grid.Column="0" 
                    Margin="0 10 0 0" />
         
         <!-- Output field -->
-        <ScrollViewer Grid.Row="7" Grid.Column="0"
+        <ScrollViewer Grid.Row="8" Grid.Column="0"
                       Grid.ColumnSpan="3"
                       Margin="0 10 0 0">
             <TabControl BorderThickness="0" Margin="0 10 0 0">

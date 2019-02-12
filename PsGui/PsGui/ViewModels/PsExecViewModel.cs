@@ -295,6 +295,7 @@ namespace PsGui.ViewModels
                         ScriptUsernameVariables.Clear();
                         ScriptPasswordVariables.Clear();
                         ScriptMultiLineVariables.Clear();
+                        ScriptVariables.Clear();
 
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
