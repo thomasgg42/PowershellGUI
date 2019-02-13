@@ -14,8 +14,6 @@
         <CollectionViewSource x:Key="ScriptTextVariables" Source="{Binding ScriptTextVariables}" />
         <CollectionViewSource x:Key="ScriptUsernameVariables" Source="{Binding ScriptUsernameVariables}" />
         <CollectionViewSource x:Key="ScriptPasswordVariables" Source="{Binding ScriptPasswordVariables}" />
-
-       <!-- TODO: remove multiline, rename compositecollection -->
         <CollectionViewSource x:Key="ScriptMultiLineVariables" Source="{Binding ScriptMultiLineVariables}" />
         
         <!-- 
@@ -24,11 +22,10 @@
         -->
         <CompositeCollection x:Key="ScriptVariables">
             <!-- Order matters for user interface -->
-            <!-- TODO: remove multiline, rename compositecollection -->
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
-            <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
+    <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
         
     </UserControl.Resources>
@@ -98,28 +95,6 @@
                    Grid.Column="0" FontWeight="Bold"
                    Margin="0 10 0 0" />
         
-        <!-- Input fields -->
-        <!-- TODO: remove multiline, rename compositecollection -->
-<!--
-        <ItemsControl ItemsSource="{Binding Path=ScriptUsernameVariables}"
-                      Grid.Column="0" Grid.Row="4"
-                      Grid.ColumnSpan="3">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
--->
        
         <!-- Single line input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
@@ -133,7 +108,6 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.Resources>
-
                 <DataTemplate DataType="{x:Type models:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
@@ -156,18 +130,8 @@
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </DataTemplate>
-<!--         
-                <DataTemplate DataType="{x:Type models:MultiLineArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 TextWrapping="NoWrap"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Visible" />
-                    </StackPanel>
-                </DataTemplate>
--->
             </ItemsControl.Resources>
+            
         </ItemsControl>
 
         <!-- Multiline input fields -->
@@ -214,7 +178,7 @@
                 <TabItem Header="Output">
                     <TextBlock Text="{Binding Path=ScriptExecutionOutput}"
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="12"/>
                 </TabItem>
                 <TabItem Header="Errors">
                     <TextBlock Text="{Binding Path=ScriptExecutionErrorOutput}"
