@@ -68,7 +68,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             catch (System.Exception e)
                 {
-                throw new PsExecException("No directory folders found!", e.ToString());
+                throw new PsExecException("No directory folders found!", e.ToString(), true);
                 }
             }
 

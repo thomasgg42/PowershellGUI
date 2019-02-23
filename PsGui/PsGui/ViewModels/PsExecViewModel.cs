@@ -22,6 +22,7 @@ namespace PsGui.ViewModels
 
         public ICommand RadioButtonChecked { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
+        public ICommand ScriptDescriptionButtonPushed { get; set; }
 
         public string TabName { get; } = "Script Executer";
 
@@ -36,20 +37,14 @@ namespace PsGui.ViewModels
             // script failed flag in powershellExecuter?
             // on fail: red border in GUI ?
 
-
-
-            //  try
-            //     {
-
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
-
-            //  powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptTextVariables);
-            powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-            //     }
-            // catch (Exception e)
-            //     {
-            //     throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString());
-            //     }
+            try
+               {
+               powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+               }
+            catch (Exception e)
+               {
+               throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
+               }
 
             ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
@@ -117,7 +112,17 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        private bool CanExecuteRadioButtonCheck(object param)
+        private bool CanClickRadiobutton(object param)
+            {
+            return true;
+            }
+
+        /// <summary>
+        /// Helper function for the ICommand implementation.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        private bool CanClickDescriptionButton(object param)
             {
             return true;
             }
@@ -133,6 +138,23 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
+        /// Displays a pop-up box with script information.
+        /// </summary>
+        private void GetScriptDescription(object descButton)
+            {
+            if (scriptReader.ScriptDescription != null &&
+               !(scriptReader.ScriptDescription.Equals("")))
+                {
+                System.Windows.MessageBox.Show(scriptReader.ScriptDescription);
+                }
+            else if (scriptReader.ScriptDescription != null &&
+                     scriptReader.ScriptDescription.Equals(""))
+                {
+                System.Windows.MessageBox.Show("No description provided");
+                }
+            }
+
+        /// <summary>
         /// Sets the initial script category on program startup.
         /// </summary>
         private void SetInitialScriptCategory()
@@ -145,7 +167,7 @@ namespace PsGui.ViewModels
                 }
             catch(Exception e)
                 {
-                throw new PsExecException("Finner ingen kategorimapper i Modules-mappen!", e.ToString());
+                throw new PsExecException("Finner ingen kategorimapper i Modules-mappen!", e.ToString(), true);
                 }
             }
 
@@ -162,8 +184,9 @@ namespace PsGui.ViewModels
             SetInitialScriptCategory();
             powershellExecuter  = new PowershellExecuter();
 
-            RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanExecuteRadioButtonCheck);
+            RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
+            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
             }
 
         /// <summary>
@@ -358,6 +381,7 @@ namespace PsGui.ViewModels
             set
                 {
                 directoryReader.IsScriptSelected = value;
+                OnPropertyChanged("IsScriptSelected");
                 }
             }
 
@@ -435,6 +459,7 @@ namespace PsGui.ViewModels
             powershellExecuter.ClearSession();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
+            IsScriptSelected = false;
             }
 
         /// <summary>
@@ -475,5 +500,6 @@ namespace PsGui.ViewModels
                     }
                 }
             }
+
         }
     }

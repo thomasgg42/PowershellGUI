@@ -194,7 +194,7 @@ namespace PsGui.ViewModels
                     catch (Exception e)
                         {
                         // throw?
-                        throw new ADInfoException("There's a problem with the connection to the domain.", e.ToString());
+                        throw new ADInfoException("There's a problem with the connection to the domain.", e.ToString(), true);
                         }
                 
                     // If user is found, allocate memory for new user

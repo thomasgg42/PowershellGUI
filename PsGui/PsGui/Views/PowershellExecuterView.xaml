@@ -27,7 +27,9 @@
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
     <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
-        
+
+        <!-- Converter to show and hide controls on true/false values -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
 
     <Grid>
@@ -59,7 +61,7 @@
             <!-- Script category panel setup -->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid />
+                    <UniformGrid Columns="3" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -94,8 +96,20 @@
         <TextBlock Text="Input" Grid.Row="3"
                    Grid.Column="0" FontWeight="Bold"
                    Margin="0 10 0 0" />
-        
-       
+
+        <!-- Script info button -->
+        <Button Content="Script description" Grid.Row="3" Grid.Column="3"
+                Margin="10 10 10 0"
+                Command="{Binding Path=ScriptDescriptionButtonPushed}"
+                Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
+            <Button.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="SlateGray" />
+                </Trigger>
+            </Button.Triggers>
+        </Button>
+
+
         <!-- Single line input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"

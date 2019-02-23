@@ -31,12 +31,12 @@ namespace PsGui.Models.PowershellExecuter
                 {
                 case description:
                     {
-                    _scriptDescription = line;
+                    _scriptDescription = ParseQuotationContent(line);
                     break;
                     }
                 case header:
                     {
-                    _scriptHeader = line;
+                    _scriptHeader = ParseQuotationContent(line);
                     break;
                     }
                 }
@@ -312,7 +312,7 @@ namespace PsGui.Models.PowershellExecuter
                 }
             catch (Exception e)
                 {
-                throw new PsExecException("Cannot read script header. Bad structure!", e.ToString());
+                throw new PsExecException("Cannot read script header. Bad structure!", e.ToString(), true);
                 }
 
             AddScriptArgumentsToMainCollection();

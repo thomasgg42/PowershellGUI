@@ -5,7 +5,7 @@
     /// </summary>
     public class PsExecException : PsGuiException
         {
-        public PsExecException(string temp1, string temp2) : base(temp1, temp2)
+        public PsExecException(string temp1, string temp2, bool closeApp) : base(temp1, temp2, closeApp)
             {
 
             }

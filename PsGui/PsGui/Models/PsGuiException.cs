@@ -5,21 +5,36 @@ namespace PsGui.Models
     {
     public class PsGuiException : Exception
         {
-        public PsGuiException(string temp1, string temp2)
+
+        public PsGuiException(string temp1, string temp2, bool closeApp)
             {
             System.Windows.MessageBox.Show(temp1);
             //skriv temp2 til fil
-            using (StreamWriter outputFile = new StreamWriter("error.log"))
+            WriteErrorToFile(temp2);
+            if(closeApp)
                 {
-                outputFile.WriteLine(temp2);
+                CloseApp();
                 }
-            CloseApp();
             }
+
         public PsGuiException(string temp1)
             {
             // Non-critical errors?
             System.Windows.MessageBox.Show(temp1);
             //CloseApp();
+            }
+
+        /// <summary>
+        /// Writes the provided error message to an error log in the 
+        /// current directory.
+        /// </summary>
+        /// <param name="error"></param>
+        public void WriteErrorToFile(string error)
+            {
+            using (StreamWriter outputFile = new StreamWriter("error.log"))
+                {
+                outputFile.WriteLine(error);
+                }
             }
 
         public void CloseApp()
