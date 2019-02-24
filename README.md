@@ -6,5 +6,4 @@ password fields and multi-line text fields are available.
 The script-header also allows for a description of the script to be shown through the GUI.
 
 # Wiki
-Check the [Project Wiki](https://github.com/thomasgg42/PowershellGUI/wiki) for how the header
-section of the script files must look like.
+Check the [Project Wiki](https://github.com/thomasgg42/PowershellGUI/wiki) more information.
