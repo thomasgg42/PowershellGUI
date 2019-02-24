@@ -21,7 +21,7 @@ namespace PsGui.ViewModels
             GetConfig();
             Tabs = new ObservableCollection<object>();
             Tabs.Add(new PsExecViewModel(powershellScriptFolderPath, powershellScriptModuleFolderName));
-            //    Tabs.Add(new ADInfoViewModel(adServerUri, adLdapPath, adPriviledgedUserName, adPriviledgedPassword));
+            //    Tabs.Add(new ADInfoViewModel());
             }
 
         /// <summary>
@@ -62,10 +62,6 @@ namespace PsGui.ViewModels
                 {
                 case "psgui_rel_scriptfolder_path": powershellScriptFolderPath = value; break;
                 case "psgui_scriptfolder_name": powershellScriptModuleFolderName = value; break;
-                case "ad_server_uri": adServerUri = value; break;
-                case "ad_ldap_path": adLdapPath = value; break;
-                case "ad_priviledged_username": adPriviledgedUserName = value; break;
-                case "ad_priviledged_password": adPriviledgedPassword = value; break;
                 default: break;
                 }
             }
@@ -101,31 +97,6 @@ namespace PsGui.ViewModels
                 "# PSGUI",
                 "psgui_rel_scriptfolder_path = \".\"",
                 "psgui_scriptfolder_name = \"Scripts\"",
-                "",
-                "# Active Directory",
-                "ad_eikanett_fqdn = \"eikanett.eika.no\"",
-                "ad_terra_fqdn = \"terra.local\"",
-                "ad_principal_name_suffix = \"@EIKANETT.eika.no\"",
-                "ad_homedrive_letter = \"H:\"",
-                "",
-                "## AD: Aktiv Eiendom",
-                "ad_terra_aktiv_path = \"OU=Users,OU=Tm,OU=Eiendom,OU=SKALA,DC=terra,DC=local\"",
-                "ad_aktiv_dep_prefix = \"AE\"",
-                "ad_aktiv_account_prefix = \"H90\"",
-                "ad_aktiv_account_start_number = \"5001\"",
-                "ad_aktiv_account_end_number = \"9999\"",
-                "",
-                "# Exchange",
-                "exch_server_uri = \"http://eikex103/powershell/\"",
-                "exch_smtp_server = \"eikex103\"",
-                "exch_mail_encoding = \"utf8\"",
-                "",
-                "# Skype",
-                "skype_server_uri = \"https://eiklyncpool001.terra.local/OcsPowershell\"",
-                "skype_id_prefix = \"Terra\"",
-                "skype_registrar_pool = \"eiklyncpool001.terra.local\"",
-                "skype_external_access_policy = \"Allow Federation+Public+Outside Access\"",
-                "skype_conferencing_policy = \"Configure full conferencing\""
                 };
             try
                 {
