@@ -97,23 +97,6 @@ namespace PsGui.Models.PowershellExecuter
                 }
             }
 
-        /*
-        /// <summary>
-        /// Gets the script argument data from the supplied collection.
-        /// </summary>
-        /// <param name="scriptVariables"></param>
-        private void GetScriptParameters(ObservableCollection<ScriptArgument> scriptVariables)
-            {
-            foreach (ScriptArgument var in scriptVariables)
-                {
-                string argKey = var.InputKey.ToString().ToLower();
-                string argValue = var.InputValue.ToString();
-                commandLineArgKeys.Add(argKey);
-                commandLineArguments.Add(argValue);
-                }
-            }
-        */
-
         /// <summary>
         /// Executes the powershell script in the provided
         /// file path. Calls functions responsible to collect output.
@@ -163,19 +146,6 @@ namespace PsGui.Models.PowershellExecuter
             ExecuteScriptCommands(scriptPath);
             }
 
-        /*
-        /// <summary>
-        /// Executes a provided scripts and handles cleanup
-        /// for the next script execution.
-        /// </summary>
-        /// <param name="scriptPath"></param>
-        public void ExecuteScript(string scriptPath, ObservableCollection<ScriptArgument> scriptVars)
-            {
-            GetScriptParameters(scriptVars);
-            ExecuteScriptCommands(scriptPath);
-            }
-
-        */
 
         /// <summary>
         /// Clears the script output.
@@ -193,7 +163,5 @@ namespace PsGui.Models.PowershellExecuter
             commandLineArgKeys.Clear();
             commandLineArguments.Clear();
             }
-
-
         }
     }

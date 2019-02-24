@@ -125,7 +125,7 @@ namespace PsGui.ViewModels
                 "skype_id_prefix = \"Terra\"",
                 "skype_registrar_pool = \"eiklyncpool001.terra.local\"",
                 "skype_external_access_policy = \"Allow Federation+Public+Outside Access\"",
-                "skype_conferencing_policy = \"Configure full conferencing\"",
+                "skype_conferencing_policy = \"Configure full conferencing\""
                 };
             try
                 {

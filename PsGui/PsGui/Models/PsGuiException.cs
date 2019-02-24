@@ -9,7 +9,6 @@ namespace PsGui.Models
         public PsGuiException(string temp1, string temp2, bool closeApp)
             {
             System.Windows.MessageBox.Show(temp1);
-            //skriv temp2 til fil
             WriteErrorToFile(temp2);
             if(closeApp)
                 {
@@ -21,7 +20,6 @@ namespace PsGui.Models
             {
             // Non-critical errors?
             System.Windows.MessageBox.Show(temp1);
-            //CloseApp();
             }
 
         /// <summary>

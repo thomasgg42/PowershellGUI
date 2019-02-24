@@ -59,13 +59,9 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
             {
-            // TODO: SCRIPTARGUMENT CHILDREN FIX
-
-            // bool canExec = true;
             if (IsScriptSelected == false)
                 {
                 return false;
-                // canExec = false;
                 }
             else
                 {
@@ -74,7 +70,6 @@ namespace PsGui.ViewModels
                     if (arg.InputValue != null && arg.InputValue.Equals(""))
                         {
                         return false;
-                        // canExec = false;
                         }
                     }
                 foreach (ScriptArgument arg in ScriptUsernameVariables)
@@ -82,7 +77,6 @@ namespace PsGui.ViewModels
                     if (arg.InputValue.Equals(""))
                         {
                         return false;
-                        // canExec = false;
                         }
                     }
                 foreach (ScriptArgument arg in ScriptPasswordVariables)
@@ -90,7 +84,6 @@ namespace PsGui.ViewModels
                     if (arg.InputValue.Equals(""))
                         {
                         return false;
-                        // canExec = false;
                         }
                     }
                 foreach (ScriptArgument arg in ScriptMultiLineVariables)
@@ -98,13 +91,10 @@ namespace PsGui.ViewModels
                     if (arg.InputValue.Equals(""))
                         {
                         return false;
-                        // canExec = false;
                         }
                     }
                 }
-
             return true;
-           // return canExec;
             }
 
         /// <summary>

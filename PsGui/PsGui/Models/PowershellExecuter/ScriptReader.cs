@@ -89,25 +89,21 @@ namespace PsGui.Models.PowershellExecuter
             {
             if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
                 {
-                //ScriptVariables.Add(ScriptTextVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
                 }
 
             if (ScriptUsernameVariables != null && ScriptUsernameVariables.Count > 0)
                 {
-                //ScriptVariables.Add(ScriptUsernameVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptUsernameVariables });
                 }
 
             if (ScriptPasswordVariables != null && ScriptPasswordVariables.Count > 0)
                 {
-                //ScriptVariables.Add(ScriptPasswordVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptPasswordVariables });
                 }
 
             if (ScriptMultiLineVariables != null && ScriptMultiLineVariables.Count > 0)
                 {
-                //ScriptVariables.Add(ScriptMultiLineVariables);
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
                 }
             }
