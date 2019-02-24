@@ -51,7 +51,7 @@
         </Grid.RowDefinitions>
         
         <!-- Header: Category -->
-        <TextBlock Text="Kategori" Grid.Row="0" 
+        <TextBlock Text="Category" Grid.Row="0" 
                    Grid.Column="0" Margin=" 0 0 0 10" 
                    FontWeight="Bold" />
 
@@ -102,11 +102,6 @@
                 Margin="10 10 10 0"
                 Command="{Binding Path=ScriptDescriptionButtonPushed}"
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
-            <Button.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="SlateGray" />
-                </Trigger>
-            </Button.Triggers>
         </Button>
 
 
@@ -175,7 +170,7 @@
         <!-- Execute button -->
         <Button Command="{Binding Path=ExecuteButtonPushed}"
                 Grid.Row="6" Grid.Column="1"
-                Content="Kjør"
+                Content="Execute"
                 Margin="10 10 10 0"
                 IsDefault="True" />
         
