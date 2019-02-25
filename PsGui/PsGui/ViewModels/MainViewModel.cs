@@ -9,10 +9,6 @@ namespace PsGui.ViewModels
 
         private string powershellScriptFolderPath;
         private string powershellScriptModuleFolderName;
-        private string adServerUri;
-        private string adLdapPath;
-        private string adPriviledgedUserName;
-        private string adPriviledgedPassword;
 
         public ObservableCollection<object> Tabs { get; private set; }
 
