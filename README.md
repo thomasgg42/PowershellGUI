@@ -1,4 +1,4 @@
-# GUI for powershell command execution
+# GUI for powershell script execution
 By adding a simple commented out header to your script file, the PSGUI application
 generates input fields corresponding to all of the required command-line arguments
 required for your script. Different types of input fields such as text-only, digits-only,
