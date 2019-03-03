@@ -5,7 +5,6 @@
     /// </summary>
     class ArgumentChecker
         {
-
         public ArgumentChecker()
             {}
 
