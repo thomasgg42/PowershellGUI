@@ -134,8 +134,7 @@ namespace PsGui.ViewModels
                 }
             else
                 {
-                // bruke throw?
-                new ADInfoException("Max number of users reached (" + MAXUSERS + ")");
+                throw new ADInfoException("Max number of users reached (" + MAXUSERS + ")");
                 }
             }
 
@@ -186,14 +185,12 @@ namespace PsGui.ViewModels
                 if (value != null)
                     {
                     SearchResult adUser = null;
-                    
                     try
                         {
                         adUser = connection.FindUserObject(value);
                         }
                     catch (Exception e)
                         {
-                        // throw?
                         throw new ADInfoException("There's a problem with the connection to the domain.", e.ToString(), true);
                         }
                 

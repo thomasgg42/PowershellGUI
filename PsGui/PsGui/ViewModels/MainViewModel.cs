@@ -17,7 +17,6 @@ namespace PsGui.ViewModels
             GetConfig();
             Tabs = new ObservableCollection<object>();
             Tabs.Add(new PsExecViewModel(powershellScriptFolderPath, powershellScriptModuleFolderName));
-            //    Tabs.Add(new ADInfoViewModel());
             }
 
         /// <summary>
