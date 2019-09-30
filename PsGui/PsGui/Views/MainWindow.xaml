@@ -17,7 +17,7 @@
                     <local:PowershellExecuterView />
                 </TabItem>
                 <TabItem DataContext="{Binding Path=Tabs[1]}" x:Name="Tab2" Header="{Binding Path=TabName}">
-                    <local:ActiveDirectoryInfo />
+                    
                 </TabItem>
             </TabControl>
         </Grid>

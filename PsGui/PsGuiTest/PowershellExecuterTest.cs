@@ -4,86 +4,66 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace PsGuiTest
-    {
-    /*
+{
     /// <summary>
-    /// Tests the PowershellExecuter program. Expects a Modules folder
-    /// with 3 categories; ActiveDirectory, Exchange, Skype, where 
-    /// ActiveDirectory contains 3 scripts.
+    /// Tests the ViewModels of the PsGui application.
     /// </summary>
     [TestClass]
     public class PowershellExecuterTest
-        {
+    {
         /// <summary>
-        /// When the program launches. A list of available categories 
-        /// (directories) shall be saved. A list of available scripts from
-        /// the default chosen category shall be saved. One shall not be able to 
-        /// execute a script. The selected script shall be set 
-        /// to an empty string. A modulepath shall be set to a existing
-        /// folder structure at the same directory level as the program.
-        /// The script browser list shall be empty and the IsScriptSelected
-        /// flag shall be set to false.
+        /// When the program launches:
+        /// - If the config file does not exist, it is created in the current directory.
+        /// - If the config file exists, it is read and the name and path of the script folder is set.
+        /// - The Tabs collection of the MainViewModel contains the PsExecViewModel.
+        /// - A script directory path leading to the script and module directories shall be set
+        ///   in the ModulePath property.
+        /// - If the Script directory does not exist, an exception with the string: "No script directory found!"
+        ///   is thrown.
+        /// - A list of available directories (categories) shall be available in the ScriptCategoryBrowser collection.
+        /// - The first found category is set in the SelectedScriptCategory property.
+        /// - A list of available scripts from SelectedScriptCategory are found in the ScriptFileBrowser collection.
+        /// - The selected script shall be set to an empty string. 
+        /// - The Execute button shall be inactive when IsScriptSelected is false.
         /// </summary>
         [TestMethod]
         public void InitialTest()
-            {
-            string modulePath = ".";
-            string moduleFolder = "Modules";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
+        {
+            // Test Tab collection content
+            MainViewModel mainViewModel = new MainViewModel();
+            Assert.AreEqual(false, mainViewModel.Tabs[0] == null);
+            Assert.AreEqual(true, mainViewModel.Tabs[0].GetType() == typeof(PsExecViewModel));
 
-            Assert.IsNotNull(psExec.ModulePath);
-            Assert.AreEqual(false, psExec.ScriptCategoryBrowser.Count == 0);
-            Assert.AreEqual(false, psExec.ScriptFileBrowser.Count == 0);
-            Assert.AreEqual("ActiveDirectory", psExec.SelectedScriptCategory);
-            Assert.AreEqual( false, psExec.IsScriptSelected);
-            Assert.AreEqual("", psExec.SelectedScriptFile);
-            }
+            // Test config file and directory existance
+            PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
+            Assert.AreEqual(true, psExecViewModel.ModulePath.Equals(".\\Scripts\\"));
+            Assert.AreEqual(true, psExecViewModel.ScriptCategoryBrowser.Count > 0);
+
+            // Test exceptions if folders does not exist
+
+            // Test category directories and script files, demands an existing ps script file
+            Assert.AreEqual(true, psExecViewModel.ScriptCategoryBrowser.Count > 0);
+            Assert.AreEqual(true, psExecViewModel.SelectedScriptCategory.Length > 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser.Count > 0);
+            Assert.AreEqual("", psExecViewModel.SelectedScriptFile);
+
+            // Test exception if script files does not exist
+
+            // Test execute button
+            Assert.AreEqual(false, psExecViewModel.IsScriptSelected);
+        }
 
         /// <summary>
-        /// When a category is chosen. The current script shall be cleared from
-        /// the dropdown menu. A new list of scripts shall then be available from
-        /// the dropdown menu.
-        /// When a script file is chosen in a selected category. All input fields 
-        /// defined in the script shall be loaded into the ScriptTextVariables collection.
-        /// Each collection object shall contain a ScriptArgument containing information
-        /// gathered from the script file. The script argument's input field shall be empty.
+        /// When a new category is chosen without a script having previously run:
+        /// - A new list of scripts shall be available from dropdown.
+        /// - All input fields defined in the script shall load into ScriptTextVariables.
+        /// - Each ScriptTextVariable contains a ScriptArgument from the script file.
+        /// - Each ScriptArgument has no value.
         /// </summary>
         [TestMethod]
-        public void NewCategoryChosenTest()
-            {
-            string modulePath = ".";
-            string moduleFolder = "Modules";
-            PsExecViewModel psExec = new PsExecViewModel(modulePath, moduleFolder);
-
-            // Select a script category
-            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = true;
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[0].FriendlyName;
-            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[0];
-
-            // Select a script in the category, containing two input fields
-            psExec.SelectedScriptFile = psExec.ScriptFileBrowser[1];
-            psExec.IsScriptSelected = true;
-            psExec.ScriptTextVariables.Add(new ScriptArgument("name", "First name", "string"));
-            psExec.ScriptTextVariables.Add(new ScriptArgument("weight", "Body weight", "int"));
-
-            // Add value to input fields
-            psExec.ScriptTextVariables[0].InputValue = "Testbert";
-            psExec.ScriptTextVariables[1].InputValue = "80";
-
-            // Select a new script category
-            psExec.ScriptCategoryBrowser[0].IsSelectedCategory = false;
-            psExec.ScriptCategoryBrowser[1].IsSelectedCategory = true;
-            psExec.SelectedScriptCategory = psExec.ScriptCategoryBrowser[1].FriendlyName;
-
-
-            Assert.AreEqual(true, psExec.ScriptCategoryBrowser.Count == 3);
-            Assert.AreEqual(true, psExec.SelectedScriptFile == "");
-            Assert.AreEqual(false, psExec.IsScriptSelected);
-            foreach (PsGui.Models.PowershellExecuter.ScriptArgument arg in psExec.ScriptTextVariables)
-                {
-                Assert.AreEqual(true, arg.HasNoInput());
-                }
-            }
+        public void NewCategoryChosenNoPrevScriptExecuted()
+        {
+            // todo
         }
-        */
     }
+ }

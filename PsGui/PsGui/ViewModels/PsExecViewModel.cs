@@ -16,6 +16,9 @@ namespace PsGui.ViewModels
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
 
+        // Module path should be renamed scriptFolderPath. The word
+        // module should not be confused with a Powershell-module.
+        // The modulePath contains the relative file path to the scripts folder.
         private string _modulePath;
         private string _scriptOutput;
         private string _scriptErrorOutput;
@@ -157,7 +160,7 @@ namespace PsGui.ViewModels
                 }
             catch(Exception e)
                 {
-                throw new PsExecException("Finner ingen kategorimapper i Modules-mappen!", e.ToString(), true);
+                throw new PsExecException("Cannot find any category directories in the script folder!", e.ToString(), true);
                 }
             }
 

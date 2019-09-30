@@ -70,28 +70,17 @@
     </ApplicationDefinition>
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Converters\PasswordBoxAssistant.cs" />
-    <Compile Include="Models\ActiveDirectoryInfo\ADConnection.cs" />
-    <Compile Include="Models\ActiveDirectoryInfo\ADInfoException.cs" />
-    <Compile Include="Models\ActiveDirectoryInfo\ADUser.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />
     <Compile Include="Models\PowershellExecuter\PasswordArgument.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
     <Compile Include="Models\PowershellExecuter\TextArgument.cs" />
     <Compile Include="Models\PowershellExecuter\UsernameArgument.cs" />
-    <Compile Include="ViewModels\ADInfoViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModels\PsExecViewModel.cs" />
-    <Compile Include="Views\ActiveDirectoryInfoView.xaml.cs">
-      <DependentUpon>ActiveDirectoryInfoView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\PowershellExecuterView.xaml.cs">
       <DependentUpon>PowershellExecuterView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\ActiveDirectoryInfoView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
