@@ -1,7 +1,5 @@
 ﻿using PsGui.ViewModels;
-using PsGui.Models.PowershellExecuter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 
 namespace PsGuiTest
 {
@@ -46,6 +44,8 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.SelectedScriptCategory.Length > 0);
             Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser.Count > 0);
             Assert.AreEqual("", psExecViewModel.SelectedScriptFile);
+            Assert.AreEqual(true, psExecViewModel.ScriptCategoryBrowser[0].FriendlyName.Equals("Category1"));
+            Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser[0].Equals("test1"));
 
             // Test exception if script files does not exist
 
@@ -54,16 +54,94 @@ namespace PsGuiTest
         }
 
         /// <summary>
-        /// When a new category is chosen without a script having previously run:
-        /// - A new list of scripts shall be available from dropdown.
-        /// - All input fields defined in the script shall load into ScriptTextVariables.
-        /// - Each ScriptTextVariable contains a ScriptArgument from the script file.
-        /// - Each ScriptArgument has no value.
+        /// When a script is selected from the current category:
+        /// - 
         /// </summary>
         [TestMethod]
-        public void NewCategoryChosenNoPrevScriptExecuted()
+        public void ScriptChosenInCurrentCategoryTest()
         {
-            // todo
+            MainViewModel mainViewModel = new MainViewModel();
+            PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
+
+            Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser.Count > 0);
+            Assert.AreEqual("", psExecViewModel.SelectedScriptFile);
+
+            // Test selecting a new script
+            psExecViewModel.SelectedScriptFile = "test2";
+
+            // Dette er feil, det er ikke sikkert scriptet har noen input felt
+            Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptVariables.Count == 0);
+            ////
+
+            Assert.AreEqual(true, psExecViewModel.IsScriptSelected == true);
+            Assert.AreEqual(true, psExecViewModel.SelectedScriptPath.Equals(".\\Scripts\\Category1\\test2.ps1")); // tenkt feil?
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorOutput.Length == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutput.Length == 0);
+
+        }
+
+        /// <summary>
+        /// When a script has been chosen and executed, the chosen 
+        /// script shall be reset back to none.
+        /// </summary>
+        public void ScriptUnchosenInCurrentCategoryTest()
+        {
+            MainViewModel mainViewModel = new MainViewModel();
+            PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
+
+            psExecViewModel.SelectedScriptFile = "test2";
+
+            // Ensures script input details are deleted when script has been executed
+            psExecViewModel.SelectedScriptFile = "";
+            Assert.AreEqual(true, psExecViewModel.IsScriptSelected == false);
+            Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorOutput.Length == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutput.Length == 0);
+
+        }
+
+
+
+        /// <summary>
+        /// When a new category is chosen:
+        /// - A new list of scripts shall be available from dropdown.
+        /// - Previous script variable data collection shall be cleared so that
+        ///   ScriptVariables contains no collections.
+        /// - The Execute button shall be inactive while IsScriptSelected is false.
+        /// - Script execution output shall not contain any strings.
+        /// - Script execution error output shall not contain any strings.
+        /// </summary>
+        [TestMethod]
+        public void NewCategoryChosenNoPrevScriptExecutedTest()
+        {
+            
+            MainViewModel   mainViewModel   = new MainViewModel();
+            PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
+
+            // Change category
+            psExecViewModel.SelectedScriptCategory = "Category2";
+
+            // Test new script and category data
+            Assert.AreEqual(true, psExecViewModel.ScriptVariables.Count == 0);
+            Assert.AreEqual("", psExecViewModel.SelectedScriptFile);
+            Assert.AreEqual(true, psExecViewModel.ScriptCategoryBrowser[1].FriendlyName.Equals("Category2"));
+            Assert.AreEqual(true, psExecViewModel.SelectedScriptCategory.Equals("Category2"));
+            Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser[0].Equals("test3"));
+
+            // Test if output strings are empty
+            Assert.AreEqual("", psExecViewModel.ScriptExecutionOutput);
+            Assert.AreEqual("", psExecViewModel.ScriptExecutionErrorOutput);
+
+            // Test execute button
+            Assert.AreEqual(false, psExecViewModel.IsScriptSelected);
         }
     }
  }

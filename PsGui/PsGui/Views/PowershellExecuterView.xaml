@@ -90,7 +90,7 @@
                   SelectedItem="{Binding Path=SelectedScriptFile, Mode=Default}"
                   Grid.Column="0" Grid.Row="2"
                   Grid.ColumnSpan="3"
-                  Margin="10 10 10 0"/>
+                  Margin="8,10,12,0"/>
         
         <!-- Header: Input-->
         <TextBlock Text="Input" Grid.Row="3"
