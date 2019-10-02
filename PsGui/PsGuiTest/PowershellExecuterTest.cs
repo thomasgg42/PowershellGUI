@@ -36,6 +36,7 @@ namespace PsGuiTest
             PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
             Assert.AreEqual(true, psExecViewModel.ModulePath.Equals(".\\Scripts\\"));
             Assert.AreEqual(true, psExecViewModel.ScriptCategoryBrowser.Count > 0);
+            Assert.AreEqual(false, psExecViewModel.IsScriptSelected);
 
             // Test exceptions if folders does not exist
 
@@ -49,8 +50,9 @@ namespace PsGuiTest
 
             // Test exception if script files does not exist
 
-            // Test execute button
-            Assert.AreEqual(false, psExecViewModel.IsScriptSelected);
+
+            // Test execute button (input field contents)
+
         }
 
         /// <summary>
@@ -66,21 +68,22 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser.Count > 0);
             Assert.AreEqual("", psExecViewModel.SelectedScriptFile);
 
-            // Test selecting a new script
+            // Test selecting a new script with two string input fields, 
+            // one int input field and one multiline input field
             psExecViewModel.SelectedScriptFile = "test2";
-
-            // Dette er feil, det er ikke sikkert scriptet har noen input felt
-            Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptVariables.Count == 0);
-            ////
-
             Assert.AreEqual(true, psExecViewModel.IsScriptSelected == true);
             Assert.AreEqual(true, psExecViewModel.SelectedScriptPath.Equals(".\\Scripts\\Category1\\test2.ps1")); // tenkt feil?
-            Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorOutput.Length == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutput.Length == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorOutput == null);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutput == null);
+            Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 3);
+            Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 1);
+
+            // Test content of input fields
+            Assert.AreEqual(true, psExecViewModel.ScriptTextVariables[0].InputValue.Length == 0);
+            Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables[0].InputValue.Length == 0);
+
 
         }
 
@@ -88,6 +91,7 @@ namespace PsGuiTest
         /// When a script has been chosen and executed, the chosen 
         /// script shall be reset back to none.
         /// </summary>
+        [TestMethod]
         public void ScriptUnchosenInCurrentCategoryTest()
         {
             MainViewModel mainViewModel = new MainViewModel();
@@ -136,9 +140,9 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.SelectedScriptCategory.Equals("Category2"));
             Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser[0].Equals("test3"));
 
-            // Test if output strings are empty
-            Assert.AreEqual("", psExecViewModel.ScriptExecutionOutput);
-            Assert.AreEqual("", psExecViewModel.ScriptExecutionErrorOutput);
+            // Test if output strings are not yet defined
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutput);
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorOutput);
 
             // Test execute button
             Assert.AreEqual(false, psExecViewModel.IsScriptSelected);
