@@ -77,21 +77,21 @@ namespace PsGui.ViewModels
                     }
                 foreach (ScriptArgument arg in ScriptUsernameVariables)
                     {
-                    if (arg.InputValue.Equals(""))
+                    if (arg.InputValue != null && arg.InputValue.Equals(""))
                         {
                         return false;
                         }
                     }
                 foreach (ScriptArgument arg in ScriptPasswordVariables)
                     {
-                    if (arg.InputValue.Equals(""))
+                    if (arg.InputValue != null && arg.InputValue.Equals(""))
                         {
                         return false;
                         }
                     }
                 foreach (ScriptArgument arg in ScriptMultiLineVariables)
                     {
-                    if (arg.InputValue.Equals(""))
+                    if (arg.InputValue != null && arg.InputValue.Equals(""))
                         {
                         return false;
                         }

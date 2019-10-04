@@ -1,0 +1,91 @@
+Script: AD-bruker status.ps1
+Seconds: 440
+Times: 22
+
+Script: EKB Tilganger.ps1
+Seconds: 300
+Times: 1
+
+Script: EKS Tilganger.ps1
+Seconds: 300
+Times: 1
+
+Script: Hent alle PC-objekter fra gruppe.ps1
+Seconds: 60
+Times: 1
+
+Script: Hent godkjent bestiller liste - Bank.ps1
+Seconds: 60
+Times: 3
+
+Script: Hent nylige GPO-endringer.ps1
+Seconds: 140
+Times: 7
+
+Script: Kopier grupper fra bruker til bruker.ps1
+Seconds: 20
+Times: 1
+
+Script: Migrering av AD-konto - Konsern.ps1
+Seconds: 1440
+Times: 6
+
+Script: Ny bruker - Aktiv Eiendom.ps1
+Seconds: 2880
+Times: 8
+
+Script: Ny bruker - Konsern.ps1
+Seconds: 1440
+Times: 4
+
+Script: Nytt passord - Eikanett.ps1
+Seconds: 720
+Times: 36
+
+Script: Nytt passord - Terra.ps1
+Seconds: 100
+Times: 5
+
+Script: Sammenligne grupper mellom AD-brukere.ps1
+Seconds: 120
+Times: 3
+
+Script: Sett ExtensionAttribute.ps1
+Seconds: 180
+Times: 12
+
+Script: Nytt passord - utklipstavle.ps1
+Seconds: 30
+Times: 6
+
+Script: Send SMS.ps1
+Seconds: 35
+Times: 7
+
+Script: Tilbakestill Citrix-profil.ps1
+Seconds: 120
+Times: 4
+
+Script: Ny brukerpostboks - Konsern.ps1
+Seconds: 40
+Times: 2
+
+Script: Ny delt postboks - Konsern.ps1
+Seconds: 960
+Times: 4
+
+Script: Sett fraværsmelding (auto-reply).ps1
+Seconds: 80
+Times: 4
+
+Script: Sett mail forwarding.ps1
+Seconds: 0
+Times: 0
+
+Script: Sett primær SMTP & SIP.ps1
+Seconds: 150
+Times: 3
+
+Script: Skjul fra addresseliste.ps1
+Seconds: 120
+Times: 6

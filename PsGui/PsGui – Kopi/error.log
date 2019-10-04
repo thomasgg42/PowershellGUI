@@ -1,0 +1,5 @@
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at PsGui.Models.PowershellExecuter.PowershellExecuter.CollectPowershellScriptErrors(PowerShell instance)
+   at PsGui.Models.PowershellExecuter.PowershellExecuter.ExecuteScriptCommands(String scriptPath)
+   at PsGui.Models.PowershellExecuter.PowershellExecuter.ExecuteScript(String scriptPath, CompositeCollection scriptVars)
+   at PsGui.ViewModels.PsExecViewModel.ExecutePowershellScript(Object obj)
