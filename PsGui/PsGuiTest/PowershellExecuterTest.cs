@@ -136,9 +136,11 @@ namespace PsGuiTest
             Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));
         }
 
+
+
         /// <summary>
-        /// When a script has been chosen and executed, the chosen 
-        /// script shall be reset back to none.
+        /// When a script has been chosen and executed:
+        /// 
         /// </summary>
         [TestMethod]
         public void ScriptUnchosenInCurrentCategoryTest()
