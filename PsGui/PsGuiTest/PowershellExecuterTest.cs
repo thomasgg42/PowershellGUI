@@ -10,6 +10,7 @@ namespace PsGuiTest
     public class PowershellExecuterTest
     {
 
+    // Returns true if all conditions are met to activate the execute button.
     private bool ExecuteButtonIsActive(PsExecViewModel psExecViewModel)
         {
             if (psExecViewModel.IsScriptSelected == false)
@@ -122,28 +123,20 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 3);
             Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 1);
 
-            // Test content of input fields
-            for (int ii = 0; ii < psExecViewModel.ScriptTextVariables.Count; ii++)
-            {
-                Assert.AreEqual(true, psExecViewModel.ScriptTextVariables[ii].InputValue.Length == 0);
-            }
-            for (int ii = 0; ii < psExecViewModel.ScriptMultiLineVariables.Count; ii++)
-            {
-                Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables[ii].InputValue.Length == 0);
-            }
-
             // Test execute button
             Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));
         }
 
-
-
         /// <summary>
         /// When a script has been chosen and executed:
-        /// 
+        /// - All saved script information shall be emptied
+        /// - Selected script shall be reset to empty string
+        /// - ScriptExecutionOutput shall contain regular script output
+        /// - ScriotExecutionErrorOutput shall contain script error output
+        /// - The execute button shall become inactive
         /// </summary>
         [TestMethod]
-        public void ScriptUnchosenInCurrentCategoryTest()
+        public void ScriptExecutedResetStatus()
         {
             MainViewModel mainViewModel = new MainViewModel();
             PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
@@ -152,14 +145,21 @@ namespace PsGuiTest
 
             // Ensures script input details are deleted when script has been executed
             psExecViewModel.SelectedScriptFile = "";
+            psExecViewModel.ClearScriptSession(); // Shall be called after execution
             Assert.AreEqual(true, psExecViewModel.IsScriptSelected == false);
             Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 0);
             Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
             Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
             Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 0);
             Assert.AreEqual(true, psExecViewModel.ScriptVariables.Count == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorOutput.Length == 0);
-            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutput.Length == 0);
+
+
+            // Test if output strings are not yet defined
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutput);
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorOutput);
+
+            // Test execute button
+            Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));
 
         }
 
@@ -173,7 +173,7 @@ namespace PsGuiTest
         /// - Script execution error output shall not contain any strings.
         /// </summary>
         [TestMethod]
-        public void NewCategoryChosenNoPrevScriptExecutedTest()
+        public void NewCategoryChosenTest()
         {
             MainViewModel   mainViewModel   = new MainViewModel();
             PsExecViewModel psExecViewModel = (PsExecViewModel)mainViewModel.Tabs[0];
