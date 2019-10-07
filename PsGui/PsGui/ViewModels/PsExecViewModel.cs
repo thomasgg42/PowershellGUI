@@ -1,6 +1,7 @@
 ﻿using PsGui.Models.PowershellExecuter;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -23,6 +24,8 @@ namespace PsGui.ViewModels
         private string _scriptOutput;
         private string _scriptErrorOutput;
 
+        private bool isBusy = false; // Async testing
+
         public ICommand RadioButtonChecked { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
         public ICommand ScriptDescriptionButtonPushed { get; set; }
@@ -34,12 +37,9 @@ namespace PsGui.ViewModels
         /// input variables. Saves normal and error output from the script.
         /// </summary>
         /// <param name="obj"></param>
+        /*
         private void ExecutePowershellScript(object obj)
             {
-            // if else logic to not clear field if execution failed?
-            // script failed flag in powershellExecuter?
-            // on fail: red border in GUI ?
-
             try
                {
                powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
@@ -53,6 +53,17 @@ namespace PsGui.ViewModels
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
             }
+        */
+
+        private async Task ExecutePowershellScript(object obj)
+        {
+            isBusy = true;
+            await powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+            isBusy = false;
+            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
+            ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
+            ClearScriptSession();
+        }
 
         /// <summary>
         /// Returns true if a selected powershell script
@@ -178,8 +189,10 @@ namespace PsGui.ViewModels
             powershellExecuter  = new PowershellExecuter();
 
             RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
-            ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
+            
+            //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
+            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScript, CanExecuteScript);
             }
 
         /// <summary>

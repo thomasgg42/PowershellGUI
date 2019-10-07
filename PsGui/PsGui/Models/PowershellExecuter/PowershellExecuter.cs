@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
@@ -102,6 +103,7 @@ namespace PsGui.Models.PowershellExecuter
         /// file path. Calls functions responsible to collect output.
         /// </summary>
         /// <param name="scriptPath"></param>
+        /*
         public void ExecuteScriptCommands(string scriptPath)
             {
             using (PowerShell psInstance = PowerShell.Create())
@@ -122,6 +124,7 @@ namespace PsGui.Models.PowershellExecuter
                 CollectPowershellScriptErrors(psInstance);
                 }
             }
+        */
 
         /// <summary>
         /// Constructor
@@ -140,12 +143,46 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="scriptPath"></param>
         /// <param name="scriptVars"></param>
+        /*
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
             {
             GetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
             }
 
+        */
+
+        public async Task ExecuteScriptCommands(string scriptPath)
+        {
+            // https://stackoverflow.com/questions/27478729/powershell-c-sharp-asynchronous-execution
+            // https://stackoverflow.com/questions/17640575/how-to-create-c-sharp-async-powershell-method
+            using (PowerShell psInstance = PowerShell.Create())
+            {
+                psInstance.AddCommand(scriptPath);
+                int argLength = commandLineArguments.Count;
+                for (int ii = 0; ii < argLength; ii++)
+                {
+                    psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
+                }
+
+                // Prevents displaying objects as objects
+                psInstance.AddCommand("Out-String");
+                // await psInstance.Invoke();
+                System.IAsyncResult async = psInstance.BeginInvoke();
+
+                Collection<PSObject> psOutput = psInstance.Invoke();
+
+                CollectPowershellScriptoutput(psOutput);
+                CollectPowershellScriptErrors(psInstance);
+            }
+        }
+
+
+        public async Task ExecuteScript(string scriptPath, CompositeCollection scriptVars)
+        {
+            GetScriptParameters(scriptVars);
+            await ExecuteScriptCommands(scriptPath);
+        }
 
         /// <summary>
         /// Clears the script output.

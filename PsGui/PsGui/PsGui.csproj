@@ -49,6 +49,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\3.0\System.Management.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,8 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\CommandHandlerAsync.cs" />
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Converters\PasswordBoxAssistant.cs" />
+    <Compile Include="Converters\TaskUtilities.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />
     <Compile Include="Models\PowershellExecuter\PasswordArgument.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
