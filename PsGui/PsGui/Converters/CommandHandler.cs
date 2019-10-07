@@ -9,10 +9,10 @@ namespace PsGui.Converters
         Func<object, bool>         _canExecMethod;
 
         /// <summary>
-        /// Constructor
+        /// Constructor creates a new command.
         /// </summary>
-        /// <param name="execMethod"></param>
-        /// <param name="canExecMethod"></param>
+        /// <param name="execMethod">Execution logic.</param>
+        /// <param name="canExecMethod">Execution status logic.</param>
         public CommandHandler(Action<object> execMethod, Func<object, bool> canExecMethod)
             {
             _execMethod = execMethod;
@@ -23,8 +23,8 @@ namespace PsGui.Converters
         /// If CanExecute() returns true, then Execute()
         /// fires.
         /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
+        /// <param name="parameter">Data used by the command. If the command does not require data to be passed, this can be set to null.</param>
+        /// <returns>True if the command can be executed; false otherwise.</returns>
         public bool CanExecute(object parameter)
             {
             if(_canExecMethod != null)
@@ -38,9 +38,9 @@ namespace PsGui.Converters
             }
 
         /// <summary>
-        /// Executes the supplied method.
+        /// Executes the supplied method. Defines the method to be called when the command is invoked.
         /// </summary>
-        /// <param name="parameter"></param>
+        /// <param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(object parameter)
             {
             _execMethod(parameter);
