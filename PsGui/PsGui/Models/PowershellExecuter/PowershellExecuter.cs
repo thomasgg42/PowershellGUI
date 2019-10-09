@@ -143,19 +143,18 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="scriptPath"></param>
         /// <param name="scriptVars"></param>
-        /*
+        
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
             {
             GetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
             }
 
-        */
-
-        public async Task ExecuteScriptCommands(string scriptPath)
+        public void ExecuteScriptCommands(string scriptPath)
         {
             // https://stackoverflow.com/questions/27478729/powershell-c-sharp-asynchronous-execution
             // https://stackoverflow.com/questions/17640575/how-to-create-c-sharp-async-powershell-method
+            // https://johnthiriet.com/mvvm-going-async-with-async-command/#
             using (PowerShell psInstance = PowerShell.Create())
             {
                 psInstance.AddCommand(scriptPath);
@@ -178,11 +177,13 @@ namespace PsGui.Models.PowershellExecuter
         }
 
 
+        /*
         public async Task ExecuteScript(string scriptPath, CompositeCollection scriptVars)
         {
             GetScriptParameters(scriptVars);
             await ExecuteScriptCommands(scriptPath);
         }
+        */
 
         /// <summary>
         /// Clears the script output.

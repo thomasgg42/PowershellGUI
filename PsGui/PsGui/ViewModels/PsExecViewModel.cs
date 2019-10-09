@@ -55,15 +55,25 @@ namespace PsGui.ViewModels
             }
         */
 
-        private async Task ExecutePowershellScript(object obj)
+        private async Task ExecutePowershellScriptAsync()
         {
-            isBusy = true;
-            await powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-            isBusy = false;
+            try
+            {
+                isBusy = true;
+                await powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+                isBusy = false;
+            }
+            finally
+            {
+                isBusy = false;
+            }
+
             ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
         }
+
+        
 
         /// <summary>
         /// Returns true if a selected powershell script

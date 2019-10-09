@@ -7,48 +7,62 @@ namespace PsGui.Converters
 {
     internal class CommandHandlerAsync : ICommand
     {
-        private readonly Func<object, Task> _execute;
-        private readonly Func<object, bool> _canExecute;
+        public event EventHandler CanExecuteChanged;
+
         private bool _isExecuting;
+        private readonly Func<Task> _execute;
+        private readonly Func<bool> _canExecute;
+        private readonly IErrorHandler _errorHandler;
 
-        /*
-        public CommandHandlerAsync(Func<Task> execute) : this(execute, () => true)
-        {
-        }
-        */
-
-        public CommandHandlerAsync(Func<object, Task> execute, Func<object, bool> canExecute)
+        public CommandHandlerAsync(
+            Func<Task> execute,
+            Func<bool> canExecute = null,
+            IErrorHandler errorHandler = null)
         {
             _execute = execute;
             _canExecute = canExecute;
+            _errorHandler = errorHandler;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute()
         {
-            return !(_isExecuting && _canExecute(parameter));
+            return !_isExecuting && (_canExecute?.Invoke() ?? true);
         }
 
-        public event EventHandler CanExecuteChanged;
-
-        public async void Execute(object parameter)
+        public async Task ExecuteAsync()
         {
-            _isExecuting = true;
-            OnCanExecuteChanged();
-            try
+            if (CanExecute())
             {
-                await _execute(parameter);
+                try
+                {
+                    _isExecuting = true;
+                    await _execute();
+                }
+                finally
+                {
+                    _isExecuting = false;
+                }
             }
-            finally
-            {
-                _isExecuting = false;
-                OnCanExecuteChanged();
-            }
+
+            RaiseCanExecuteChanged();
         }
 
-        protected virtual void OnCanExecuteChanged()
+        public void RaiseCanExecuteChanged()
         {
-            CanExecuteChanged?.Invoke(this, new EventArgs());
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        #region Explicit implementations
+        bool ICommand.CanExecute(object parameter)
+        {
+            return CanExecute();
+        }
+
+        void ICommand.Execute(object parameter)
+        {
+            ExecuteAsync().FireAndForgetSafeAsync(_errorHandler);
+        }
+        #endregion
     }
 }
 
