@@ -141,14 +141,12 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="scriptPath"></param>
         /// <param name="scriptVars"></param>
+
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
             {
             GetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
             }
-
-
-
 
         public void ExecuteScriptAsync(string scriptPath, CompositeCollection scriptVars)
         {
@@ -176,6 +174,7 @@ namespace PsGui.Models.PowershellExecuter
                 CollectPowershellScriptErrors(psInstance);
             }
         }
+
 
 
         /// <summary>

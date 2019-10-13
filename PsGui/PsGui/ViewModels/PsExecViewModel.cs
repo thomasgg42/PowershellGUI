@@ -67,6 +67,8 @@ namespace PsGui.ViewModels
             ClearScriptSession();
         }
 
+        
+
         /// <summary>
         /// Returns true if a selected powershell script
         /// is ready to be executed. False otherwise.
