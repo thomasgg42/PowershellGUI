@@ -24,8 +24,6 @@ namespace PsGui.ViewModels
         private string _scriptOutput;
         private string _scriptErrorOutput;
 
-        private bool isBusy = false; // Async testing
-
         public ICommand RadioButtonChecked { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
         public ICommand ScriptDescriptionButtonPushed { get; set; }
@@ -37,29 +35,33 @@ namespace PsGui.ViewModels
         /// input variables. Saves normal and error output from the script.
         /// </summary>
         /// <param name="obj"></param>
-        /*
         private void ExecutePowershellScript(object obj)
-            {
+        {
             try
-               {
-               powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-               }
+            {
+                powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
+            }
             catch (Exception e)
-               {
-               throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
-               }
+            {
+                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
+            }
 
             ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
-            }
-        */
+        }
 
-        private async Task ExecutePowershellScript(object obj)
+        private async Task ExecutePowershellScriptAsync(object obj)
         {
-            isBusy = true;
-            await powershellExecuter.ExecuteScript(SelectedScriptPath, ScriptVariables);
-            isBusy = false;
+            try
+            {
+                await Task.Run(() => powershellExecuter.ExecuteScriptAsync(SelectedScriptPath, ScriptVariables));
+            }
+            catch (Exception e)
+            {
+                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
+            }
+
             ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
@@ -192,7 +194,7 @@ namespace PsGui.ViewModels
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
             
             //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
-            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScript, CanExecuteScript);
+            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
             }
 
         /// <summary>

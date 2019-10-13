@@ -5,19 +5,20 @@ using System.Windows.Input;
 
 namespace PsGui.Converters
 {
+    /*
     internal class CommandHandlerAsync : ICommand
     {
-        private readonly Func<object, Task> _execute;
-        private readonly Func<object, bool> _canExecute;
+        private readonly Func<T, Task> _execute;
+        private readonly Func<T, bool> _canExecute;
         private bool _isExecuting;
 
-        /*
-        public CommandHandlerAsync(Func<Task> execute) : this(execute, () => true)
+        
+        public CommandHandlerAsync(Func<T, Task> execute) : this(execute, null) { }
         {
         }
-        */
+        
 
-        public CommandHandlerAsync(Func<object, Task> execute, Func<object, bool> canExecute)
+        public CommandHandlerAsync(Func<T, Task> execute, Func<T, bool> canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
@@ -50,29 +51,73 @@ namespace PsGui.Converters
             CanExecuteChanged?.Invoke(this, new EventArgs());
         }
     }
-}
+*/
 
-/*
+    /*
+       public class CommandHandlerAsync : ICommand
+       {
+           private readonly Func<object, Task> executedMethod;
+           private readonly Func<object, bool> canExecuteMethod;
 
+           /// <summary>
+           /// Runs CanExecute continously.
+           /// </summary>
+           public event EventHandler CanExecuteChanged
+           {
+               add
+               {
+                   CommandManager.RequerySuggested += value;
+               }
+               remove
+               {
+                   CommandManager.RequerySuggested -= value;
+               }
+           }
 
- public class RelayCommandAsync : ICommand
+           public CommandHandlerAsync(Func<object, Task> execute, Func<object, bool> canExecute)
+           {
+               this.executedMethod = execute;
+               this.canExecuteMethod = canExecute;
+           }
+
+           public bool CanExecute(object parameter)
+           {
+               if (canExecuteMethod != null)
+               {
+                   return canExecuteMethod(parameter);
+               }
+               else
+               {
+                   return false;
+               }
+           }
+           public async void Execute(object parameter) => await this.executedMethod(parameter);
+       }
+       */
+
+    public class CommandHandlerAsync : ICommand
     {
-        private readonly Func<T, Task> executedMethod;
-        private readonly Func<T, bool> canExecuteMethod;
- 
-        public event EventHandler CanExecuteChanged;
-        public RelayCommandAsync(Func<T, Task> execute) : this(execute, null) { }
- 
-        public RelayCommandAsync(Func<T, Task> execute, Func<T, bool> canExecute)
+        private readonly Func<object, Task> executedMethod;
+        private readonly Func<object, bool> canExecuteMethod;
+
+        public event EventHandler CanExecuteChanged
+        {
+            add    { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+        public CommandHandlerAsync(Func<object, Task> execute) : this(execute, null) { }
+
+        public CommandHandlerAsync(Func<object, Task> execute, Func<object, bool> canExecute)
         {
             this.executedMethod = execute ?? throw new ArgumentNullException("execute");
             this.canExecuteMethod = canExecute;
         }
- 
-        public bool CanExecute(object parameter) => this.canExecuteMethod == null || this.canExecuteMethod((T)parameter);
-        public async void Execute(object parameter) => await this.executedMethod((T)parameter);
-        public void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+
+        public bool CanExecute(object parameter) => this.canExecuteMethod == null || this.canExecuteMethod(parameter);
+        public async void Execute(object parameter) => await this.executedMethod(parameter);
     }
+}
 
 
-*/
+
+
