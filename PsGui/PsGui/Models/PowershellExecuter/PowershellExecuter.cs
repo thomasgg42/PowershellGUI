@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 
 namespace PsGui.Models.PowershellExecuter
     {
@@ -154,8 +157,43 @@ namespace PsGui.Models.PowershellExecuter
             ExecuteScriptCommandsAsync(scriptPath);
         }
 
-        public void ExecuteScriptCommandsAsync(string scriptPath)
+        public void wait(int milliseconds)
         {
+            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+            //Console.WriteLine("start wait timer");
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+                //Console.WriteLine("stop wait timer");
+            };
+            while (timer1.Enabled)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+        public async Task ExecuteScriptCommandsAsync(string scriptPath)
+        {
+            /*
+            await Task.Run(() => ScriptOutput = "1");
+            wait(1000);
+            await Task.Run(() => ScriptOutput += "2");
+            wait(1000);
+            ScriptOutput += "3";
+            wait(1000);
+            ScriptOutput += "4";
+            wait(1000);
+            ScriptOutput += "5";
+            */
+
+
+            // https://csharp.hotexamples.com/examples/-/PowerShell/BeginInvoke/php-powershell-begininvoke-method-examples.html
+            // https://csharp.hotexamples.com/examples/-/PSDataCollection/-/php-psdatacollection-class-examples.html
             using (PowerShell psInstance = PowerShell.Create())
             {
                 psInstance.AddCommand(scriptPath);
@@ -167,11 +205,37 @@ namespace PsGui.Models.PowershellExecuter
 
                 // Prevents displaying objects as objects
                 psInstance.AddCommand("Out-String");
+                PSDataCollection<PSObject> psOutput = new PSDataCollection<PSObject>();
+                IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, psOutput);
+                /*
+                while(result.IsCompleted == false)
+                {
+                    await Task.Delay(100);
+                }
+                */
+                psInstance.EndInvoke(result);
+                //CollectPowershellScriptoutput(psOutput);
+                StringBuilder tmp = new StringBuilder();
+                foreach (PSObject output in psOutput)
+                {
+                    if (output != null)
+                    {
+                        tmp.Append(output.ToString());
+                    }
+                }
+                ScriptOutput = tmp.ToString();
 
+
+
+
+                CollectPowershellScriptErrors(psInstance);
+
+                /*
                 Collection<PSObject> psOutput = psInstance.Invoke();
 
                 CollectPowershellScriptoutput(psOutput);
                 CollectPowershellScriptErrors(psInstance);
+                */
             }
         }
 
