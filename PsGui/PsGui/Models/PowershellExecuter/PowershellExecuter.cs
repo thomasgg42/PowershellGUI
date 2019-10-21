@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -179,66 +180,53 @@ namespace PsGui.Models.PowershellExecuter
 
         public async Task ExecuteScriptCommandsAsync(string scriptPath)
         {
-            /*
-            await Task.Run(() => ScriptOutput = "1");
-            wait(1000);
-            await Task.Run(() => ScriptOutput += "2");
-            wait(1000);
-            ScriptOutput += "3";
-            wait(1000);
-            ScriptOutput += "4";
-            wait(1000);
-            ScriptOutput += "5";
-            */
-
-
-            // https://csharp.hotexamples.com/examples/-/PowerShell/BeginInvoke/php-powershell-begininvoke-method-examples.html
-            // https://csharp.hotexamples.com/examples/-/PSDataCollection/-/php-psdatacollection-class-examples.html
             using (PowerShell psInstance = PowerShell.Create())
             {
-                psInstance.AddCommand(scriptPath);
-                int argLength = commandLineArguments.Count;
-                for (int ii = 0; ii < argLength; ii++)
+                psInstance.AddScript(scriptPath);
+                PSDataCollection<PSObject> outputCollection = new PSDataCollection<PSObject>();
+
+                // Collect output in real time
+                outputCollection.DataAdded += outputCollection_DataAdded;
+                psInstance.Streams.Error.DataAdded += Error_DataAdded;
+
+                IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, outputCollection);
+
+                // When wrapping PowerShell instance in a using block, the pipeline will
+                // close and the script execution will abort. Therefore we must wait for
+                // the state of the pipeline to equal Completed
+                while (result.IsCompleted == false)
                 {
-                    psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
+                    Thread.Sleep(1000);
                 }
 
-                // Prevents displaying objects as objects
-                psInstance.AddCommand("Out-String");
-                PSDataCollection<PSObject> psOutput = new PSDataCollection<PSObject>();
-                IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, psOutput);
-                /*
-                while(result.IsCompleted == false)
+                foreach (PSObject outputItem in outputCollection)
                 {
-                    await Task.Delay(100);
+                    ScriptOutput += outputItem.ToString();
                 }
-                */
-                psInstance.EndInvoke(result);
-                //CollectPowershellScriptoutput(psOutput);
-                StringBuilder tmp = new StringBuilder();
-                foreach (PSObject output in psOutput)
-                {
-                    if (output != null)
-                    {
-                        tmp.Append(output.ToString());
-                    }
-                }
-                ScriptOutput = tmp.ToString();
-
-
-
-
-                CollectPowershellScriptErrors(psInstance);
-
-                /*
-                Collection<PSObject> psOutput = psInstance.Invoke();
-
-                CollectPowershellScriptoutput(psOutput);
-                CollectPowershellScriptErrors(psInstance);
-                */
             }
         }
 
+        /// <summary>
+        /// Event handler for when data is added to the output stream.
+        /// </summary>
+        /// <param name="sender">Contains the complete PSDataCollection of all output items.</param>
+        /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
+        void outputCollection_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            ScriptOutput += sender.ToString();
+            System.Windows.MessageBox.Show(sender.ToString());
+        }
+
+        /// <summary>
+        /// Event handler for when Data is added to the Error stream.
+        /// </summary>
+        /// <param name="sender">Contains the complete PSDataCollection of all error output items.</param>
+        /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
+        void Error_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            // do something when an error is written to the error stream
+            Console.WriteLine("An error was written to the Error stream!");
+        }
 
 
         /// <summary>

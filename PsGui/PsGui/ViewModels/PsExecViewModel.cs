@@ -1,6 +1,8 @@
 ﻿using PsGui.Models.PowershellExecuter;
 using System;
 using System.Collections.ObjectModel;
+using System.Management.Automation;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -53,6 +55,7 @@ namespace PsGui.ViewModels
 
         private async Task ExecutePowershellScriptAsync(object obj)
         {
+            /*
             try
             {
                 await Task.Run(() => powershellExecuter.ExecuteScriptAsync(SelectedScriptPath, ScriptVariables));
@@ -65,9 +68,65 @@ namespace PsGui.ViewModels
             ScriptExecutionOutput = powershellExecuter.ScriptOutput;
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
+            */
+
+            await Task.Run(() =>
+            {
+                using (PowerShell psInstance = PowerShell.Create())
+                {
+                    psInstance.AddScript(SelectedScriptPath);
+                    PSDataCollection<PSObject> outputCollection = new PSDataCollection<PSObject>();
+
+                    // Collect output in real time
+                    outputCollection.DataAdded += outputCollection_DataAdded;
+                    psInstance.Streams.Error.DataAdded += Error_DataAdded;
+
+                    IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, outputCollection);
+
+                    // When wrapping PowerShell instance in a using block, the pipeline will
+                    // close and the script execution will abort. Therefore we must wait for
+                    // the state of the pipeline to equal Completed
+                    while (result.IsCompleted == false)
+                    {
+                        Thread.Sleep(1000);
+                    }
+
+                    foreach (PSObject outputItem in outputCollection)
+                    {
+                       // ScriptExecutionOutput += outputItem.ToString();
+                    }
+                }
+            });
+
+
         }
 
-        
+
+
+        /// <summary>
+        /// Event handler for when data is added to the output stream.
+        /// </summary>
+        /// <param name="sender">Contains the complete PSDataCollection of all output items.</param>
+        /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
+        void outputCollection_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            ScriptExecutionOutput += ((PSDataCollection<PSObject>)sender)[e.Index].ToString();
+           // System.Windows.MessageBox.Show(sender.ToString());
+        }
+
+        /// <summary>
+        /// Event handler for when Data is added to the Error stream.
+        /// </summary>
+        /// <param name="sender">Contains the complete PSDataCollection of all error output items.</param>
+        /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
+        void Error_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            // do something when an error is written to the error stream
+            Console.WriteLine("An error was written to the Error stream!");
+        }
+
+
+
 
         /// <summary>
         /// Returns true if a selected powershell script
