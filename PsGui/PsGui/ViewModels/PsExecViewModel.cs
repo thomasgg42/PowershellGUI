@@ -55,6 +55,10 @@ namespace PsGui.ViewModels
 
         private async Task ExecutePowershellScriptAsync(object obj)
         {
+
+            // Kanskje best om PowershellExecuter har instansen lagret som 
+            // en privat medlem
+
             /*
             try
             {
@@ -69,16 +73,22 @@ namespace PsGui.ViewModels
             ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
             ClearScriptSession();
             */
-
+            powershellExecuter.SetScriptParameters(ScriptVariables);
             await Task.Run(() =>
             {
                 using (PowerShell psInstance = PowerShell.Create())
                 {
                     psInstance.AddScript(SelectedScriptPath);
+                    int argLength = powershellExecuter.CommandLineArguments.Count;
+                    for (int ii = 0; ii < argLength; ii++)
+                    {
+                        psInstance.AddParameter(powershellExecuter.CommandLineArgumentKeys[ii], powershellExecuter.CommandLineArguments[ii]);
+                    }
+
                     PSDataCollection<PSObject> outputCollection = new PSDataCollection<PSObject>();
 
                     // Collect output in real time
-                    outputCollection.DataAdded += outputCollection_DataAdded;
+                    outputCollection.DataAdded += OutputCollection_DataAdded;
                     psInstance.Streams.Error.DataAdded += Error_DataAdded;
 
                     IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, outputCollection);
@@ -93,7 +103,7 @@ namespace PsGui.ViewModels
 
                     foreach (PSObject outputItem in outputCollection)
                     {
-                       // ScriptExecutionOutput += outputItem.ToString();
+                    //    ScriptExecutionOutput += outputItem.ToString();
                     }
                 }
             });
@@ -108,7 +118,7 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="sender">Contains the complete PSDataCollection of all output items.</param>
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
-        void outputCollection_DataAdded(object sender, DataAddedEventArgs e)
+        void OutputCollection_DataAdded(object sender, DataAddedEventArgs e)
         {
             ScriptExecutionOutput += ((PSDataCollection<PSObject>)sender)[e.Index].ToString();
            // System.Windows.MessageBox.Show(sender.ToString());
