@@ -65,7 +65,7 @@ namespace PsGui.Models.PowershellExecuter
         /// powershell script instance.
         /// </summary>
         /// <param name="instance"></param>
-        private void CollectPowershellScriptErrors(PowerShell instance)
+        public void CollectPowershellScriptErrors(PowerShell instance)
             {
             if (instance.HadErrors)
                 {
@@ -99,7 +99,7 @@ namespace PsGui.Models.PowershellExecuter
         /// powershell script instance.
         /// </summary>
         /// <param name="instance"></param>
-        private void CollectPowershellScriptoutput(Collection<PSObject> instanceOutput)
+        public void CollectPowershellScriptOutput(Collection<PSObject> instanceOutput)
             {
             StringBuilder tmp = new StringBuilder();
             foreach (PSObject output in instanceOutput)
@@ -119,13 +119,13 @@ namespace PsGui.Models.PowershellExecuter
         /// <param name="scriptPath"></param>
         public void ExecuteScriptCommands(string scriptPath)
             {
-            /*   using (PowerShell psInstance = PowerShell.Create())
+            using (PowerShell psInstance = PowerShell.Create())
                   {
                  psInstance.AddCommand(scriptPath);
-                  int argLength = commandLineArguments.Count;
+                  int argLength = CommandLineArguments.Count;
                   for (int ii = 0; ii < argLength; ii++)
                       {
-                      psInstance.AddParameter(commandLineArgKeys[ii], commandLineArguments[ii]);
+                      psInstance.AddParameter(CommandLineArgumentKeys[ii], CommandLineArguments[ii]);
                       }
 
                   // Prevents displaying objects as objects
@@ -133,10 +133,10 @@ namespace PsGui.Models.PowershellExecuter
 
                   Collection<PSObject> psOutput = psInstance.Invoke();
 
-                  CollectPowershellScriptoutput(psOutput);
+                  CollectPowershellScriptOutput(psOutput);
                   CollectPowershellScriptErrors(psInstance);
                   }
-            */
+            
             }
 
         /// <summary>

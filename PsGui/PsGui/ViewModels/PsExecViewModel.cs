@@ -19,6 +19,8 @@ namespace PsGui.ViewModels
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
 
+
+        private bool isBusy = false;
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
         // The modulePath contains the relative file path to the scripts folder.
@@ -55,30 +57,13 @@ namespace PsGui.ViewModels
 
         private async Task ExecutePowershellScriptAsync(object obj)
         {
-
-            // Kanskje best om PowershellExecuter har instansen lagret som 
-            // en privat medlem
-
-            /*
-            try
-            {
-                await Task.Run(() => powershellExecuter.ExecuteScriptAsync(SelectedScriptPath, ScriptVariables));
-            }
-            catch (Exception e)
-            {
-                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
-            }
-
-            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
-            ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
-            ClearScriptSession();
-            */
+            isBusy = true;
             powershellExecuter.SetScriptParameters(ScriptVariables);
             await Task.Run(() =>
             {
                 using (PowerShell psInstance = PowerShell.Create())
                 {
-                    psInstance.AddScript(SelectedScriptPath);
+                    psInstance.AddCommand(SelectedScriptPath);
                     int argLength = powershellExecuter.CommandLineArguments.Count;
                     for (int ii = 0; ii < argLength; ii++)
                     {
@@ -91,6 +76,7 @@ namespace PsGui.ViewModels
                     outputCollection.DataAdded += OutputCollection_DataAdded;
                     psInstance.Streams.Error.DataAdded += Error_DataAdded;
 
+                    // Begin powershell execution and continue control
                     IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, outputCollection);
 
                     // When wrapping PowerShell instance in a using block, the pipeline will
@@ -101,27 +87,32 @@ namespace PsGui.ViewModels
                         Thread.Sleep(1000);
                     }
 
+                    // Gather output for the PowershellExecuter object
+                    Collection<PSObject> outputObjects = new Collection<PSObject>();
                     foreach (PSObject outputItem in outputCollection)
                     {
-                    //    ScriptExecutionOutput += outputItem.ToString();
+                        outputObjects.Add(outputItem);
                     }
+
+                    powershellExecuter.CollectPowershellScriptOutput(outputObjects);
+                    powershellExecuter.CollectPowershellScriptErrors(psInstance);
+
+                    //System.Windows.MessageBox.Show(powershellExecuter.ScriptErrors);
+                    //System.Windows.MessageBox.Show(ScriptExecutionOutput);
                 }
             });
-
-
+            ClearScriptSession();
+            isBusy = false;
         }
-
-
 
         /// <summary>
         /// Event handler for when data is added to the output stream.
         /// </summary>
         /// <param name="sender">Contains the complete PSDataCollection of all output items.</param>
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
-        void OutputCollection_DataAdded(object sender, DataAddedEventArgs e)
+        private void OutputCollection_DataAdded(object sender, DataAddedEventArgs e)
         {
             ScriptExecutionOutput += ((PSDataCollection<PSObject>)sender)[e.Index].ToString();
-           // System.Windows.MessageBox.Show(sender.ToString());
         }
 
         /// <summary>
@@ -129,10 +120,9 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="sender">Contains the complete PSDataCollection of all error output items.</param>
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
-        void Error_DataAdded(object sender, DataAddedEventArgs e)
+        private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
-            // do something when an error is written to the error stream
-            Console.WriteLine("An error was written to the Error stream!");
+            ScriptExecutionErrorOutput += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
         }
 
 
@@ -146,6 +136,10 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
             {
+            if(isBusy == true)
+            {
+                return false;
+            }
             if (IsScriptSelected == false)
                 {
                 return false;
@@ -539,7 +533,8 @@ namespace PsGui.ViewModels
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
             IsScriptSelected = false;
-            }
+
+        }
 
         /// <summary>
         /// Gets the output from the executed powershell script.
