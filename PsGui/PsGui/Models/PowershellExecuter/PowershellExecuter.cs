@@ -20,6 +20,16 @@ namespace PsGui.Models.PowershellExecuter
         private List<string> _commandLineArguments;
         private List<string> _commandLineArgKeys;
 
+        public string ScriptExecutionOutput                   { get; set; }
+        public string ScriptExecutionOutputStandard           { get; set; }
+        public string ScriptExecutionOutputCustom             { get; set; }
+
+        public string ScriptExecutionErrorException           { get; set; }
+        public string ScriptExecutionErrorDetails             { get; set; }
+        public string ScriptExecutionProgressPercentComplete  { get; set; }
+        public string ScriptExecutionProgressCurrentOperation { get; set; }
+
+        
         /// <summary>
         /// Gets the script execution output.
         /// </summary>
@@ -29,7 +39,11 @@ namespace PsGui.Models.PowershellExecuter
         /// Gets or sets the script execution error messages.
         /// </summary>
         public string ScriptErrors { get; private set; }
-
+        
+        /// <summary>
+        /// Sets or gets a collection of command line argument keys
+        /// required for the current PowerShell-script.
+        /// </summary>
         public List<string> CommandLineArgumentKeys
         {
             get
@@ -45,6 +59,10 @@ namespace PsGui.Models.PowershellExecuter
             }
         }
 
+        /// <summary>
+        /// Sets or gets a collection of command line arguments
+        /// required for the current PowerShell-script.
+        /// </summary>
         public List<string> CommandLineArguments
         {
             get
@@ -144,9 +162,9 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public PowershellExecuter()
             {
-            ScriptOutput         = "";
-            CommandLineArguments = new List<string>();
-            CommandLineArgumentKeys   = new List<string>();
+            ScriptOutput            = "";
+            CommandLineArguments    = new List<string>();
+            CommandLineArgumentKeys = new List<string>();
             }
 
         /// <summary>

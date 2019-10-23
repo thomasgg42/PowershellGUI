@@ -8,13 +8,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 namespace PsGui.ViewModels
-    {
+{
     /// <summary>
     /// Executes powershell scripts with command line arguments
     /// in the form of user input.
     /// </summary>
     public class PsExecViewModel : ObservableObject
-        {
+    {
         private DirectoryReader    directoryReader;
         private ScriptReader       scriptReader;
         private PowershellExecuter powershellExecuter;
@@ -25,9 +25,6 @@ namespace PsGui.ViewModels
         // module should not be confused with a Powershell-module.
         // The modulePath contains the relative file path to the scripts folder.
         private string _modulePath;
-        private string _scriptOutput;
-        private string _scriptErrorOutput;
-        private string _scriptProgressOutput;
 
         public ICommand RadioButtonChecked { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
@@ -51,11 +48,18 @@ namespace PsGui.ViewModels
                 throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
             }
 
-            ScriptExecutionOutput = powershellExecuter.ScriptOutput;
-            ScriptExecutionErrorOutput = powershellExecuter.ScriptErrors;
+            // Outdated since async implemented
+            ScriptExecutionOutputStandard = powershellExecuter.ScriptExecutionOutput;
+            ScriptExecutionErrorException = powershellExecuter.ScriptExecutionErrorException;
             ClearScriptSession();
         }
 
+        /// <summary>
+        /// Executes a powershell script at the supplied path asynchronously.
+        /// Output stream data is saved in real time as the script executes.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private async Task ExecutePowershellScriptAsync(object obj)
         {
             isBusy = true;
@@ -96,11 +100,8 @@ namespace PsGui.ViewModels
                         outputObjects.Add(outputItem);
                     }
 
-                    powershellExecuter.CollectPowershellScriptOutput(outputObjects);
-                    powershellExecuter.CollectPowershellScriptErrors(psInstance);
-
-                    //System.Windows.MessageBox.Show(powershellExecuter.ScriptErrors);
-                    //System.Windows.MessageBox.Show(ScriptExecutionOutput);
+                   // powershellExecuter.CollectPowershellScriptOutput(outputObjects);
+                   // powershellExecuter.CollectPowershellScriptErrors(psInstance);
                 }
             });
             ClearScriptSession();
@@ -114,7 +115,7 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void OutputCollection_DataAdded(object sender, DataAddedEventArgs e)
         {
-            ScriptExecutionOutput += ((PSDataCollection<PSObject>)sender)[e.Index].ToString();
+            FilterScriptExecutionOutput(((PSDataCollection<PSObject>)sender)[e.Index].ToString());
         }
 
         /// <summary>
@@ -124,7 +125,8 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
-            ScriptExecutionErrorOutput += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
+            ScriptExecutionErrorException += ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString();
+            ScriptExecutionErrorDetails += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString();
         }
 
         /// <summary>
@@ -134,7 +136,8 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void Progress_DataAdded(object sender, DataAddedEventArgs e)
         {
-            ScriptExecutionProgressOutput = ((PSDataCollection<ProgressRecord>)sender)[e.Index].PercentComplete.ToString();
+            ScriptExecutionProgressPercentComplete = ((PSDataCollection<ProgressRecord>)sender)[e.Index].PercentComplete.ToString();
+            ScriptExecutionProgressCurrentOperation = ((PSDataCollection<ProgressRecord>)sender)[e.Index].StatusDescription.ToString();
         }
 
 
@@ -408,12 +411,10 @@ namespace PsGui.ViewModels
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
 
-                        if((ScriptExecutionOutput != null && ScriptExecutionOutput.Length > 0) ||
-                           (ScriptExecutionErrorOutput != null && ScriptExecutionErrorOutput.Length > 0))
+                        // If previous session output/errors, clear them
+                        if (OutputStreamsContainsData())
                             {
-                            // If previous session output/errors, clear them
-                            ScriptExecutionOutput = "";
-                            ScriptExecutionErrorOutput = "";
+                            ClearOutputStreams();
                             }
                         }
                     else
@@ -547,60 +548,184 @@ namespace PsGui.ViewModels
 
         }
 
+       
         /// <summary>
-        /// Gets the output from the executed powershell script.
+        /// Gets the script output and filters it into the different types
+        /// of script output. Calls the properties responsible for each of
+        /// the output types.
         /// </summary>
-        public string ScriptExecutionOutput
+        public void FilterScriptExecutionOutput(string output)
+        {
+            string standardOutputPrefix = "std: ";
+            string customOutputPrefix   = "cust: ";
+            int stdPrefixLength         = standardOutputPrefix.Length;
+            int custPrefixLength        = customOutputPrefix.Length;
+ 
+            if(output.Substring(0,stdPrefixLength).Equals(standardOutputPrefix))
             {
-            get
-                {
-                return _scriptOutput;
-                }
-            set
-                {
-                if(value != null)
-                    {
-                    _scriptOutput = value;
-                    OnPropertyChanged("ScriptExecutionOutput");
-                    }
-                }
+                ScriptExecutionOutputStandard = output.Substring(stdPrefixLength);
             }
+            else if(output.Substring(0, custPrefixLength).Equals(customOutputPrefix))
+            {
+                ScriptExecutionOutputCustom = output.Substring(custPrefixLength);
+            }
+            else
+            {
+                // Miss-typed powershell scripts will display the prefix as well.
+                ScriptExecutionOutputStandard = output;
+            }
+        }
 
         /// <summary>
-        /// Gets the error output generated by the executed 
+        /// Gets the standard output generated by the executed
         /// powershell script.
         /// </summary>
-        public string ScriptExecutionErrorOutput
-            {
-            get
-                {
-                return _scriptErrorOutput;
-                }
-            set
-                {
-                if (value != null)
-                    { 
-                    _scriptErrorOutput = value;
-                    OnPropertyChanged("ScriptExecutionErrorOutput");
-                    }
-                }
-            }
-
-        public string ScriptExecutionProgressOutput
+        public string ScriptExecutionOutputStandard
         {
             get
             {
-                return _scriptProgressOutput;
+                return powershellExecuter.ScriptExecutionOutputStandard;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionOutputStandard = value;
+                    OnPropertyChanged("ScriptExecutionOutputStandard");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the custom output generated by the executed
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionOutputCustom
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionOutputCustom;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionOutputCustom = value;
+                    OnPropertyChanged("ScriptExecutionOutputCustom");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the Percent Completed progress status
+        /// output generated by the executed powershell script.
+        /// </summary>
+        public string ScriptExecutionProgressPercentComplete
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionProgressPercentComplete;
             }
             set
             {
                 if(value != null)
                 {
-                    _scriptProgressOutput = value;
-                    OnPropertyChanged("ScriptExecutionProgressOutput");
+                    powershellExecuter.ScriptExecutionProgressPercentComplete = value;
+                    OnPropertyChanged("ScriptExecutionProgressPercentComplete");
                 }
             }
         }
 
+        /// <summary>
+        /// Gets the Current Operation progress status
+        /// output generated by the executed powershell script.
+        /// </summary>
+        public string ScriptExecutionProgressCurrentOperation
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionProgressCurrentOperation;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionProgressCurrentOperation = value;
+                    OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error Exception output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorException
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorException;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorException = value;
+                    OnPropertyChanged("ScriptExecutionErrorOutput");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error Details output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorDetails
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorDetails;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorDetails = value;
+                    OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if any of the output streams contains data.
+        /// </summary>
+        /// <returns>True/false</returns>
+        public bool OutputStreamsContainsData()
+        {
+            if((ScriptExecutionOutputStandard != null && ScriptExecutionOutputStandard.Length > 0) ||
+               (ScriptExecutionOutputCustom != null && ScriptExecutionOutputCustom.Length > 0) ||
+               (ScriptExecutionProgressPercentComplete != null && ScriptExecutionProgressPercentComplete.Length > 0) ||
+               (ScriptExecutionProgressCurrentOperation != null && ScriptExecutionProgressCurrentOperation.Length > 0) ||
+               (ScriptExecutionErrorException != null && ScriptExecutionErrorException.Length > 0) ||
+               (ScriptExecutionErrorDetails) != null & ScriptExecutionErrorDetails.Length > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Clears the output streams for data. Setting them to an empty string.
+        /// </summary>
+        public void ClearOutputStreams()
+        {
+            ScriptExecutionOutputStandard           = "";
+            ScriptExecutionOutputCustom             = "";
+            ScriptExecutionErrorDetails             = "";
+            ScriptExecutionErrorException           = "";
+            ScriptExecutionErrorException           = "";
+            ScriptExecutionProgressCurrentOperation = "";
+            ScriptExecutionProgressPercentComplete  = "";
         }
     }
+}
