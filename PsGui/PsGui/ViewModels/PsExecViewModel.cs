@@ -27,6 +27,7 @@ namespace PsGui.ViewModels
         private string _modulePath;
         private string _scriptOutput;
         private string _scriptErrorOutput;
+        private string _scriptProgressOutput;
 
         public ICommand RadioButtonChecked { get; set; }
         public ICommand ExecuteButtonPushed { get; set; }
@@ -75,6 +76,7 @@ namespace PsGui.ViewModels
                     // Collect output in real time
                     outputCollection.DataAdded += OutputCollection_DataAdded;
                     psInstance.Streams.Error.DataAdded += Error_DataAdded;
+                    psInstance.Streams.Progress.DataAdded += Progress_DataAdded;
 
                     // Begin powershell execution and continue control
                     IAsyncResult result = psInstance.BeginInvoke<PSObject, PSObject>(null, outputCollection);
@@ -125,6 +127,15 @@ namespace PsGui.ViewModels
             ScriptExecutionErrorOutput += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ToString();
         }
 
+        /// <summary>
+        /// Event handler for when Data is added to the Progress stream.
+        /// </summary>
+        /// <param name="sender">Contains the complete PSDataCollection of all progress output items.</param>
+        /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
+        private void Progress_DataAdded(object sender, DataAddedEventArgs e)
+        {
+            ScriptExecutionProgressOutput = ((PSDataCollection<ProgressRecord>)sender)[e.Index].PercentComplete.ToString();
+        }
 
 
 
@@ -574,6 +585,22 @@ namespace PsGui.ViewModels
                     }
                 }
             }
+
+        public string ScriptExecutionProgressOutput
+        {
+            get
+            {
+                return _scriptProgressOutput;
+            }
+            set
+            {
+                if(value != null)
+                {
+                    _scriptProgressOutput = value;
+                    OnPropertyChanged("ScriptExecutionProgressOutput");
+                }
+            }
+        }
 
         }
     }
