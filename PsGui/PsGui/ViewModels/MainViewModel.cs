@@ -55,8 +55,8 @@ namespace PsGui.ViewModels
 
             switch (key)
                 {
-                case "psgui_rel_scriptfolder_path": powershellScriptFolderPath = value; break;
-                case "psgui_scriptfolder_name": powershellScriptModuleFolderName = value; break;
+                case "psgui_rel_scriptfolder_path":  powershellScriptFolderPath       = value; break;
+                case "psgui_scriptfolder_name":      powershellScriptModuleFolderName = value; break;
                 default: break;
                 }
             }

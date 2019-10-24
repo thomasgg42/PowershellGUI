@@ -20,12 +20,16 @@ namespace PsGui.Models.PowershellExecuter
         private List<string> _commandLineArguments;
         private List<string> _commandLineArgKeys;
 
+        public string StandardOutputPrefix                    { get; } = "std: ";
+        public string CustomOutputPrefix                      { get; } = "cust: ";
+
         public string ScriptExecutionOutput                   { get; set; }
         public string ScriptExecutionOutputStandard           { get; set; }
         public string ScriptExecutionOutputCustom             { get; set; }
 
         public string ScriptExecutionErrorException           { get; set; }
         public string ScriptExecutionErrorDetails             { get; set; }
+        public string ScriptExecutionErrorCustom              { get; set; }
         public string ScriptExecutionProgressPercentComplete  { get; set; }
         public string ScriptExecutionProgressCurrentOperation { get; set; }
 
