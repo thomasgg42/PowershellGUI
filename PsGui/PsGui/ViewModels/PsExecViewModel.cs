@@ -707,7 +707,7 @@ namespace PsGui.ViewModels
                (ScriptExecutionProgressPercentComplete != null && ScriptExecutionProgressPercentComplete.Length > 0) ||
                (ScriptExecutionProgressCurrentOperation != null && ScriptExecutionProgressCurrentOperation.Length > 0) ||
                (ScriptExecutionErrorException != null && ScriptExecutionErrorException.Length > 0) ||
-               (ScriptExecutionErrorDetails) != null & ScriptExecutionErrorDetails.Length > 0)
+               (ScriptExecutionErrorDetails != null && ScriptExecutionErrorDetails.Length > 0))
             {
                 return true;
             }

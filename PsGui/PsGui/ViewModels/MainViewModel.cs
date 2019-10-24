@@ -7,8 +7,8 @@ namespace PsGui.ViewModels
         {
         private const string relConfigFilePath = @".\config.ini";
 
-        private string powershellScriptFolderPath;
-        private string powershellScriptModuleFolderName;
+        private static string powershellScriptFolderPath;
+        private static string powershellScriptModuleFolderName;
 
         public ObservableCollection<object> Tabs { get; private set; }
 
