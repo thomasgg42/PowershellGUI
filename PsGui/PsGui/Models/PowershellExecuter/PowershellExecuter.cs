@@ -198,7 +198,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="scriptPath"></param>
         /// <param name="scriptVars"></param>
-
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
             {
             SetScriptParameters(scriptVars);

@@ -94,11 +94,13 @@ namespace PsGui.ViewModels
                     }
 
                     // Gather output for the PowershellExecuter object
+                    /*
                     Collection<PSObject> outputObjects = new Collection<PSObject>();
                     foreach (PSObject outputItem in outputCollection)
                     {
                         outputObjects.Add(outputItem);
                     }
+                    */
 
                    // powershellExecuter.CollectPowershellScriptOutput(outputObjects);
                    // powershellExecuter.CollectPowershellScriptErrors(psInstance);
@@ -559,8 +561,8 @@ namespace PsGui.ViewModels
             // Må oppdatere OutputStreamsContainsData når denne oppdateres
             int stdPrefixLength  = powershellExecuter.StandardOutputPrefix.Length;
             int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
-
-            if(output.Substring(0,stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
+            
+            if (output.Substring(0,stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
             {
                 // If Write-Output is standard output
                 ScriptExecutionOutputStandard = output.Substring(stdPrefixLength);
@@ -591,7 +593,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionOutputStandard = value;
+                    powershellExecuter.ScriptExecutionOutputStandard += value;
                     OnPropertyChanged("ScriptExecutionOutputStandard");
                 }
             }
@@ -611,7 +613,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionOutputCustom = value;
+                    powershellExecuter.ScriptExecutionOutputCustom += value;
                     OnPropertyChanged("ScriptExecutionOutputCustom");
                 }
             }
@@ -671,7 +673,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorException = value;
+                    powershellExecuter.ScriptExecutionErrorException += value;
                     OnPropertyChanged("ScriptExecutionErrorOutput");
                 }
             }
@@ -691,7 +693,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorDetails = value;
+                    powershellExecuter.ScriptExecutionErrorDetails += value;
                     OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }
