@@ -8,11 +8,12 @@ namespace PsGui.Models.PowershellExecuter
     public class ScriptReader
         {
 
-        private CompositeCollection                  _scriptVariables;
-        private ObservableCollection<TextArgument> _scriptTextVariables;
-        private ObservableCollection<PasswordArgument> _scriptPasswordVariables;
-        private ObservableCollection<UsernameArgument> _scriptUsernameVariables;
+        private CompositeCollection                     _scriptVariables;
+        private ObservableCollection<TextArgument>      _scriptTextVariables;
+        private ObservableCollection<PasswordArgument>  _scriptPasswordVariables;
+        private ObservableCollection<UsernameArgument>  _scriptUsernameVariables;
         private ObservableCollection<MultiLineArgument> _scriptMultiLineVariables;
+        private ObservableCollection<CheckboxArgument>  _scriptCheckboxVariables;
 
         private string _scriptDescription;
         private string _scriptHeader;
@@ -106,6 +107,11 @@ namespace PsGui.Models.PowershellExecuter
                 {
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
                 }
+
+            if (ScriptCheckboxVariables != null & ScriptCheckboxVariables.Count > 0)
+                {
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptCheckboxVariables });
+                }
             }
 
         /// <summary>
@@ -120,10 +126,11 @@ namespace PsGui.Models.PowershellExecuter
             inputType = inputType.ToLower();
             switch (inputType)
                 {
-                case "password": _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType)); break;
-                case "username": _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType)); break;
+                case "password": _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType));    break;
+                case "username": _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType));    break;
                 case "multiline": _scriptMultiLineVariables.Add(new MultiLineArgument(inputKey, inputDesc, inputType)); break;
-                default: _scriptTextVariables.Add(new TextArgument(inputKey, inputDesc, inputType)); break;
+                case "checkbox": _scriptCheckboxVariables.Add(new CheckboxArgument(inputKey, inputDesc, inputType));    break;
+                default: _scriptTextVariables.Add(new TextArgument(inputKey, inputDesc, inputType));                    break;
                 }
             }
 
@@ -166,6 +173,7 @@ namespace PsGui.Models.PowershellExecuter
             _scriptUsernameVariables  = new ObservableCollection<UsernameArgument>();
             _scriptPasswordVariables  = new ObservableCollection<PasswordArgument>();
             _scriptMultiLineVariables = new ObservableCollection<MultiLineArgument>();
+            _scriptCheckboxVariables  = new ObservableCollection<CheckboxArgument>();
             _scriptDescription        = "";
             _scriptHeader             = "";
             }
@@ -235,7 +243,7 @@ namespace PsGui.Models.PowershellExecuter
 
         /// <summary>
         /// Sets or gets a collection of strings representing
-        /// script input multi line text values.
+        /// script input multiline text values.
         /// </summary>
         public ObservableCollection<MultiLineArgument> ScriptMultiLineVariables
             {
@@ -248,6 +256,22 @@ namespace PsGui.Models.PowershellExecuter
                 _scriptMultiLineVariables = value;
                 }
             }
+
+        /// <summary>
+        /// Sets or gets a collection of strings representing
+        /// script input textbox values.
+        /// </summary>
+        public ObservableCollection<CheckboxArgument> ScriptCheckboxVariables
+        {
+            get
+            {
+                return _scriptCheckboxVariables;
+            }
+            private set
+            {
+                _scriptCheckboxVariables = value;
+            }
+        }
 
         /// <summary>
         /// Sets or gets the script description from the 
@@ -348,6 +372,13 @@ namespace PsGui.Models.PowershellExecuter
                     arg.ClearUserInput();
                     }
                 }
+            if(_scriptCheckboxVariables != null && _scriptCheckboxVariables.Count > 0)
+                {
+                foreach (CheckboxArgument arg in _scriptCheckboxVariables)
+                    {
+                    arg.ClearUserInput();
+                    }
+                }
             }
 
         /// <summary>
@@ -359,6 +390,7 @@ namespace PsGui.Models.PowershellExecuter
             ScriptUsernameVariables.Clear();
             ScriptPasswordVariables.Clear();
             ScriptMultiLineVariables.Clear();
+            ScriptCheckboxVariables.Clear();
             ScriptVariables.Clear();
             _scriptDescription = "";
             _scriptHeader = "";

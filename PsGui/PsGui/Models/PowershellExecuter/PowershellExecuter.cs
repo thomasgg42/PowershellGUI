@@ -26,14 +26,23 @@ namespace PsGui.Models.PowershellExecuter
         public string ScriptExecutionOutput                   { get; set; }
         public string ScriptExecutionOutputStandard           { get; set; }
         public string ScriptExecutionOutputCustom             { get; set; }
-
         public string ScriptExecutionErrorException           { get; set; }
         public string ScriptExecutionErrorDetails             { get; set; }
         public string ScriptExecutionErrorCustom              { get; set; }
         public string ScriptExecutionProgressPercentComplete  { get; set; }
         public string ScriptExecutionProgressCurrentOperation { get; set; }
 
-        
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PowershellExecuter()
+        {
+            ScriptOutput = "";
+            CommandLineArguments = new List<string>();
+            CommandLineArgumentKeys = new List<string>();
+        }
+
         /// <summary>
         /// Gets the script execution output.
         /// </summary>
@@ -159,16 +168,6 @@ namespace PsGui.Models.PowershellExecuter
                   CollectPowershellScriptErrors(psInstance);
                   }
             
-            }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public PowershellExecuter()
-            {
-            ScriptOutput            = "";
-            CommandLineArguments    = new List<string>();
-            CommandLineArgumentKeys = new List<string>();
             }
 
         /// <summary>

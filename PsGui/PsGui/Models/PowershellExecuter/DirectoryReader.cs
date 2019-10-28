@@ -17,7 +17,7 @@ namespace PsGui.Models.PowershellExecuter
         private string _selectedScriptPath;
 
         private ObservableCollection<ScriptCategory> _scriptCategories;
-        private ObservableCollection<string> _scriptFiles;
+        private ObservableCollection<string>         _scriptFiles;
 
         /// <summary>
         /// Constructor

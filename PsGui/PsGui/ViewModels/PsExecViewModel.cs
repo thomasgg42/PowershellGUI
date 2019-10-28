@@ -142,7 +142,33 @@ namespace PsGui.ViewModels
             ScriptExecutionProgressCurrentOperation = ((PSDataCollection<ProgressRecord>)sender)[e.Index].StatusDescription.ToString();
         }
 
+        /// <summary>
+        /// Gets the script output and filters it into the different types
+        /// of script output. Calls the properties responsible for each of
+        /// the output types.
+        /// </summary>
+        private void FilterScriptExecutionOutput(string output)
+        {
+            // Må oppdatere OutputStreamsContainsData når denne oppdateres
+            int stdPrefixLength = powershellExecuter.StandardOutputPrefix.Length;
+            int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
 
+            if (output.Substring(0, stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
+            {
+                // If Write-Output is standard output
+                ScriptExecutionOutputStandard = output.Substring(stdPrefixLength);
+            }
+            else if (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix))
+            {
+                // If Write-Output is custom output
+                ScriptExecutionOutputCustom = output.Substring(custPrefixLength);
+            }
+            else
+            {
+                // Miss-typed and unspecified Write-Output contents are not filtered
+                ScriptExecutionOutputStandard = output;
+            }
+        }
 
         /// <summary>
         /// Returns true if a selected powershell script
@@ -298,6 +324,109 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
+        /// Sets or gets the selected category in form of a 
+        /// ScriptCategory.FriendlyName. Clears existing 
+        /// input field values upon setting a new category.
+        /// Does not clear the fields themselves.
+        /// </summary>
+        public string SelectedScriptCategory
+        {
+            get
+            {
+                return directoryReader.SelectedCategoryName;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    scriptReader.ClearScriptVariableInfo();
+                    directoryReader.SelectedCategoryName = value;
+                    directoryReader.ClearScripts();
+                    directoryReader.UpdateScriptFilesList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets or gets the selected powershell script and its path. Also
+        /// calls functions responsible to read contents of a 
+        /// selected powershell script and functions responsible
+        /// of cleaning up previous script input fields.
+        /// </summary>
+        public string SelectedScriptFile
+        {
+            get
+            {
+                return directoryReader.SelectedScript;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    // The setter runs when set to empty string as well as a script name
+                    if (value != "")
+                    {
+                        // If new script selected, clear previous session
+                        ScriptTextVariables.Clear();
+                        ScriptUsernameVariables.Clear();
+                        ScriptPasswordVariables.Clear();
+                        ScriptMultiLineVariables.Clear();
+                        ScriptVariables.Clear();
+
+                        IsScriptSelected = true;
+                        SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
+                        scriptReader.ReadSelectedScript(SelectedScriptPath);
+
+                        // If previous session output/errors, clear them
+                        if (OutputStreamsContainsData())
+                        {
+                            ClearOutputStreams();
+                        }
+                    }
+                    else
+                    {
+                        IsScriptSelected = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets or gets the file path to the selected
+        /// powershell script.
+        /// </summary>
+        public string SelectedScriptPath
+        {
+            get
+            {
+                return directoryReader.SelectedScriptPath;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    directoryReader.SelectedScriptPath = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if a powershell script has been selected.
+        /// </summary>
+        public bool IsScriptSelected
+        {
+            get
+            {
+                return directoryReader.IsScriptSelected;
+            }
+            set
+            {
+                directoryReader.IsScriptSelected = value;
+                OnPropertyChanged("IsScriptSelected");
+            }
+        }
+
+        /// <summary>
         /// Sets or gets a collection of strings representing
         /// the directory file paths, the script categories.
         /// </summary>
@@ -317,160 +446,27 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Sets or gets the selected category in form of a 
-        /// ScriptCategory.FriendlyName. Clears existing 
-        /// input field values upon setting a new category.
-        /// Does not clear the fields themselves.
-        /// </summary>
-        public string SelectedScriptCategory
-            {
-            get
-                {
-                return directoryReader.SelectedCategoryName;
-                }
-            set
-                {
-                if (value != null)
-                    {
-                    scriptReader.ClearScriptVariableInfo();
-                    directoryReader.SelectedCategoryName = value;
-                    directoryReader.ClearScripts();
-                    directoryReader.UpdateScriptFilesList();
-                    }
-                }
-            }
-
-        /// <summary>
-        /// Fills the list of script categories based on 
-        /// the directories found in the Module-folder. Uses
-        /// the SelectedScriptCategory property value to set the
-        /// selected script boolean value in the list object.
-        /// @Throws PsGuiException
-        /// </summary>
-        public void UpdateScriptCategoriesList()
-            {
-            directoryReader.UpdateScriptCategoriesList();
-            foreach (ScriptCategory cat in ScriptCategoryBrowser)
-                {
-                if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName)
-                    && cat.IsSelectedCategory != true)
-                    {
-                    cat.IsSelectedCategory = true;
-                    }
-                }
-            }
-
-        /// <summary>
         /// Sets or gets a collection of strings representing
         /// the script files in each category.
         /// </summary>
         public ObservableCollection<string> ScriptFileBrowser
-            {
+        {
             get
-                {
+            {
                 return directoryReader.ScriptFiles;
-                }
+            }
             set
-                {
+            {
                 if (value != null)
-                    {
+                {
                     directoryReader.ScriptFiles = value;
-                    }
+                }
                 else
-                    {
+                {
                     System.Windows.MessageBox.Show("ScriptFileBrowser null");
-                    }
                 }
             }
-
-        /// <summary>
-        /// Sets or gets the selected powershell script and its path. Also
-        /// calls functions responsible to read contents of a 
-        /// selected powershell script and functions responsible
-        /// of cleaning up previous script input fields.
-        /// </summary>
-        public string SelectedScriptFile
-            {
-            get
-                {
-                return directoryReader.SelectedScript;
-                }
-            set
-                {
-                if(value != null)
-                    {
-                    // The setter runs when set to empty string as well as a script name
-                    if(value != "")
-                        {
-                        // If new script selected, clear previous session
-                        ScriptTextVariables.Clear();
-                        ScriptUsernameVariables.Clear();
-                        ScriptPasswordVariables.Clear();
-                        ScriptMultiLineVariables.Clear();
-                        ScriptVariables.Clear();
-
-                        IsScriptSelected = true;
-                        SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
-                        scriptReader.ReadSelectedScript(SelectedScriptPath);
-
-                        // If previous session output/errors, clear them
-                        if (OutputStreamsContainsData())
-                            {
-                            ClearOutputStreams();
-                            }
-                        }
-                    else
-                        {
-                        IsScriptSelected = false;
-                        }
-                    }
-                }
-            }
-
-        /// <summary>
-        /// Sets or gets the file path to the selected
-        /// powershell script.
-        /// </summary>
-        public string SelectedScriptPath
-            {
-            get
-                {
-                return directoryReader.SelectedScriptPath;
-                }
-            set
-                {
-                if(value != null)
-                    {
-                    directoryReader.SelectedScriptPath = value;
-                    }
-                }
-            }
-
-        /// Updates the list of scripts based on the currently
-        /// selected category.
-        /// Finds all files with a .ps1 file extension in the 
-        /// selected category folder and stores each file name
-        /// excluding the file extension.
-        public void UpdateScriptFilesList()
-            {
-            directoryReader.UpdateScriptFilesList();
-            }
-
-        /// <summary>
-        /// Returns true if a powershell script has been selected.
-        /// </summary>
-        public bool IsScriptSelected 
-            {
-            get
-                {
-                return directoryReader.IsScriptSelected;
-                }
-            set
-                {
-                directoryReader.IsScriptSelected = value;
-                OnPropertyChanged("IsScriptSelected");
-                }
-            }
+        }
 
         /// <summary>
         /// Gets a collection of collections represnting the different
@@ -536,46 +532,14 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Clears the script session, and resets the program state 
-        /// back to the initial state.
+        /// Gets a collection of strings representing
+        /// script input checkbox values.
         /// </summary>
-        public void ClearScriptSession()
-            {
-            directoryReader.ClearSesssion();
-            scriptReader.ClearSession();
-            powershellExecuter.ClearSession();
-            UpdateScriptCategoriesList();
-            SetInitialScriptCategory();
-            IsScriptSelected = false;
-
-        }
-
-       
-        /// <summary>
-        /// Gets the script output and filters it into the different types
-        /// of script output. Calls the properties responsible for each of
-        /// the output types.
-        /// </summary>
-        public void FilterScriptExecutionOutput(string output)
+        public ObservableCollection<CheckboxArgument> ScriptCheckboxVariables
         {
-            // Må oppdatere OutputStreamsContainsData når denne oppdateres
-            int stdPrefixLength  = powershellExecuter.StandardOutputPrefix.Length;
-            int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
-            
-            if (output.Substring(0,stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
+            get
             {
-                // If Write-Output is standard output
-                ScriptExecutionOutputStandard = output.Substring(stdPrefixLength);
-            }
-            else if(output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix))
-            {
-                // If Write-Output is custom output
-                ScriptExecutionOutputCustom = output.Substring(custPrefixLength);
-            }
-            else
-            {
-                // Miss-typed and unspecified Write-Output contents are not filtered
-                ScriptExecutionOutputStandard = output;
+                return scriptReader.ScriptCheckboxVariables;
             }
         }
 
@@ -720,6 +684,36 @@ namespace PsGui.ViewModels
         }
 
         /// <summary>
+        /// Fills the list of script categories based on 
+        /// the directories found in the Module-folder. Uses
+        /// the SelectedScriptCategory property value to set the
+        /// selected script boolean value in the list object.
+        /// @Throws PsGuiException
+        /// </summary>
+        public void UpdateScriptCategoriesList()
+        {
+            directoryReader.UpdateScriptCategoriesList();
+            foreach (ScriptCategory cat in ScriptCategoryBrowser)
+            {
+                if (cat.FriendlyName.Equals(directoryReader.SelectedCategoryName)
+                    && cat.IsSelectedCategory != true)
+                {
+                    cat.IsSelectedCategory = true;
+                }
+            }
+        }
+
+        /// Updates the list of scripts based on the currently
+        /// selected category.
+        /// Finds all files with a .ps1 file extension in the 
+        /// selected category folder and stores each file name
+        /// excluding the file extension.
+        public void UpdateScriptFilesList()
+        {
+            directoryReader.UpdateScriptFilesList();
+        }
+
+        /// <summary>
         /// Returns true if any of the output streams contains data.
         /// </summary>
         /// <returns>True/false</returns>
@@ -750,5 +744,21 @@ namespace PsGui.ViewModels
             ScriptExecutionProgressCurrentOperation = "";
             ScriptExecutionProgressPercentComplete  = "";
         }
+
+        /// <summary>
+        /// Clears the script session, and resets the program state 
+        /// back to the initial state.
+        /// </summary>
+        public void ClearScriptSession()
+        {
+            directoryReader.ClearSesssion();
+            scriptReader.ClearSession();
+            powershellExecuter.ClearSession();
+            UpdateScriptCategoriesList();
+            SetInitialScriptCategory();
+            IsScriptSelected = false;
+            isBusy           = false;
+        }
+
     }
 }
