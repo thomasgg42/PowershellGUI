@@ -371,6 +371,7 @@ namespace PsGui.ViewModels
                         ScriptUsernameVariables.Clear();
                         ScriptPasswordVariables.Clear();
                         ScriptMultiLineVariables.Clear();
+                        ScriptCheckboxVariables.Clear();
                         ScriptVariables.Clear();
 
                         IsScriptSelected = true;
