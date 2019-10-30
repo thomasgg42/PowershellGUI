@@ -62,8 +62,14 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private async Task ExecutePowershellScriptAsync(object obj)
         {
+            // Disable UI elements
             isBusy = true;
+            scriptReader.SetArgumentsEnabled(false);
+
+            // Add user input to script parameters
             powershellExecuter.SetScriptParameters(ScriptVariables);
+
+            // Execute script asynchronously
             await Task.Run(() =>
             {
                 using (PowerShell psInstance = PowerShell.Create())
@@ -106,8 +112,11 @@ namespace PsGui.ViewModels
                    // powershellExecuter.CollectPowershellScriptErrors(psInstance);
                 }
             });
-            ClearScriptSession();
+
             isBusy = false;
+            scriptReader.SetArgumentsEnabled(true);
+            ClearScriptSession();
+            
         }
 
         /// <summary>
@@ -156,12 +165,12 @@ namespace PsGui.ViewModels
             if (output.Substring(0, stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
             {
                 // If Write-Output is standard output
-                ScriptExecutionOutputStandard = output.Substring(stdPrefixLength);
+                ScriptExecutionOutputStandard += output.Substring(stdPrefixLength);
             }
             else if (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix))
             {
                 // If Write-Output is custom output
-                ScriptExecutionOutputCustom = output.Substring(custPrefixLength);
+                ScriptExecutionOutputCustom += output.Substring(custPrefixLength);
             }
             else
             {
@@ -569,7 +578,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionOutputStandard += value;
+                    powershellExecuter.ScriptExecutionOutputStandard = value;
                     OnPropertyChanged("ScriptExecutionOutputStandard");
                 }
             }
@@ -589,7 +598,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionOutputCustom += value;
+                    powershellExecuter.ScriptExecutionOutputCustom = value;
                     OnPropertyChanged("ScriptExecutionOutputCustom");
                 }
             }
@@ -649,7 +658,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorException += value;
+                    powershellExecuter.ScriptExecutionErrorException = value;
                     OnPropertyChanged("ScriptExecutionErrorOutput");
                 }
             }
@@ -669,7 +678,7 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorDetails += value;
+                    powershellExecuter.ScriptExecutionErrorDetails = value;
                     OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }

@@ -163,7 +163,9 @@
 
                 <DataTemplate DataType="{x:Type models:CheckboxArgument}">
                     <StackPanel Margin="0 5 5 0">
-                        <CheckBox></CheckBox>
+                        <!-- FIKS ISENABLED, mangler nok kun en onpropertychanged som må trigges fra vm-->
+                        <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
                 </DataTemplate>
 

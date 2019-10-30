@@ -69,12 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\AsyncCommand.cs" />
     <Compile Include="Converters\CommandHandlerAsync.cs" />
     <Compile Include="Converters\CommandHandler.cs" />
-    <Compile Include="Converters\IAsyncCommand.cs" />
     <Compile Include="Converters\PasswordBoxAssistant.cs" />
-    <Compile Include="Converters\TaskUtilities.cs" />
     <Compile Include="Models\PowershellExecuter\CheckboxArgument.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />
     <Compile Include="Models\PowershellExecuter\PasswordArgument.cs" />

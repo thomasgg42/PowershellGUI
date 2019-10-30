@@ -395,5 +395,21 @@ namespace PsGui.Models.PowershellExecuter
             _scriptDescription = "";
             _scriptHeader = "";
             }
+
+        /// <summary>
+        /// Locks all the script arguments, setting their lock out value to true
+        /// </summary>
+        /// <param name="enabled">true/false</param>
+        public void SetArgumentsEnabled(bool enabled)
+        {
+            foreach(CollectionContainer container in _scriptVariables)
+            {
+                foreach (ScriptArgument arg in container.Collection)
+                {
+                    arg.IsEnabled = enabled;
+                }
+            }
+        }
+
         }
     }

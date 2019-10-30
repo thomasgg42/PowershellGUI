@@ -15,6 +15,7 @@
         private string _inputDescription;
         private string _inputType;
         private string _inputValue;
+        private bool   _isEnabled;
 
         public ScriptArgument(string key, string description, string type)
             {
@@ -22,6 +23,7 @@
             _inputKey         = key;
             _inputDescription = description;
             _inputType        = type;
+            _isEnabled        = true;
             ClearUserInput();
             }
 
@@ -120,6 +122,21 @@
             }
 
         /// <summary>
+        /// Sets or gets the script arguments' lock status.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
+            }
+        }
+
+        /// <summary>
         /// Returns true if a script argument contains information.
         /// </summary>
         /// <returns></returns>
@@ -143,5 +160,7 @@
             _inputValue = "";
             }
        
+        
+
         }
     }

@@ -15,6 +15,7 @@ namespace PsGui.Converters
             add    { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+
         public CommandHandlerAsync(Func<object, Task> execute) : this(execute, null) { }
 
         public CommandHandlerAsync(Func<object, Task> execute, Func<object, bool> canExecute)
@@ -24,6 +25,7 @@ namespace PsGui.Converters
         }
 
         public bool CanExecute(object parameter) => this.canExecuteMethod == null || this.canExecuteMethod(parameter);
+
         public async void Execute(object parameter) => await this.executedMethod(parameter);
     }
 }
