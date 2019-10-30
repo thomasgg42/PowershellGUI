@@ -108,7 +108,7 @@ namespace PsGui.Models.PowershellExecuter
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptMultiLineVariables });
                 }
 
-            if (ScriptCheckboxVariables != null & ScriptCheckboxVariables.Count > 0)
+            if (ScriptCheckboxVariables != null && ScriptCheckboxVariables.Count > 0)
                 {
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptCheckboxVariables });
                 }

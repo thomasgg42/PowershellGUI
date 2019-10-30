@@ -216,7 +216,18 @@ namespace PsGui.ViewModels
                         return false;
                         }
                     }
+
+                // Her må vi sjekke for noe annet
+                /*
+                foreach (ScriptArgument arg in ScriptCheckboxVariables)
+                {
+                    if (arg.InputValue != null && arg.InputValue.Equals(""))
+                    {
+                        return false;
+                    }
                 }
+                */
+            }
             return true;
             }
 

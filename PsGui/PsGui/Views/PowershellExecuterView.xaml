@@ -10,11 +10,15 @@
              d:DesignHeight="900" d:DesignWidth="450">
 
     <UserControl.Resources>
-        <!-- Collection views for the ObservableCollections in the ViewModel (ScriptReader) -->
+        <!-- 
+            Collection views for the ObservableCollections in the ViewModel (ScriptReader)
+            Required to make the Control visible in the UI.  
+        -->
         <CollectionViewSource x:Key="ScriptTextVariables" Source="{Binding ScriptTextVariables}" />
         <CollectionViewSource x:Key="ScriptUsernameVariables" Source="{Binding ScriptUsernameVariables}" />
         <CollectionViewSource x:Key="ScriptPasswordVariables" Source="{Binding ScriptPasswordVariables}" />
         <CollectionViewSource x:Key="ScriptMultiLineVariables" Source="{Binding ScriptMultiLineVariables}" />
+        <CollectionViewSource x:Key="ScriptCheckboxVariables" Source="{Binding ScriptCheckboxVariables}" />
         
         <!-- 
              Combine the collection view into a single composite collection.
@@ -25,7 +29,8 @@
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
-    <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
+            <CollectionContainer Collection="{Binding Source={StaticResource ScriptCheckboxVariables}}" />
+            <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
 
         <!-- Converter to show and hide controls on true/false values -->
@@ -107,6 +112,7 @@
 
         
         <!-- Checkbox input fields -->
+        <!--
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
@@ -126,7 +132,7 @@
             </ItemsControl.Resources>
 
         </ItemsControl>
-
+-->
         <!-- Single line input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
@@ -152,6 +158,12 @@
                         <PasswordBox x:Name="PasswordBox"
                                      pw:PasswordBoxAssistant.BindPassword="True"
                                      pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </StackPanel>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type models:CheckboxArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <CheckBox></CheckBox>
                     </StackPanel>
                 </DataTemplate>
 
