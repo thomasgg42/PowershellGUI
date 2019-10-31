@@ -30,7 +30,7 @@
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptCheckboxVariables}}" />
-            <!--    <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
+       <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
 
         <!-- Converter to show and hide controls on true/false values -->
@@ -85,6 +85,9 @@
                                                    RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                   AncestorType={x:Type ItemsControl}}}"
                                  CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}"
                                  IsChecked="{Binding Path=IsSelectedCategory}"
                                  Margin="0 0 0 5" />
                 </DataTemplate>
@@ -96,7 +99,8 @@
                   SelectedItem="{Binding Path=SelectedScriptFile, Mode=Default}"
                   Grid.Column="0" Grid.Row="2"
                   Grid.ColumnSpan="3"
-                  Margin="8,10,12,0"/>
+                  Margin="8,10,12,0"
+                  IsEnabled="{Binding Path=CanInteract}"/>
         
         <!-- Header: Input-->
         <TextBlock Text="Input" Grid.Row="3"
@@ -110,29 +114,6 @@
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
 
-        
-        <!-- Checkbox input fields -->
-        <!--
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
-                      Grid.Column="0" Grid.Row="4"
-                      Grid.ColumnSpan="3">
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type models:CheckboxArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <CheckBox Visibility="Visible">t</CheckBox>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.Resources>
-
-        </ItemsControl>
--->
         <!-- Single line input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
                       Grid.Column="0" Grid.Row="4"
@@ -148,7 +129,10 @@
                 <DataTemplate DataType="{x:Type models:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
                     </StackPanel>
                 </DataTemplate>
 
@@ -157,7 +141,10 @@
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <PasswordBox x:Name="PasswordBox"
                                      pw:PasswordBoxAssistant.BindPassword="True"
-                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
                     </StackPanel>
                 </DataTemplate>
 
@@ -165,14 +152,19 @@
                     <StackPanel Margin="0 5 5 0">
                         <!-- FIKS ISENABLED, mangler nok kun en onpropertychanged som må trigges fra vm-->
                         <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                  IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}"/>
                     </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type models:TextArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.Resources>
@@ -196,7 +188,10 @@
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Visible" />
+                                 VerticalScrollBarVisibility="Visible"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}"/>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

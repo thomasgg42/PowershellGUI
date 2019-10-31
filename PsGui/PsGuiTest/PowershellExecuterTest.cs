@@ -89,6 +89,8 @@ namespace PsGuiTest
 
             // Test exception if script files does not exist
 
+            Assert.AreEqual(false, psExecViewModel.IsBusy);
+            Assert.AreEqual(true, psExecViewModel.CanInteract);
 
             // Test execute button (input field contents)
             Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));
@@ -125,8 +127,25 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.ScriptTextVariables.Count == 3);
             Assert.AreEqual(true, psExecViewModel.ScriptMultiLineVariables.Count == 1);
 
+            Assert.AreEqual(false, psExecViewModel.IsBusy);
+            Assert.AreEqual(true, psExecViewModel.CanInteract);
+
             // Test execute button
             Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));
+        }
+
+        /// <summary>
+        /// When a script has been selected and execution is in progress:
+        /// - The IsScriptSelected shall equal true
+        /// - The SelectedScriptPath shall equal the relative file path to the selected script
+        /// - 
+        /// - IsBusy shall return true.
+        /// - CanInteract shall return false.
+        /// </summary>
+        [TestMethod]
+        public void ScriptExecutionstartedTest()
+        {
+
         }
 
         /// <summary>
@@ -197,6 +216,9 @@ namespace PsGuiTest
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputCustom);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorException);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorDetails);
+
+            Assert.AreEqual(false, psExecViewModel.IsBusy);
+            Assert.AreEqual(true, psExecViewModel.CanInteract);
 
             // Test execute button
             Assert.AreEqual(false, ExecuteButtonIsActive(psExecViewModel));

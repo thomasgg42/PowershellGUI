@@ -20,7 +20,8 @@ namespace PsGui.ViewModels
         private PowershellExecuter powershellExecuter;
 
 
-        private bool isBusy = false;
+        private bool   _isBusy;
+        private bool   _canInteract;
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
         // The modulePath contains the relative file path to the scripts folder.
@@ -63,7 +64,7 @@ namespace PsGui.ViewModels
         private async Task ExecutePowershellScriptAsync(object obj)
         {
             // Disable UI elements
-            isBusy = true;
+            IsBusy = true;
             scriptReader.SetArgumentsEnabled(false);
 
             // Add user input to script parameters
@@ -113,7 +114,7 @@ namespace PsGui.ViewModels
                 }
             });
 
-            isBusy = false;
+            IsBusy = false;
             scriptReader.SetArgumentsEnabled(true);
             ClearScriptSession();
             
@@ -187,7 +188,7 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
             {
-            if(isBusy == true)
+            if(IsBusy == true)
             {
                 return false;
             }
@@ -310,19 +311,22 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
             {
-            _modulePath         = modulePath + "\\" + moduleFolderName + "\\";
-            directoryReader     = new DirectoryReader(_modulePath);
-            scriptReader        = new ScriptReader();
+            IsBusy                = false;
+            CanInteract           = true;
+            _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
+            directoryReader       = new DirectoryReader(_modulePath);
+            scriptReader          = new ScriptReader();
+
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
-            powershellExecuter  = new PowershellExecuter();
 
-            RadioButtonChecked  = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
+            powershellExecuter            = new PowershellExecuter();
+            RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
-            
+            ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
             //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
-            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
-            }
+
+        }
 
         /// <summary>
         /// Sets or gets the filepath to the "Module" folder containing
@@ -444,6 +448,39 @@ namespace PsGui.ViewModels
             {
                 directoryReader.IsScriptSelected = value;
                 OnPropertyChanged("IsScriptSelected");
+            }
+        }
+
+        /// <summary>
+        /// Sets or gets the busy state. Enables or disables 
+        /// script argument changes.
+        /// </summary>
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+            set
+            {
+                _isBusy = value;
+                CanInteract = !_isBusy;
+            }
+        }
+
+        /// <summary>
+        /// Sets or gets the UI element interaction state.
+        /// </summary>
+        public bool CanInteract
+        {
+            get
+            {
+                return _canInteract;
+            }
+            set
+            {
+                _canInteract = value;
+                OnPropertyChanged("CanInteract");
             }
         }
 
@@ -778,7 +815,7 @@ namespace PsGui.ViewModels
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
             IsScriptSelected = false;
-            isBusy           = false;
+            IsBusy           = false;
         }
 
     }
