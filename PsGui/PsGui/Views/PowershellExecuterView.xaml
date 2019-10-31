@@ -29,8 +29,13 @@
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
-            <CollectionContainer Collection="{Binding Source={StaticResource ScriptCheckboxVariables}}" />
-       <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
+            
+            <!-- 
+                 Folowing collections are taken out of the CompositeCollection due to their
+                 need of being separated from text input elements 
+            -->
+            <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptCheckboxVariables}}" /> -->
+            <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
 
         <!-- Converter to show and hide controls on true/false values -->
@@ -44,6 +49,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -113,10 +119,35 @@
                 Command="{Binding Path=ScriptDescriptionButtonPushed}"
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
+        
+        <!-- Checkbox input fields -->
 
-        <!-- Single line input fields -->
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
+        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}"
                       Grid.Column="0" Grid.Row="4"
+                      Grid.ColumnSpan="3">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0 5 5 0">
+                        <CheckBox Content="{Binding InputKey}"
+                                  IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+
+        <!-- Single line string input fields -->
+        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
+                      Grid.Column="0" Grid.Row="5"
                       Grid.ColumnSpan="3">
             
             <ItemsControl.ItemsPanel>
@@ -148,16 +179,6 @@
                     </StackPanel>
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type models:CheckboxArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <!-- FIKS ISENABLED, mangler nok kun en onpropertychanged som må trigges fra vm-->
-                        <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  IsEnabled="{Binding DataContext.CanInteract,
-                                                      RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                     AncestorType={x:Type ItemsControl}}}"/>
-                    </StackPanel>
-                </DataTemplate>
-
                 <DataTemplate DataType="{x:Type models:TextArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
@@ -171,9 +192,9 @@
             
         </ItemsControl>
 
-        <!-- Multiline input fields -->
+        <!-- Multiline string input fields -->
         <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}"
-                      Grid.Column="0" Grid.Row="5"
+                      Grid.Column="0" Grid.Row="6"
                       Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -197,21 +218,20 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-
         <!-- Execute button -->
         <Button Command="{Binding Path=ExecuteButtonPushed}"
-                Grid.Row="6" Grid.Column="1"
+                Grid.Row="7" Grid.Column="1"
                 Content="Execute"
                 Margin="10 10 10 0"
                 IsDefault="True" />
         
         <!-- Header: Output -->
         <TextBlock Text="Output" FontWeight="Bold"
-                   Grid.Row="7" Grid.Column="0" 
+                   Grid.Row="8" Grid.Column="0" 
                    Margin="0 10 0 0" />
 
         <!-- Output field -->
-        <ScrollViewer Grid.Row="8" Grid.Column="0"
+        <ScrollViewer Grid.Row="9" Grid.Column="0"
                       Grid.ColumnSpan="3"
                       Margin="0 10 0 0">
             <TabControl BorderThickness="0" Margin="0 10 0 0">
@@ -227,7 +247,8 @@
             </TabControl>
         </ScrollViewer>
 
-        <StatusBar Grid.Row="9" 
+        <!-- Status bar -->
+        <StatusBar Grid.Row="11" 
                    Grid.Column="0" 
                    Grid.ColumnSpan="3"
                    Background="White">
