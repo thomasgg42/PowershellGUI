@@ -316,11 +316,11 @@ namespace PsGui.ViewModels
             _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
             directoryReader       = new DirectoryReader(_modulePath);
             scriptReader          = new ScriptReader();
+            powershellExecuter    = new PowershellExecuter();
 
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
 
-            powershellExecuter            = new PowershellExecuter();
             RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
             ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
@@ -401,7 +401,8 @@ namespace PsGui.ViewModels
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
-
+                        ScriptExecutionProgressPercentComplete  = "0";
+                        ScriptExecutionProgressCurrentOperation = "";
                         // If previous session output/errors, clear them
                         if (OutputStreamsContainsData())
                         {

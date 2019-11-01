@@ -121,7 +121,6 @@
         </Button>
         
         <!-- Checkbox input fields -->
-
         <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}"
                       Grid.Column="0" Grid.Row="4"
                       Grid.ColumnSpan="3">
@@ -143,7 +142,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
 
         <!-- Single line string input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
@@ -259,6 +257,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -266,7 +265,8 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Row="0"
-                           Grid.Column="0">
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2">
                 <TextBlock Text="{Binding Path=ScriptExecutionProgressCurrentOperation}" />
             </StatusBarItem>
             <StatusBarItem Grid.Row="0" 
