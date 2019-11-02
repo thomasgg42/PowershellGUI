@@ -13,5 +13,6 @@ namespace PsGui.Views
             InitializeComponent();
             this.DataContext = new PsGui.ViewModels.MainViewModel();
             }
+
         }
     }

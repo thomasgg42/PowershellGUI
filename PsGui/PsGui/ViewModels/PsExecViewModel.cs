@@ -179,6 +179,9 @@ namespace PsGui.ViewModels
                 ScriptExecutionOutputStandard = output;
             }
         }
+        
+
+
 
         /// <summary>
         /// Returns true if a selected powershell script
@@ -285,6 +288,7 @@ namespace PsGui.ViewModels
                      scriptReader.ScriptDescription.Equals(""))
                 {
                 System.Windows.MessageBox.Show("No description provided");
+                
                 }
             }
 

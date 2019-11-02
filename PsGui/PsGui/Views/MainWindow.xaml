@@ -3,23 +3,51 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+       
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
         Title="PSGUI"
         Height="600" Width="450"
         MinHeight="600" MinWidth="450"
-        MaxHeight="900" MaxWidth="450">
+         MaxWidth="450">
 
-    <Border Padding="10">
+    <Border Padding="0 0 0 0">
+        <Grid DataContext="{Binding Path=Tabs[0]}">
+            <local:PowershellExecuterView />
+        </Grid>
+
+        <!--
         <Grid>
+            <dragablz:TabablzControl BorderThickness="0">
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController />
+                </dragablz:TabablzControl.InterTabController>
+                <TabItem DataContext="{Binding Path=Tabs[0]}" x:Name="Tab1" Header="{Binding Path=TabName}">
+                    <local:PowershellExecuterView />
+                </TabItem>
+            </dragablz:TabablzControl>
+            
+            -->
+            <!--
             <TabControl Padding="10">
                 <TabItem DataContext="{Binding Path=Tabs[0]}" x:Name="Tab1" Header="{Binding Path=TabName}">
                     <local:PowershellExecuterView />
                 </TabItem>
-                <TabItem DataContext="{Binding Path=Tabs[1]}" x:Name="Tab2" Header="{Binding Path=TabName}">
-                    
-                </TabItem>
             </TabControl>
-        </Grid>
+            
+        </Grid> 
+        -->
+        
     </Border>
 </Window>

@@ -5,6 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:PsGui.Models.PowershellExecuter"
              xmlns:pw="clr-namespace:PsGui.Converters"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+             
              mc:Ignorable="d" 
              MaxHeight="900" MaxWidth="450"
              d:DesignHeight="900" d:DesignWidth="450">
@@ -49,27 +53,28 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*"    /> 
-            <RowDefinition Height="auto" /> <!-- Statusbar testt -->
+            <RowDefinition Height="auto" /> <!-- 0 Header: Category -->
+            <RowDefinition Height="auto" /> <!-- 1 Script category radio buttons  -->
+            <RowDefinition Height="auto" /> <!-- 2 Script file dropdown menu -->
+            <RowDefinition Height="auto" /> <!-- 3 Header: Input-->
+            <RowDefinition Height="auto" /> <!-- 4 Script info button -->
+            <RowDefinition Height="auto" /> <!-- 5 Checkbox input fields -->
+            <RowDefinition Height="auto" /> <!-- 6 Single line string input fields -->
+            <RowDefinition Height="auto" /> <!-- 7 Multiline string input fields -->
+            <RowDefinition Height="auto" /> <!-- 8 Execute button -->
+            <RowDefinition Height="*"    /> <!-- 9 Output field -->
+            <RowDefinition Height="auto" /> <!-- 10 Statusbar-->
         </Grid.RowDefinitions>
         
         <!-- Header: Category -->
         <TextBlock Text="Category" Grid.Row="0" 
-                   Grid.Column="0" Margin=" 0 0 0 10" 
+                   Grid.Column="0" Margin="10 10 0 10"
                    FontWeight="Bold" />
 
         <!-- Script category radio buttons  -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" 
-                      Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
+        <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" Grid.Row="1"
+                      Margin="10 0 0 0"
+                      Grid.Column="0" Grid.ColumnSpan="3">
             <!-- Script category panel setup -->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -101,28 +106,30 @@
         </ItemsControl>
         
         <!-- Script file dropdown menu -->
-        <ComboBox ItemsSource="{Binding Path=ScriptFileBrowser}"
+        <ComboBox ItemsSource="{Binding Path=ScriptFileBrowser}" Grid.Row="2"
                   SelectedItem="{Binding Path=SelectedScriptFile, Mode=Default}"
-                  Grid.Column="0" Grid.Row="2"
+                  Grid.Column="0"
                   Grid.ColumnSpan="3"
-                  Margin="8,10,12,0"
+                  Margin="10 10 10 0"
                   IsEnabled="{Binding Path=CanInteract}"/>
         
         <!-- Header: Input-->
         <TextBlock Text="Input" Grid.Row="3"
                    Grid.Column="0" FontWeight="Bold"
-                   Margin="0 10 0 0" />
+                   Margin="10 10 0 0" />
 
-        <!-- Script info button -->
-        <Button Content="Script description" Grid.Row="3" Grid.Column="3"
+        <!-- Script description button -->
+        <Button Content="Description" Grid.Row="4" 
+                Grid.Column="3"
                 Margin="10 10 10 0"
                 Command="{Binding Path=ScriptDescriptionButtonPushed}"
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
         
         <!-- Checkbox input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}"
-                      Grid.Column="0" Grid.Row="4"
+        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="5"
+                      Margin="10 0 0 0"
+                      Grid.Column="0"
                       Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -144,8 +151,9 @@
         </ItemsControl>
 
         <!-- Single line string input fields -->
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}"
-                      Grid.Column="0" Grid.Row="5"
+        <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="6"
+                      Margin="10 0 0 0"
+                      Grid.Column="0"
                       Grid.ColumnSpan="3">
             
             <ItemsControl.ItemsPanel>
@@ -191,9 +199,9 @@
         </ItemsControl>
 
         <!-- Multiline string input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}"
-                      Grid.Column="0" Grid.Row="6"
-                      Grid.ColumnSpan="3">
+        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}" Grid.Row="7"
+                      Margin="10 0 0 0"
+                      Grid.Column="0" Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="1" />
@@ -217,39 +225,73 @@
         </ItemsControl>
 
         <!-- Execute button -->
-        <Button Command="{Binding Path=ExecuteButtonPushed}"
-                Grid.Row="7" Grid.Column="1"
+        <Button Command="{Binding Path=ExecuteButtonPushed}" Grid.Row="8"
+                Grid.Column="1"
                 Content="Execute"
-                Margin="10 10 10 0"
+                Margin="10 10 10 10"
                 IsDefault="True" />
         
-        <!-- Header: Output -->
-        <TextBlock Text="Output" FontWeight="Bold"
-                   Grid.Row="8" Grid.Column="0" 
-                   Margin="0 10 0 0" />
-
         <!-- Output field -->
-        <ScrollViewer Grid.Row="9" Grid.Column="0"
-                      Grid.ColumnSpan="3"
-                      Margin="0 10 0 0">
-            <TabControl BorderThickness="0" Margin="0 10 0 0">
-                <TabItem Header="Output">
+        <dragablz:TabablzControl Grid.Row="9"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="3"
+                                 FixedHeaderCount="2" 
+                                 Background="#e8eaf6"
+                                 BorderThickness="0">
+            <dragablz:TabablzControl.InterTabController>
+                <dragablz:InterTabController />
+            </dragablz:TabablzControl.InterTabController>
+            <TabItem Header="Output">
+                <ScrollViewer>
                     <TextBlock Text="{Binding Path=ScriptExecutionOutputCustom}"
                                TextWrapping="Wrap"
-                               FontSize="12"/>
-                </TabItem>
-                <TabItem Header="Errors">
+                               FontSize="12"
+                               Margin="10 10 10 0"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Errors">
+                <ScrollViewer>
                     <TextBlock Text="{Binding Path=ScriptExecutionErrorOutput}"
-                               TextWrapping="Wrap" />
-                </TabItem>
-            </TabControl>
-        </ScrollViewer>
+                               TextWrapping="Wrap"
+                               Margin="10 10 10 0"/>
+                </ScrollViewer>
+            </TabItem>
+        </dragablz:TabablzControl>
 
         <!-- Status bar -->
-        <StatusBar Grid.Row="11" 
+        <!--
+        <Grid Grid.Row="10" 
                    Grid.Column="0" 
                    Grid.ColumnSpan="3"
-                   Background="White">
+                   Background="White"
+                   Margin="10 0 10 0">
+            <ProgressBar Value="{Binding Path=ScriptExecutionProgressPercentComplete}" Height="18" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="{Binding Path=ScriptExecutionProgressCurrentOperation}" />
+        </Grid>
+        -->
+
+        <Grid Grid.Row="10" 
+              Grid.Column="0" 
+              Grid.ColumnSpan="3"
+              Background="White"
+              Margin="0 0 0 0"
+              Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
+            <ProgressBar Minimum="0" 
+                Maximum="100"
+                Value="{Binding ScriptExecutionProgressPercentComplete}"
+                Height="18"
+                Name="pbStatus" />
+            <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" 
+           HorizontalAlignment="Center" 
+           VerticalAlignment="Center" />
+        </Grid>
+
+        <!--
+        <StatusBar Grid.Row="10" 
+                   Grid.Column="0" 
+                   Grid.ColumnSpan="3"
+                   Background="White"
+                   Margin="10 0 10 0">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -274,6 +316,7 @@
                 <ProgressBar Value="{Binding Path=ScriptExecutionProgressPercentComplete}" Width="120" Height="18"/>
             </StatusBarItem>
         </StatusBar>
+       -->
 
     </Grid>
 </UserControl>
