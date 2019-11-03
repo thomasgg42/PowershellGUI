@@ -87,12 +87,20 @@
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
     <Compile Include="Models\PowershellExecuter\TextArgument.cs" />
     <Compile Include="Models\PowershellExecuter\UsernameArgument.cs" />
+    <Compile Include="ViewModels\DialogBoxViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModels\PsExecViewModel.cs" />
+    <Compile Include="Views\DialogBoxView.xaml.cs">
+      <DependentUpon>DialogBoxView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PowershellExecuterView.xaml.cs">
       <DependentUpon>PowershellExecuterView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\DialogBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

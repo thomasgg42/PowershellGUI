@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -179,9 +180,6 @@ namespace PsGui.ViewModels
                 ScriptExecutionOutputStandard = output;
             }
         }
-        
-
-
 
         /// <summary>
         /// Returns true if a selected powershell script
@@ -278,19 +276,47 @@ namespace PsGui.ViewModels
         /// Displays a pop-up box with script information.
         /// </summary>
         private void GetScriptDescription(object descButton)
-            {
+        {
             if (scriptReader.ScriptDescription != null &&
                !(scriptReader.ScriptDescription.Equals("")))
-                {
+            {
                 System.Windows.MessageBox.Show(scriptReader.ScriptDescription);
-                }
-            else if (scriptReader.ScriptDescription != null &&
-                     scriptReader.ScriptDescription.Equals(""))
-                {
-                System.Windows.MessageBox.Show("No description provided");
-                
-                }
             }
+            else if (scriptReader.ScriptDescription != null &&
+                    scriptReader.ScriptDescription.Equals(""))
+            {
+                System.Windows.MessageBox.Show("No description provided");
+            }
+        }
+
+        /// <summary>
+        /// Provides a replacement for the Windows.MessageBox by using
+        /// Material Design and DialogHost. The DialogHost uses its own
+        /// View and ViewModel to define the looks and feels.
+        /// The RootDialog is defined in MainWindow.xaml and acts as a 
+        /// container of the contents that is to be set inactive while
+        /// the box is active.
+        /// </summary>
+        /// <param name="descButton">Sender</param>
+        /// <returns>void task</returns>
+        private async Task GetScriptDescriptionAsync(object descButton)
+        {
+            string msg   = "No script description provided.";
+            string title = SelectedScriptFile;
+
+            if (scriptReader.ScriptDescription != null &&
+               !(scriptReader.ScriptDescription.Equals("")))
+            {
+                msg = scriptReader.ScriptDescription;
+            }
+
+            var view = new Views.DialogBoxView
+            {
+                DataContext = new DialogBoxViewModel(title, msg)
+            };
+
+            await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog");
+        }
 
         /// <summary>
         /// Sets the initial script category on program startup.
@@ -326,8 +352,10 @@ namespace PsGui.ViewModels
             SetInitialScriptCategory();
 
             RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
-            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
+            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
             ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
+            
+            // ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
             //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
 
         }
@@ -402,6 +430,7 @@ namespace PsGui.ViewModels
                         ScriptCheckboxVariables.Clear();
                         ScriptVariables.Clear();
 
+                        directoryReader.SelectedScript = value; // forsikre seg om at denne ikke ødelegger noe
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);

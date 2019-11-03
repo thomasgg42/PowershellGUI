@@ -18,16 +18,24 @@
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
         Title="PSGUI"
-        Height="600" Width="450"
+        Height="auto" Width="450"
         MinHeight="600" MinWidth="450"
-         MaxWidth="450">
+        MaxWidth="450">
 
-    <Border Padding="0 0 0 0">
-        <Grid DataContext="{Binding Path=Tabs[0]}">
-            <local:PowershellExecuterView />
-        </Grid>
+    <!-- 
+        Wrapping contents into a DialogHost. This allows everything wrapped
+        to fade out upon opening a Material Design Dialog Box.
+    -->
+    <materialDesign:DialogHost Identifier="RootDialog" CloseOnClickAway="True">
+        <Border Padding="0 0 0 0">
+            <Grid DataContext="{Binding Path=Tabs[0]}">
+                <local:PowershellExecuterView />
+            </Grid>
+        </Border>
+    </materialDesign:DialogHost>
 
-        <!--
+
+            <!--
         <Grid>
             <dragablz:TabablzControl BorderThickness="0">
                 <dragablz:TabablzControl.InterTabController>
@@ -49,5 +57,4 @@
         </Grid> 
         -->
         
-    </Border>
 </Window>

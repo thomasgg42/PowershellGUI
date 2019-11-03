@@ -1,0 +1,67 @@
+﻿<!--
+     The Material Design dialog box. Replaces System.Windows.MessageBox.
+-->
+    <UserControl x:Class="PsGui.Views.DialogBoxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+
+    <StackPanel Margin="20"
+        Grid.Column="1"
+        MinWidth="300">
+        <TextBlock Text="{Binding Title}"
+                   Style="{StaticResource MaterialDesignTitleTextBlock}" />
+        <TextBlock Text="{Binding Message}"
+                   Margin="0,10,0,20"
+                   MaxWidth="300"
+                   TextWrapping="Wrap" />
+        <Button Content="OK"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Height="30"
+                Width="130"/>
+    </StackPanel>
+    <!--
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Title}" 
+                   Grid.Row="0" 
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Width="10"
+                   Style="{StaticResource MaterialDesignTitleTextBlock}" />
+        <TextBlock Text="{Binding Message}"
+                 TextWrapping="Wrap"
+                 Grid.Row="1" 
+                 Grid.Column="0" 
+                 Grid.ColumnSpan="2"
+                 Margin="0,10,0,20" />
+        <Button Content="OK"
+                Grid.Row="2"
+                Grid.Column="1"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Width="10"/>
+    </Grid>
+        -->
+    
+    <!--
+    <StackPanel Margin="20" Grid.Column="1" MinWidth="300">
+        <TextBlock Text="{Binding Title}" Style="{StaticResource MaterialDesignTitleTextBlock}" />
+        <TextBlock Text="{Binding Message}" Margin="0,10,0,20" />
+        <Button Content="OK" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+    </StackPanel>
+    -->
+</UserControl>

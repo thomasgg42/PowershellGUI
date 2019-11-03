@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:models="clr-namespace:PsGui.Models.PowershellExecuter"
-             xmlns:pw="clr-namespace:PsGui.Converters"
+             xmlns:models="clr-namespace:PsGui.Models"
+             xmlns:psExecModels="clr-namespace:PsGui.Models.PowershellExecuter"
+             xmlns:converters="clr-namespace:PsGui.Converters"
              
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              
              mc:Ignorable="d" 
-             MaxHeight="900" MaxWidth="450"
              d:DesignHeight="900" d:DesignWidth="450">
 
     <UserControl.Resources>
@@ -23,7 +23,7 @@
         <CollectionViewSource x:Key="ScriptPasswordVariables" Source="{Binding ScriptPasswordVariables}" />
         <CollectionViewSource x:Key="ScriptMultiLineVariables" Source="{Binding ScriptMultiLineVariables}" />
         <CollectionViewSource x:Key="ScriptCheckboxVariables" Source="{Binding ScriptCheckboxVariables}" />
-        
+
         <!-- 
              Combine the collection view into a single composite collection.
              Excluding the multiline collection
@@ -44,6 +44,7 @@
 
         <!-- Converter to show and hide controls on true/false values -->
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
     </UserControl.Resources>
 
     <Grid>
@@ -125,6 +126,15 @@
                 Command="{Binding Path=ScriptDescriptionButtonPushed}"
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
+
+        <!--
+        <Button Content="Description" Grid.Row="4" 
+                Grid.Column="3"
+                Margin="10 10 10 0"
+                Command="{Binding Path=ScriptDescriptionButtonPushed}"
+                Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
+        </Button>
+        -->
         
         <!-- Checkbox input fields -->
         <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="5"
@@ -163,7 +173,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type models:UsernameArgument}">
+                <DataTemplate DataType="{x:Type psExecModels:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
@@ -173,19 +183,19 @@
                     </StackPanel>
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type models:PasswordArgument}">
+                <DataTemplate DataType="{x:Type psExecModels:PasswordArgument}">
                     <StackPanel Margin="0 5 5 0" >
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <PasswordBox x:Name="PasswordBox"
-                                     pw:PasswordBoxAssistant.BindPassword="True"
-                                     pw:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     converters:PasswordBoxAssistant.BindPassword="True"
+                                     converters:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                      AncestorType={x:Type ItemsControl}}}" />
                     </StackPanel>
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type models:TextArgument}">
+                <DataTemplate DataType="{x:Type psExecModels:TextArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
@@ -259,17 +269,6 @@
         </dragablz:TabablzControl>
 
         <!-- Status bar -->
-        <!--
-        <Grid Grid.Row="10" 
-                   Grid.Column="0" 
-                   Grid.ColumnSpan="3"
-                   Background="White"
-                   Margin="10 0 10 0">
-            <ProgressBar Value="{Binding Path=ScriptExecutionProgressPercentComplete}" Height="18" HorizontalAlignment="Stretch"/>
-            <TextBlock Text="{Binding Path=ScriptExecutionProgressCurrentOperation}" />
-        </Grid>
-        -->
-
         <Grid Grid.Row="10" 
               Grid.Column="0" 
               Grid.ColumnSpan="3"
@@ -285,38 +284,5 @@
            HorizontalAlignment="Center" 
            VerticalAlignment="Center" />
         </Grid>
-
-        <!--
-        <StatusBar Grid.Row="10" 
-                   Grid.Column="0" 
-                   Grid.ColumnSpan="3"
-                   Background="White"
-                   Margin="10 0 10 0">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2">
-                <TextBlock Text="{Binding Path=ScriptExecutionProgressCurrentOperation}" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Row="0" 
-                           Grid.Column="1">
-                <ProgressBar Value="{Binding Path=ScriptExecutionProgressPercentComplete}" Width="120" Height="18"/>
-            </StatusBarItem>
-        </StatusBar>
-       -->
-
     </Grid>
 </UserControl>
