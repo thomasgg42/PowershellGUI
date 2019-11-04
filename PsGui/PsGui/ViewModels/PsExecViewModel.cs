@@ -86,8 +86,8 @@ namespace PsGui.ViewModels
                     PSDataCollection<PSObject> outputCollection = new PSDataCollection<PSObject>();
 
                     // Collect output in real time
-                    outputCollection.DataAdded += OutputCollection_DataAdded;
-                    psInstance.Streams.Error.DataAdded += Error_DataAdded;
+                    outputCollection.DataAdded            += OutputCollection_DataAdded;
+                    psInstance.Streams.Error.DataAdded    += Error_DataAdded;
                     psInstance.Streams.Progress.DataAdded += Progress_DataAdded;
 
                     // Begin powershell execution and continue control
@@ -100,25 +100,12 @@ namespace PsGui.ViewModels
                     {
                         Thread.Sleep(1000);
                     }
-
-                    // Gather output for the PowershellExecuter object
-                    /*
-                    Collection<PSObject> outputObjects = new Collection<PSObject>();
-                    foreach (PSObject outputItem in outputCollection)
-                    {
-                        outputObjects.Add(outputItem);
-                    }
-                    */
-
-                   // powershellExecuter.CollectPowershellScriptOutput(outputObjects);
-                   // powershellExecuter.CollectPowershellScriptErrors(psInstance);
                 }
             });
 
             IsBusy = false;
             scriptReader.SetArgumentsEnabled(true);
             ClearScriptSession();
-            
         }
 
         /// <summary>

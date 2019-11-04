@@ -256,14 +256,14 @@
                     <TextBlock Text="{Binding Path=ScriptExecutionOutputCustom}"
                                TextWrapping="Wrap"
                                FontSize="12"
-                               Margin="10 10 10 0"/>
+                               Margin="10 10 10 10"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Errors">
                 <ScrollViewer>
                     <TextBlock Text="{Binding Path=ScriptExecutionErrorOutput}"
                                TextWrapping="Wrap"
-                               Margin="10 10 10 0"/>
+                               Margin="10 10 10 10"/>
                 </ScrollViewer>
             </TabItem>
         </dragablz:TabablzControl>
