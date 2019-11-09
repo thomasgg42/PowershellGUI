@@ -16,7 +16,7 @@ namespace PsGui.Models.PowershellExecuter
         private ObservableCollection<CheckboxArgument>  _scriptCheckboxVariables;
 
         private string _scriptDescription;
-        private string _scriptHeader;
+       // private string _scriptHeader;
 
         /// <summary>
         /// Reads the powershell script header's top section.
@@ -26,7 +26,7 @@ namespace PsGui.Models.PowershellExecuter
         private void ReadScriptHeader(int lineNum, string line)
             {
             const int description = 1;
-            const int header = 2;
+           // const int header = 2;
 
             switch (lineNum)
                 {
@@ -35,11 +35,13 @@ namespace PsGui.Models.PowershellExecuter
                     _scriptDescription = ParseQuotationContent(line);
                     break;
                     }
+                /*
                 case header:
                     {
                     _scriptHeader = ParseQuotationContent(line);
                     break;
                     }
+                */
                 }
             }
 
@@ -175,7 +177,7 @@ namespace PsGui.Models.PowershellExecuter
             _scriptMultiLineVariables = new ObservableCollection<MultiLineArgument>();
             _scriptCheckboxVariables  = new ObservableCollection<CheckboxArgument>();
             _scriptDescription        = "";
-            _scriptHeader             = "";
+          //  _scriptHeader             = "";
             }
 
         /// <summary>
@@ -293,6 +295,7 @@ namespace PsGui.Models.PowershellExecuter
         /// Sets or gets the script header from the
         /// header section.
         /// </summary>
+        /*
         public string ScriptHeader
             {
             get
@@ -304,6 +307,7 @@ namespace PsGui.Models.PowershellExecuter
                 _scriptHeader = value;
                 }
             }
+        */
 
         /// <summary>
         /// Reads the selected powershell script and calls the functions
@@ -316,16 +320,16 @@ namespace PsGui.Models.PowershellExecuter
             string[] lines            = System.IO.File.ReadAllLines(scriptPath);
             string scriptHeaderEndTag = "#>";
             int lineNum               = 0;
-            int lastHeaderLine        = 2;
+            int lastHeaderLine        = 1; // Must match number of meta data lines
             try
                 {
                 foreach (string line in lines)
                     {
-                    // if header is completely parsed
+                    // If header is completely parsed
                     if (line.Equals(scriptHeaderEndTag)) { break; }
-                    // If description, header or output
+                    // If script meta data (description...)
                     if (lineNum <= lastHeaderLine) { ReadScriptHeader(lineNum, line); }
-                    // else if input variables to script
+                    // Else if input variables to script
                     else { ReadScriptVariables(line); }
                     lineNum++;
                     }
@@ -393,7 +397,7 @@ namespace PsGui.Models.PowershellExecuter
             ScriptCheckboxVariables.Clear();
             ScriptVariables.Clear();
             _scriptDescription = "";
-            _scriptHeader = "";
+       //     _scriptHeader = "";
             }
 
         /// <summary>

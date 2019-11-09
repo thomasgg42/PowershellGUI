@@ -125,8 +125,10 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
-            ScriptExecutionErrorException += ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString();
-            ScriptExecutionErrorDetails += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString();
+            //ScriptExecutionErrorException += ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString();
+            //ScriptExecutionErrorDetails += ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString();
+
+            FilterScriptExecutionOutput(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString());
         }
 
         /// <summary>
@@ -147,10 +149,14 @@ namespace PsGui.ViewModels
         /// </summary>
         private void FilterScriptExecutionOutput(string output)
         {
-            // Må oppdatere OutputStreamsContainsData når denne oppdateres
-            int stdPrefixLength = powershellExecuter.StandardOutputPrefix.Length;
-            int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
+            // OutputStreamsContainsData must be updated upon updating this function
+            int    stdPrefixLength      = powershellExecuter.StandardOutputPrefix.Length;
+            int    custPrefixLength     = powershellExecuter.CustomOutputPrefix.Length;
+            string newLine              = "\r\n";
+            output                      += newLine;
+            ScriptExecutionOutputCustom += output;
 
+            /*
             if (output.Substring(0, stdPrefixLength).Equals(powershellExecuter.StandardOutputPrefix))
             {
                 // If Write-Output is standard output
@@ -164,8 +170,9 @@ namespace PsGui.ViewModels
             else
             {
                 // Miss-typed and unspecified Write-Output contents are not filtered
-                ScriptExecutionOutputStandard = output;
+                // ScriptExecutionOutputStandard += output;
             }
+            */
         }
 
         /// <summary>

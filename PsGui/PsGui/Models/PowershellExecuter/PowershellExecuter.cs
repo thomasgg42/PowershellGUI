@@ -152,7 +152,7 @@ namespace PsGui.Models.PowershellExecuter
             {
             using (PowerShell psInstance = PowerShell.Create())
                   {
-                 psInstance.AddCommand(scriptPath);
+                 psInstance.AddScript(scriptPath);
                   int argLength = CommandLineArguments.Count;
                   for (int ii = 0; ii < argLength; ii++)
                       {
@@ -160,14 +160,13 @@ namespace PsGui.Models.PowershellExecuter
                       }
 
                   // Prevents displaying objects as objects
-                  psInstance.AddCommand("Out-String");
+                  psInstance.AddScript("Out-String");
 
                   Collection<PSObject> psOutput = psInstance.Invoke();
 
                   CollectPowershellScriptOutput(psOutput);
                   CollectPowershellScriptErrors(psInstance);
                   }
-            
             }
 
         /// <summary>
