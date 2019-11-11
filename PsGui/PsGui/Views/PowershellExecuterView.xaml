@@ -245,13 +245,13 @@
         <dragablz:TabablzControl Grid.Row="9"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="3"
-                                 FixedHeaderCount="2" 
+                                 FixedHeaderCount="1" 
                                  Background="#e8eaf6"
                                  BorderThickness="0">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
             </dragablz:TabablzControl.InterTabController>
-            <TabItem Header="Output">
+            <TabItem Header="Custom">
                 <ScrollViewer>
                     <TextBlock Text="{Binding Path=ScriptExecutionOutputCustom}"
                                TextWrapping="Wrap"
@@ -259,9 +259,17 @@
                                Margin="10 10 10 10"/>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Errors">
+            <TabItem Header="Raw">
                 <ScrollViewer>
-                    <TextBlock Text="{Binding Path=ScriptExecutionErrorOutput}"
+                    <TextBlock Text="{Binding Path=ScriptExecutionOutputRaw}"
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Margin="10 10 10 10"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Detailed errors">
+                <ScrollViewer>
+                    <TextBlock Text="{Binding Path=ScriptExecutionErrorRaw}"
                                TextWrapping="Wrap"
                                Margin="10 10 10 10"/>
                 </ScrollViewer>

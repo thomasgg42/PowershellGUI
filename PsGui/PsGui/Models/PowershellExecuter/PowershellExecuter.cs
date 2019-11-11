@@ -20,17 +20,22 @@ namespace PsGui.Models.PowershellExecuter
         private List<string> _commandLineArguments;
         private List<string> _commandLineArgKeys;
 
-        public string StandardOutputPrefix                    { get; } = "std: ";
-        public string CustomOutputPrefix                      { get; } = "cust: ";
-
-        public string ScriptExecutionOutput                   { get; set; }
-        public string ScriptExecutionOutputStandard           { get; set; }
-        public string ScriptExecutionOutputCustom             { get; set; }
-        public string ScriptExecutionErrorException           { get; set; }
-        public string ScriptExecutionErrorDetails             { get; set; }
-        public string ScriptExecutionErrorCustom              { get; set; }
-        public string ScriptExecutionProgressPercentComplete  { get; set; }
-        public string ScriptExecutionProgressCurrentOperation { get; set; }
+        public string CustomOutputPrefix                         { get; } = "cust: ";
+        public string ScriptExecutionOutput                      { get; set; }
+        public string ScriptExecutionOutputCustom                { get; set; }
+        public string ScriptExecutionOutputRaw                   { get; set; }
+        public string ScriptExecutionErrorCustom                 { get; set; }
+        public string ScriptExecutionErrorRaw                    { get; set; }
+        public string ScriptExecutionErrorException              { get; set; }
+        public string ScriptExecutionErrorDetails                { get; set; }
+        public string ScriptExecutionErrorCategoryInfo           { get; set; }
+        public string ScriptExecutionErrorFullyQualifiedErrorId  { get; set; }
+        public string ScriptExecutionErrorInvocationInfo         { get; set; }
+        public string ScriptExecutionErrorPipelineIterationInfo  { get; set; }
+        public string ScriptExecutionErrorScriptStackTrace       { get; set; }
+        public string ScriptExecutionErrorTargetObject           { get; set; }
+        public string ScriptExecutionProgressPercentComplete     { get; set; }
+        public string ScriptExecutionProgressCurrentOperation    { get; set; }
 
 
         /// <summary>

@@ -120,7 +120,7 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.SelectedScriptPath.Equals(".\\Scripts\\Category1\\test2.ps1")); // tenkt feil?
             Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorException == null);
             Assert.AreEqual(true, psExecViewModel.ScriptExecutionErrorDetails == null);
-            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutputStandard == null);
+            Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutputRaw == null);
             Assert.AreEqual(true, psExecViewModel.ScriptExecutionOutputCustom == null);
             Assert.AreEqual(true, psExecViewModel.ScriptUsernameVariables.Count == 0);
             Assert.AreEqual(true, psExecViewModel.ScriptPasswordVariables.Count == 0);
@@ -176,7 +176,7 @@ namespace PsGuiTest
 
 
             // Test if output strings are not yet defined
-            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputStandard);
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputRaw);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputCustom);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorException);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorDetails);
@@ -212,7 +212,7 @@ namespace PsGuiTest
             Assert.AreEqual(true, psExecViewModel.ScriptFileBrowser[0].Equals("test3"));
 
             // Test if output strings are not yet defined
-            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputStandard);
+            Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputRaw);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionOutputCustom);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorException);
             Assert.AreEqual(null, psExecViewModel.ScriptExecutionErrorDetails);
