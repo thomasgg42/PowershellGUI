@@ -52,7 +52,7 @@ namespace PsGui.ViewModels
             }
 
             // Outdated since async implemented
-  //          ScriptExecutionOutputStandard = powershellExecuter.ScriptExecutionOutput;
+            // ScriptExecutionOutputStandard = powershellExecuter.ScriptExecutionOutput;
             ScriptExecutionErrorException = powershellExecuter.ScriptExecutionErrorException;
             ClearScriptSession();
         }
@@ -126,6 +126,8 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
+            ScriptExecutionErrorCustom = ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message;
+            System.Windows.MessageBox.Show(ScriptExecutionErrorCustom);
             ScriptExecutionErrorTargetObject               = ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString();
             ScriptExecutionErrorScriptStackTrace           = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace.ToString();
             ScriptExecutionErrorFullyQualifiedErrorId      = ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId.ToString();
@@ -135,7 +137,7 @@ namespace PsGui.ViewModels
             //   ScriptExecutionErrorInvocationInfo        = ((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo.ToString();
             //   ScriptExecutionErrorPipelineIterationInfo = ((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo.ToString();
             string errorSeparator = "=======================================================" + newLine;
-            ScriptExecutionErrorRaw = errorSeparator;
+            ScriptExecutionErrorRaw += errorSeparator;
         }
 
         /// <summary>
@@ -425,16 +427,16 @@ namespace PsGui.ViewModels
                         ScriptCheckboxVariables.Clear();
                         ScriptVariables.Clear();
 
-                        directoryReader.SelectedScript = value; // forsikre seg om at denne ikke ødelegger noe
+                        directoryReader.SelectedScript = value;
                         IsScriptSelected = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
                         ScriptExecutionProgressPercentComplete  = "0";
                         ScriptExecutionProgressCurrentOperation = "";
                         // If previous session output/errors, clear them
-                        if (OutputStreamsContainsData())
+                        if (StreamsContainsData())
                         {
-                            ClearOutputStreams();
+                            ClearStreams();
                         }
                     }
                     else
@@ -739,7 +741,7 @@ namespace PsGui.ViewModels
         {
             get
             {
-                return powershellExecuter.ScriptExecutionErrorDetails;
+                return powershellExecuter.ScriptExecutionErrorCustom;
             }
             set
             {
@@ -763,12 +765,21 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null && value != "")
+                if(value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorRaw += value;
-                    powershellExecuter.ScriptExecutionErrorRaw += newLine;
-                    OnPropertyChanged("ScriptExecutionErrorRaw");
+                    if(!value.Equals(""))
+                    {
+                        // If adding additional error text
+                        powershellExecuter.ScriptExecutionErrorRaw = value;
+                        powershellExecuter.ScriptExecutionErrorRaw += newLine;
+                    }
+                    else
+                    {
+                        // If clearing the error text
+                        powershellExecuter.ScriptExecutionErrorRaw = value;
+                    }
                 }
+                OnPropertyChanged("ScriptExecutionErrorRaw");
             }
         }
 
@@ -787,7 +798,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorTargetObject = value;
-                    ScriptExecutionErrorRaw = value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorTargetObject");
                 }
             }
@@ -808,7 +819,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorScriptStackTrace = value;
-                    ScriptExecutionErrorRaw = value;
+                    ScriptExecutionErrorRaw                                += value;
                     OnPropertyChanged("ScriptExecutionErrorScriptStackTrace");
                 }
             }
@@ -829,7 +840,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId = value;
-                    ScriptExecutionErrorRaw = value;
+                    ScriptExecutionErrorRaw                                     += value;
                     OnPropertyChanged("ScriptExecutionErrorFullyQualifiedErrorId");
                 }
             }
@@ -850,7 +861,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorException = value;
-                    ScriptExecutionErrorRaw                          = value;
+                    ScriptExecutionErrorRaw                          += value;
                     OnPropertyChanged("ScriptExecutionErrorOutput");
                 }
             }
@@ -871,7 +882,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorDetails = value;
-                    ScriptExecutionErrorRaw                        = value;
+                    ScriptExecutionErrorRaw                       += value;
                     OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }
@@ -892,7 +903,7 @@ namespace PsGui.ViewModels
                 if(value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorCategoryInfo = value;
-                    ScriptExecutionErrorRaw                             = value;
+                    ScriptExecutionErrorRaw                            += value;
                     OnPropertyChanged("ScriptExecutionErrorCategoryInfo");
                 }
             }
@@ -913,7 +924,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorInvocationInfo  = value;
-                    ScriptExecutionErrorRaw                                = value;
+                    ScriptExecutionErrorRaw                               += value;
                     OnPropertyChanged("ScriptExecutionErrorInvocationInfo");
                 }
             }
@@ -934,7 +945,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorPipelineIterationInfo  = value;
-                    ScriptExecutionErrorRaw                                       = value;
+                    ScriptExecutionErrorRaw                                      += value;
                     OnPropertyChanged("ScriptExecutionErrorPipelineIterationInfo");
 
                 }
@@ -981,14 +992,15 @@ namespace PsGui.ViewModels
         /// Returns true if any of the output streams contains data.
         /// </summary>
         /// <returns>True/false</returns>
-        public bool OutputStreamsContainsData()
+        public bool StreamsContainsData()
         {
-            if((ScriptExecutionOutputRaw != null && ScriptExecutionOutputRaw.Length > 0) ||
-               (ScriptExecutionOutputCustom != null && ScriptExecutionOutputCustom.Length > 0) ||
-               (ScriptExecutionProgressPercentComplete != null && ScriptExecutionProgressPercentComplete.Length > 0) ||
+            // Only checking ErrorRaw because this property will be updated
+            // for each of the specific error properties
+            if((ScriptExecutionOutputRaw                != null && ScriptExecutionOutputRaw.Length > 0) ||
+               (ScriptExecutionOutputCustom             != null && ScriptExecutionOutputCustom.Length > 0) ||
+               (ScriptExecutionProgressPercentComplete  != null && !ScriptExecutionProgressPercentComplete.Equals("0")) ||
                (ScriptExecutionProgressCurrentOperation != null && ScriptExecutionProgressCurrentOperation.Length > 0) ||
-               (ScriptExecutionErrorException != null && ScriptExecutionErrorException.Length > 0) ||
-               (ScriptExecutionErrorDetails != null && ScriptExecutionErrorDetails.Length > 0))
+               (ScriptExecutionErrorRaw                 != null && ScriptExecutionErrorRaw.Length > 0))
             {
                 return true;
             }
@@ -996,17 +1008,50 @@ namespace PsGui.ViewModels
         }
 
         /// <summary>
-        /// Clears the output streams for data. Setting them to an empty string.
+        /// Clears the the different output streams for data. Setting them to their default values.
+        /// </summary>
+        public void ClearStreams()
+        {
+            ClearOutputStreams();
+            ClearProgressStreams();
+            ClearErrorStreams();
+        }
+
+        /// <summary>
+        /// Clears the output streams. Setting them to an empty string.
         /// </summary>
         public void ClearOutputStreams()
         {
-            ScriptExecutionOutputRaw                = "";
-            ScriptExecutionOutputCustom             = "";
-            ScriptExecutionErrorDetails             = "";
-            ScriptExecutionErrorException           = "";
-            ScriptExecutionErrorException           = "";
+            ScriptExecutionOutputRaw = "";
+            ScriptExecutionOutputCustom = "";
+        }
+
+        /// <summary>
+        /// Clears the progress streams. Reseting the percentage stream back to 0
+        /// and the rest of the progress streams back to an empty string.
+        /// </summary>
+        public void ClearProgressStreams()
+        {
             ScriptExecutionProgressCurrentOperation = "";
-            ScriptExecutionProgressPercentComplete  = "";
+            ScriptExecutionProgressPercentComplete = "0";
+        }
+
+        /// <summary>
+        /// Clears the output error streams for data. Setting them to an empty string.
+        /// </summary>
+        public void ClearErrorStreams()
+        {
+            ScriptExecutionErrorCustom                = "";
+            ScriptExecutionErrorRaw                   = "";
+            ScriptExecutionErrorTargetObject          = "";
+            ScriptExecutionErrorScriptStackTrace      = "";
+            ScriptExecutionErrorFullyQualifiedErrorId = "";
+            ScriptExecutionErrorFullyQualifiedErrorId = "";
+            ScriptExecutionErrorDetails               = "";
+            ScriptExecutionErrorException             = "";
+            ScriptExecutionErrorCategoryInfo          = "";
+            ScriptExecutionErrorInvocationInfo        = "";
+            ScriptExecutionErrorPipelineIterationInfo = "";
         }
 
         /// <summary>
