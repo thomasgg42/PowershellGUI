@@ -120,6 +120,7 @@
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Converters\PasswordBoxAssistant.cs" />
     <Compile Include="Models\PowershellExecuter\CheckboxArgument.cs" />
+    <Compile Include="Models\PowershellExecuter\CustomOutput.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />
     <Compile Include="Models\PowershellExecuter\PasswordArgument.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />

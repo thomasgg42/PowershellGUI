@@ -275,6 +275,7 @@ namespace PsGui.Models.PowershellExecuter
             }
         }
 
+
         /// <summary>
         /// Sets or gets the script description from the 
         /// header section.
