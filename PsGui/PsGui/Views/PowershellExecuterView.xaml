@@ -253,10 +253,22 @@
             </dragablz:TabablzControl.InterTabController>
             <TabItem Header="Custom">
                 <ScrollViewer>
+
+
+                    <ItemsControl ItemsSource="{StaticResource ScriptVariables}">
+
+                    </ItemsControl>
+
+
+                    <!--
                     <TextBlock Text="{Binding Path=ScriptExecutionOutputCustom}"
                                TextWrapping="Wrap"
                                FontSize="12"
                                Margin="10 10 10 10"/>
+                    -->
+                    
+                    
+                    
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Raw">

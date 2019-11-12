@@ -128,10 +128,23 @@ namespace PsGui.ViewModels
         {
             //   ScriptExecutionErrorCustom                     = ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message;
             ScriptExecutionOutputCustom.Add(new CustomOutput(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message, CustomOutput.Types.Error));
+            /*
+            if (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null)
+            {
+                ScriptExecutionErrorTargetObject = ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString();
+            }
+            */
 
-            ScriptExecutionErrorTargetObject               = ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString();
-            ScriptExecutionErrorScriptStackTrace           = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace;
-            ScriptExecutionErrorFullyQualifiedErrorId      = ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId;
+            ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ? 
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString() : "");
+
+            ScriptExecutionErrorScriptStackTrace = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace : "");
+
+            ScriptExecutionErrorFullyQualifiedErrorId = (((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId : "");
+
+            // Disse må også endres om de skal benyttes
             //   ScriptExecutionErrorCategoryInfo          = ((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo.ToString();
             //   ScriptExecutionErrorException             = ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString();
             //   ScriptExecutionErrorDetails               = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString();
@@ -165,13 +178,11 @@ namespace PsGui.ViewModels
             int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
             output += newLine;
 
-            if (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix))
+            // ensure substring does not exceed length of output string, causing out of index
+            if (output.Length >= custPrefixLength && (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix)))
             {
-                // If Write-Output is custom output
-
-                // Custom output should contain Write-Error too!
-                // ScriptExecutionOutputCustom += output.Substring(custPrefixLength);
-                ScriptExecutionOutputCustom.Add(new CustomOutput(output.Substring(0, custPrefixLength), CustomOutput.Types.Output));
+                // If Write-Output is custom
+                 ScriptExecutionOutputCustom.Add(new CustomOutput(output.Substring(0, custPrefixLength), CustomOutput.Types.Output));
             }
             else
             {
@@ -979,12 +990,6 @@ namespace PsGui.ViewModels
                 }
             }
         }
-
-
-
-
-
-
 
         /// <summary>
         /// Fills the list of script categories based on 
