@@ -23,8 +23,8 @@ namespace PsGui.Models.PowershellExecuter
 
         public CustomOutput(string text, Types type)
         {
-            Text = "";
-            outputType = type;
+            this.Text = text;
+            this.outputType = type;
         }
 
         public string Text { get; set; }

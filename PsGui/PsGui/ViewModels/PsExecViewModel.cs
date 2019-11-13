@@ -126,15 +126,19 @@ namespace PsGui.ViewModels
         /// <param name="e">Contains the index ID of the added collection item and the ID of the PowerShell instance this event belongs to.</param>
         private void Error_DataAdded(object sender, DataAddedEventArgs e)
         {
-            //   ScriptExecutionErrorCustom                     = ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message;
-            ScriptExecutionOutputCustom.Add(new CustomOutput(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message, CustomOutput.Types.Error));
-            /*
-            if (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null)
+            // Exception.Message is treated as a custom error message and will
+            // be shown together with custom output.
+            if(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message != null)
             {
-                ScriptExecutionErrorTargetObject = ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString();
+                // This error added function is called from an async function,
+                // resulting in the CustomOutput object being created by the
+                // rendering thread and the ObservableCollection created by
+                // the UI thread.
+                App.Current.Dispatcher.Invoke(delegate {
+                    ScriptExecutionOutputCustom.Add(new CustomOutput(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message, CustomOutput.Types.Error));
+                });
             }
-            */
-
+            
             ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ? 
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString() : "");
 
@@ -176,13 +180,20 @@ namespace PsGui.ViewModels
             // must be updated upon updating this function
 
             int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
-            output += newLine;
+            // output += newLine;
 
             // ensure substring does not exceed length of output string, causing out of index
             if (output.Length >= custPrefixLength && (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix)))
             {
-                // If Write-Output is custom
-                 ScriptExecutionOutputCustom.Add(new CustomOutput(output.Substring(0, custPrefixLength), CustomOutput.Types.Output));
+                // This filter function is called from an async function,
+                // resulting in the CustomOutput object being created by the
+                // rendering thread and the ObservableCollection created by
+                // the UI thread.
+                App.Current.Dispatcher.Invoke(delegate {
+                    // If Write-Output is custom
+                    ScriptExecutionOutputCustom.Add(new CustomOutput(output.Substring(custPrefixLength), CustomOutput.Types.Output));
+                });
+                
             }
             else
             {

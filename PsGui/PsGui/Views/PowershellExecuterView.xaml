@@ -252,11 +252,25 @@
                 <dragablz:InterTabController />
             </dragablz:TabablzControl.InterTabController>
             <TabItem Header="Custom">
-                <ScrollViewer>
+                <ScrollViewer Margin="10 0 10 0">
 
 
-                    <ItemsControl ItemsSource="{StaticResource ScriptVariables}">
-
+                    <ItemsControl ItemsSource="{Binding ScriptExecutionOutputCustom}">
+                        <!--
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="1" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        -->
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}"
+                                           TextWrapping="Wrap"
+                                           FontSize="12"
+                                           Margin="0 5 0 0"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
 
