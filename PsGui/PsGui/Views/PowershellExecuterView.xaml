@@ -245,44 +245,25 @@
         <dragablz:TabablzControl Grid.Row="9"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="3"
-                                 FixedHeaderCount="1" 
+                                 FixedHeaderCount="3" 
                                  Background="#e8eaf6"
                                  BorderThickness="0">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
             </dragablz:TabablzControl.InterTabController>
             <TabItem Header="Custom">
-                <ScrollViewer Margin="10 0 10 0">
-
-
+                <ScrollViewer>
                     <ItemsControl ItemsSource="{Binding ScriptExecutionOutputCustom}">
-                        <!--
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="1" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        -->
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Text}"
                                            TextWrapping="Wrap"
-                                           FontSize="12"
-                                           Margin="0 5 0 0"/>
+                                           FontSize="13"
+                                           Margin="10 10 10 0"
+                                           Foreground="{Binding OutputColor}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
-
-                    <!--
-                    <TextBlock Text="{Binding Path=ScriptExecutionOutputCustom}"
-                               TextWrapping="Wrap"
-                               FontSize="12"
-                               Margin="10 10 10 10"/>
-                    -->
-                    
-                    
-                    
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Raw">
@@ -290,13 +271,14 @@
                     <TextBlock Text="{Binding Path=ScriptExecutionOutputRaw}"
                                TextWrapping="Wrap"
                                FontSize="12"
-                               Margin="10 10 10 10"/>
+                               Margin="10 10 10 0"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Detailed errors">
                 <ScrollViewer>
                     <TextBlock Text="{Binding Path=ScriptExecutionErrorRaw}"
                                TextWrapping="Wrap"
+                               FontSize="12"
                                Margin="10 10 10 10"/>
                 </ScrollViewer>
             </TabItem>
@@ -308,7 +290,7 @@
               Grid.ColumnSpan="3"
               Background="White"
               Margin="0 0 0 0"
-              Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
+              Visibility="{Binding Path=VisibleStatusBar, Converter={StaticResource BoolToVisibility}}">
             <ProgressBar Minimum="0" 
                 Maximum="100"
                 Value="{Binding ScriptExecutionProgressPercentComplete}"

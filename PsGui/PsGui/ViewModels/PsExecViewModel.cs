@@ -22,6 +22,7 @@ namespace PsGui.ViewModels
 
         private const string newLine = "\r\n";
 
+        private bool   _visibleStatusBar;
         private bool   _isBusy;
         private bool   _canInteract;
         // Module path should be renamed scriptFolderPath. The word
@@ -139,21 +140,43 @@ namespace PsGui.ViewModels
                 });
             }
             
+            // TargetObject
             ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ? 
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString() : "");
 
+            // StackTrace
             ScriptExecutionErrorScriptStackTrace = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace : "");
 
+
+            /*
+             * Too many details. Drowning the interesting details.
+             * 
+            // FullyQualifiedErrorId
             ScriptExecutionErrorFullyQualifiedErrorId = (((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId : "");
+            
+            // CategoryInfo
+            ScriptExecutionErrorCategoryInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo.ToString() : "");
 
-            // Disse må også endres om de skal benyttes
-            //   ScriptExecutionErrorCategoryInfo          = ((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo.ToString();
-            //   ScriptExecutionErrorException             = ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString();
-            //   ScriptExecutionErrorDetails               = ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString();
-            //   ScriptExecutionErrorInvocationInfo        = ((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo.ToString();
-            //   ScriptExecutionErrorPipelineIterationInfo = ((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo.ToString();
+            // Exception
+            ScriptExecutionErrorException = (((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString() : "");
+
+            // ErrorDetails
+            ScriptExecutionErrorDetails = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString() : "");
+
+            // InvocationInfo
+            ScriptExecutionErrorInvocationInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo.ToString() : "");
+
+            // PipelineIterationinfo
+            ScriptExecutionErrorPipelineIterationInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo.ToString() : "");
+            */
+
             string errorSeparator = "=======================================================" + newLine;
             ScriptExecutionErrorRaw += errorSeparator;
         }
@@ -180,7 +203,6 @@ namespace PsGui.ViewModels
             // must be updated upon updating this function
 
             int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
-            // output += newLine;
 
             // ensure substring does not exceed length of output string, causing out of index
             if (output.Length >= custPrefixLength && (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix)))
@@ -199,6 +221,7 @@ namespace PsGui.ViewModels
             {
                 // Miss-typed and unspecified Write-Output contents are not filtered
                 ScriptExecutionOutputRaw += output;
+                ScriptExecutionOutputRaw += newLine;
             }
         }
 
@@ -364,6 +387,7 @@ namespace PsGui.ViewModels
             {
             IsBusy                = false;
             CanInteract           = true;
+            VisibleStatusBar      = false;
             _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
             directoryReader       = new DirectoryReader(_modulePath);
             scriptReader          = new ScriptReader();
@@ -453,10 +477,9 @@ namespace PsGui.ViewModels
 
                         directoryReader.SelectedScript = value;
                         IsScriptSelected = true;
+                        VisibleStatusBar = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
-                        ScriptExecutionProgressPercentComplete  = "0";
-                        ScriptExecutionProgressCurrentOperation = "";
                         // If previous session output/errors, clear them
                         if (StreamsContainsData())
                         {
@@ -536,6 +559,23 @@ namespace PsGui.ViewModels
             {
                 _canInteract = value;
                 OnPropertyChanged("CanInteract");
+            }
+        }
+
+        /// <summary>
+        /// Sets or gets the true/false value for when the status
+        /// bar shall be shown to the user.
+        /// </summary>
+        public bool VisibleStatusBar
+        {
+            get
+            {
+                return _visibleStatusBar;
+            }
+            set
+            {
+                _visibleStatusBar = value;
+                OnPropertyChanged("VisibleStatusBar");
             }
         }
 
@@ -1075,10 +1115,20 @@ namespace PsGui.ViewModels
         /// Clears the progress streams. Reseting the percentage stream back to 0
         /// and the rest of the progress streams back to an empty string.
         /// </summary>
-        public void ClearProgressStreams()
+        public async Task ClearProgressStreams()
         {
             ScriptExecutionProgressCurrentOperation = "";
-            ScriptExecutionProgressPercentComplete = "0";
+
+            // Linear countdown to 0 for the visual pleaseure
+            // Can be set directly to "0" instead.
+            await Task.Run(() =>
+            {
+                for (int ii = 100; ii >= 0; ii--)
+                {
+                    ScriptExecutionProgressPercentComplete = ii.ToString();
+                    Thread.Sleep(3);
+                }
+            });
         }
 
         /// <summary>
