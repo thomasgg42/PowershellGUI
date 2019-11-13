@@ -3,15 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:models="clr-namespace:PsGui.Models"
              xmlns:psExecModels="clr-namespace:PsGui.Models.PowershellExecuter"
              xmlns:converters="clr-namespace:PsGui.Converters"
-             
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-             
+             d:DesignHeight="600" d:DesignWidth="450"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="450">
+             >
 
     <UserControl.Resources>
         <!-- 
@@ -54,27 +51,30 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" /> <!-- 0 Header: Category -->
-            <RowDefinition Height="auto" /> <!-- 1 Script category radio buttons  -->
-            <RowDefinition Height="auto" /> <!-- 2 Script file dropdown menu -->
-            <RowDefinition Height="auto" /> <!-- 3 Header: Input-->
-            <RowDefinition Height="auto" /> <!-- 4 Script info button -->
-            <RowDefinition Height="auto" /> <!-- 5 Checkbox input fields -->
-            <RowDefinition Height="auto" /> <!-- 6 Single line string input fields -->
-            <RowDefinition Height="auto" /> <!-- 7 Multiline string input fields -->
-            <RowDefinition Height="auto" /> <!-- 8 Execute button -->
-            <RowDefinition Height="*"    /> <!-- 9 Output field -->
-            <RowDefinition Height="auto" /> <!-- 10 Statusbar-->
+            <!--   <RowDefinition Height="auto" />  0 Header: Category -->
+            <RowDefinition Height="auto" /> <!-- 0 Script category radio buttons  -->
+            <RowDefinition Height="auto" /> <!-- 1 Script file dropdown menu -->
+            <!--   <RowDefinition Height="auto" />  3 Header: Input-->
+            <RowDefinition Height="auto" /> <!-- 2 Script info button -->
+            <RowDefinition Height="auto" /> <!-- 3 Single line string input fields -->
+            <RowDefinition Height="auto" /> <!-- 4 Checkbox input fields -->
+            <RowDefinition Height="auto" /> <!-- 5 Multiline string input fields -->
+            <RowDefinition Height="auto" /> <!-- 6 Execute button -->
+            <!--   <RowDefinition Height="auto" />  9 Header: output -->
+            <RowDefinition Height="*"    /> <!-- 7 Output field -->
+            <RowDefinition Height="auto" /> <!-- 8 Statusbar-->
         </Grid.RowDefinitions>
         
         <!-- Header: Category -->
+        <!--
         <TextBlock Text="Category" Grid.Row="0" 
                    Grid.Column="0" Margin="10 10 0 10"
-                   FontWeight="Bold" />
-
+                    />
+        -->
+        
         <!-- Script category radio buttons  -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" Grid.Row="1"
-                      Margin="10 0 0 0"
+        <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" Grid.Row="0"
+                      Margin="10 10 0 0"
                       Grid.Column="0" Grid.ColumnSpan="3">
             <!-- Script category panel setup -->
             <ItemsControl.ItemsPanel>
@@ -107,38 +107,91 @@
         </ItemsControl>
         
         <!-- Script file dropdown menu -->
-        <ComboBox ItemsSource="{Binding Path=ScriptFileBrowser}" Grid.Row="2"
+        <ComboBox ItemsSource="{Binding Path=ScriptFileBrowser}" Grid.Row="1"
                   SelectedItem="{Binding Path=SelectedScriptFile, Mode=Default}"
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
                   Margin="10 10 10 0"
                   IsEnabled="{Binding Path=CanInteract}"/>
-        
-        <!-- Header: Input-->
-        <TextBlock Text="Input" Grid.Row="3"
-                   Grid.Column="0" FontWeight="Bold"
-                   Margin="10 10 0 0" />
 
         <!-- Script description button -->
-        <Button Content="Description" Grid.Row="4" 
+        <Button Content="Description" Grid.Row="2" 
                 Grid.Column="3"
                 Margin="10 10 10 0"
                 Command="{Binding Path=ScriptDescriptionButtonPushed}"
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
 
+        <!-- Header: Input-->
         <!--
-        <Button Content="Description" Grid.Row="4" 
-                Grid.Column="3"
-                Margin="10 10 10 0"
-                Command="{Binding Path=ScriptDescriptionButtonPushed}"
-                Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
-        </Button>
+        <TextBlock Text="Input" Grid.Row="4"
+                   Grid.Column="0" 
+                   Margin="10 10 0 0" />
         -->
-        
-        <!-- Checkbox input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="5"
+
+        <!-- Single line string input fields -->
+        <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="3"
                       Margin="10 0 0 0"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3">
+            
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.Resources>
+                <!-- Username -->
+                <DataTemplate DataType="{x:Type psExecModels:UsernameArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" 
+                                   ToolTip="{Binding InputDescription}" 
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                    />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
+                    </StackPanel>
+                </DataTemplate>
+                
+                <!-- Password -->
+                <DataTemplate DataType="{x:Type psExecModels:PasswordArgument}">
+                    <StackPanel Margin="0 5 5 0" >
+                        <TextBlock Text="{Binding InputKey}" 
+                                   ToolTip="{Binding InputDescription}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                    />
+                        <PasswordBox x:Name="PasswordBox"
+                                     converters:PasswordBoxAssistant.BindPassword="True"
+                                     converters:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                     IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
+                    </StackPanel>
+                </DataTemplate>
+
+                <!-- Text -->
+                <DataTemplate DataType="{x:Type psExecModels:TextArgument}">
+                    <StackPanel Margin="0 5 5 0">
+                        <TextBlock Text="{Binding InputKey}" 
+                                   ToolTip="{Binding InputDescription}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                    />
+                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.Resources>
+            
+        </ItemsControl>
+
+        <!-- Checkbox input fields -->
+        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="4"
+                      Margin="10 10 0 0"
                       Grid.Column="0"
                       Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
@@ -151,6 +204,8 @@
                 <DataTemplate>
                     <StackPanel Margin="0 5 5 0">
                         <CheckBox Content="{Binding InputKey}"
+                                  Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                  
                                   IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
@@ -160,56 +215,8 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Single line string input fields -->
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="6"
-                      Margin="10 0 0 0"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="3">
-            
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.Resources>
-                <DataTemplate DataType="{x:Type psExecModels:UsernameArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 IsEnabled="{Binding DataContext.CanInteract,
-                                                      RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                     AncestorType={x:Type ItemsControl}}}" />
-                    </StackPanel>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type psExecModels:PasswordArgument}">
-                    <StackPanel Margin="0 5 5 0" >
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <PasswordBox x:Name="PasswordBox"
-                                     converters:PasswordBoxAssistant.BindPassword="True"
-                                     converters:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                     IsEnabled="{Binding DataContext.CanInteract,
-                                                      RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                     AncestorType={x:Type ItemsControl}}}" />
-                    </StackPanel>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type psExecModels:TextArgument}">
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
-                        <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 IsEnabled="{Binding DataContext.CanInteract,
-                                                      RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                     AncestorType={x:Type ItemsControl}}}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.Resources>
-            
-        </ItemsControl>
-
         <!-- Multiline string input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}" Grid.Row="7"
+        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}" Grid.Row="5"
                       Margin="10 0 0 0"
                       Grid.Column="0" Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
@@ -220,8 +227,11 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="0 5 5 0">
-                        <TextBlock Text="{Binding InputKey}" ToolTip="{Binding InputDescription}" />
+                    <StackPanel Margin="0 10 5 0">
+                        <TextBlock Text="{Binding InputKey}" 
+                                   ToolTip="{Binding InputDescription}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                    />
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
@@ -235,14 +245,21 @@
         </ItemsControl>
 
         <!-- Execute button -->
-        <Button Command="{Binding Path=ExecuteButtonPushed}" Grid.Row="8"
+        <Button Command="{Binding Path=ExecuteButtonPushed}" Grid.Row="6"
                 Grid.Column="1"
                 Content="Execute"
                 Margin="10 10 10 10"
                 IsDefault="True" />
         
+        <!-- Header: Output -->
+        <!--
+        <TextBlock Text="Output" Grid.Row="9"
+                   Grid.Column="0" 
+                   Margin="10 10 0 5" />
+        -->
+
         <!-- Output field -->
-        <dragablz:TabablzControl Grid.Row="9"
+        <dragablz:TabablzControl Grid.Row="7"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="3"
                                  FixedHeaderCount="3" 
@@ -285,20 +302,20 @@
         </dragablz:TabablzControl>
 
         <!-- Status bar -->
-        <Grid Grid.Row="10" 
+        <Grid Grid.Row="8" 
               Grid.Column="0" 
               Grid.ColumnSpan="3"
               Background="White"
               Margin="0 0 0 0"
               Visibility="{Binding Path=VisibleStatusBar, Converter={StaticResource BoolToVisibility}}">
             <ProgressBar Minimum="0" 
-                Maximum="100"
-                Value="{Binding ScriptExecutionProgressPercentComplete}"
-                Height="18"
-                Name="pbStatus" />
+                         Maximum="100"
+                         Value="{Binding ScriptExecutionProgressPercentComplete}"
+                         Height="18"
+                         Name="pbStatus" />
             <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" 
-           HorizontalAlignment="Center" 
-           VerticalAlignment="Center" />
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center" />
         </Grid>
     </Grid>
 </UserControl>

@@ -13,14 +13,14 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         
-        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-       
         xmlns:local="clr-namespace:PsGui.Views"
         mc:Ignorable="d"
         Title="PSGUI"
-        Height="auto" Width="450"
+        Width="450"
+        SizeToContent="Height"
         MinHeight="600" MinWidth="450"
-        MaxWidth="450">
+        MaxWidth="450"
+        d:DesignHeight="600" d:DesignWidth="450">
 
     <!-- 
         Wrapping contents into a DialogHost. This allows everything wrapped
