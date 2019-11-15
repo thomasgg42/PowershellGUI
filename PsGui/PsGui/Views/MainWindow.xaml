@@ -17,7 +17,7 @@
         mc:Ignorable="d"
         Title="PSGUI"
         Width="450"
-        SizeToContent="Height"
+        Height="Auto"
         MinHeight="600" MinWidth="450"
         MaxWidth="450"
         d:DesignHeight="600" d:DesignWidth="450">

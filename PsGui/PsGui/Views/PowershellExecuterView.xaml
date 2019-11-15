@@ -264,19 +264,20 @@
                                  Grid.ColumnSpan="3"
                                  FixedHeaderCount="3" 
                                  Background="#e8eaf6"
-                                 BorderThickness="0">
+                                 BorderThickness="0"
+                                 Padding="0 40 0 0">
             <dragablz:TabablzControl.InterTabController>
                 <dragablz:InterTabController />
             </dragablz:TabablzControl.InterTabController>
             <TabItem Header="Custom">
                 <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding ScriptExecutionOutputCustom}">
+                    <ItemsControl ItemsSource="{Binding ScriptExecutionOutputCustom}" 
+                                  Margin="10 10 10 10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Text}"
                                            TextWrapping="Wrap"
                                            FontSize="13"
-                                           Margin="10 10 10 0"
                                            Foreground="{Binding OutputColor}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
