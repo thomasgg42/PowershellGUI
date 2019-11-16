@@ -25,6 +25,7 @@ namespace PsGui.ViewModels
         private bool   _visibleStatusBar;
         private bool   _isBusy;
         private bool   _canInteract;
+        private bool   _cancelScriptExecution;
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
         // The modulePath contains the relative file path to the scripts folder.
@@ -56,6 +57,24 @@ namespace PsGui.ViewModels
             // ScriptExecutionOutputStandard = powershellExecuter.ScriptExecutionOutput;
             ScriptExecutionErrorException = powershellExecuter.ScriptExecutionErrorException;
             ClearScriptSession();
+        }
+
+        /// <summary>
+        /// Calls the function to stop script execution, if execution is 
+        /// in progress. Calls the function to start script execution if
+        /// execution is not in progress.
+        /// </summary>
+        /// <param name="obj">Caller object</param>
+        private async Task StartOrStopScriptExecution(object obj)
+        {
+            if(IsBusy)
+            {
+                CancelScriptExecution = true;
+            } 
+            else
+            {
+                await ExecutePowershellScriptAsync(obj);
+            }
         }
 
         /// <summary>
@@ -100,7 +119,11 @@ namespace PsGui.ViewModels
                     // the state of the pipeline to equal Completed
                     while (result.IsCompleted == false)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(250);
+                        if(CancelScriptExecution)
+                        {
+                            psInstance.Stop();
+                        }
                     }
                 }
             });
@@ -232,17 +255,63 @@ namespace PsGui.ViewModels
         /// <param name="parameter"></param>
         /// <returns></returns>
         private bool CanExecuteScript(object parameter)
-            {
-            if(IsBusy == true)
+        {
+            if (IsScriptSelected == false)
             {
                 return false;
             }
-            if (IsScriptSelected == false)
-                {
-                return false;
-                }
             else
+            {
+                if (IsBusy == true)
                 {
+                    return true;
+                }
+                else
+                {
+                    foreach (ScriptArgument arg in ScriptTextVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptUsernameVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptPasswordVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptMultiLineVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+
+            /*
+            if (IsBusy == true)
+            {
+                return true;
+            }
+
+            if (IsScriptSelected == false)
+            {
+                return false;
+            }
+            else
+            {
                 foreach (ScriptArgument arg in ScriptTextVariables)
                     {
                     if (arg.InputValue != null && arg.InputValue.Equals(""))
@@ -271,20 +340,10 @@ namespace PsGui.ViewModels
                         return false;
                         }
                     }
-
-                // Her må vi sjekke for noe annet
-                /*
-                foreach (ScriptArgument arg in ScriptCheckboxVariables)
-                {
-                    if (arg.InputValue != null && arg.InputValue.Equals(""))
-                    {
-                        return false;
-                    }
-                }
-                */
             }
             return true;
-            }
+            */
+        }
 
         /// <summary>
         /// Helper function for the ICommand implementation.
@@ -386,6 +445,7 @@ namespace PsGui.ViewModels
         public PsExecViewModel(string modulePath, string moduleFolderName)
             {
             IsBusy                = false;
+            CancelScriptExecution = false;
             CanInteract           = true;
             VisibleStatusBar      = false;
             _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
@@ -398,7 +458,8 @@ namespace PsGui.ViewModels
 
             RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
-            ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
+            // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
+            ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
 
             // ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
             //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
@@ -543,6 +604,30 @@ namespace PsGui.ViewModels
             {
                 _isBusy = value;
                 CanInteract = !_isBusy;
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the currently ongoing script execution
+        /// is to be canceled.
+        /// </summary>
+        public bool CancelScriptExecution
+        {
+            get
+            {
+                return _cancelScriptExecution;
+            }
+            set
+            {
+                if(value)
+                {
+                    // If true, clean up 
+                    IsBusy = false;
+                    scriptReader.SetArgumentsEnabled(true);
+                    ClearScriptSession();
+                }
+
+                _cancelScriptExecution = value;
             }
         }
 
@@ -1125,9 +1210,10 @@ namespace PsGui.ViewModels
 
             // Linear countdown to 0 for the visual pleaseure
             // Can be set directly to "0" instead.
+            int progressPercent = Int32.Parse(ScriptExecutionProgressPercentComplete);
             await Task.Run(() =>
             {
-                for (int ii = 100; ii >= 0; ii--)
+                for (int ii = progressPercent; ii >= 0; ii--)
                 {
                     ScriptExecutionProgressPercentComplete = ii.ToString();
                     Thread.Sleep(3);
