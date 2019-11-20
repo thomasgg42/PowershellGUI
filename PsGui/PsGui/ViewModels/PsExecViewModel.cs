@@ -26,6 +26,9 @@ namespace PsGui.ViewModels
         private bool   _isBusy;
         private bool   _canInteract;
         private bool   _cancelScriptExecution;
+        
+        private bool   cancelHasBeenUsed;
+
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
         // The modulePath contains the relative file path to the scripts folder.
@@ -67,7 +70,7 @@ namespace PsGui.ViewModels
         /// <param name="obj">Caller object</param>
         private async Task StartOrStopScriptExecution(object obj)
         {
-            if(IsBusy)
+            if(IsBusy && cancelHasBeenUsed)
             {
                 CancelScriptExecution = true;
             } 
@@ -262,12 +265,35 @@ namespace PsGui.ViewModels
             }
             else
             {
-                if (IsBusy == true)
+                if (IsBusy)
                 {
-                    return true;
+                    if(!cancelHasBeenUsed)
+                    {
+                        // Only once, do not allow the stop button to activate before
+                        // x seconds has passed upon executing a script.
+                        // This prevents miss doubleclicks.
+                        // Timer is used instead of async wait due to struggles impelementing
+                        // the commandhandler with a Task<bool> CanExecute.
+
+                        System.Timers.Timer t = new System.Timers.Timer
+                        {
+                            Interval = 2000, // In milliseconds
+                            AutoReset = false // Stops it from repeating
+                        };
+                        t.Elapsed += new System.Timers.ElapsedEventHandler(TimerElapsed);
+                        t.Start();
+                        // TODO: Make this a lambda expression instead
+                        void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+                        {
+                            cancelHasBeenUsed = true;
+                        }
+                    }
+                    return false;
                 }
                 else
                 {
+                    // TODO: Dette er veldig prosesskrevende for noe som
+                    // kjøres kontinuerlig. Bør oppdateres
                     foreach (ScriptArgument arg in ScriptTextVariables)
                     {
                         if (arg.InputValue != null && arg.InputValue.Equals(""))
@@ -303,7 +329,7 @@ namespace PsGui.ViewModels
             /*
             if (IsBusy == true)
             {
-                return true;
+                return false;
             }
 
             if (IsScriptSelected == false)
@@ -344,6 +370,69 @@ namespace PsGui.ViewModels
             return true;
             */
         }
+
+        /// <summary>
+        /// Returns true if a selected powershell script
+        /// is ready to be executed. False otherwise.
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        private async Task<bool> CanExecuteScriptAsync(object parameter)
+        {
+            System.Windows.MessageBox.Show("bop");
+            if (IsScriptSelected == false)
+            {
+                return false;
+            }
+            else
+            {
+                if (IsBusy == true)
+                {
+                    if (!cancelHasBeenUsed)
+                    {
+                        await Task.Run(() =>
+                        {
+                            Thread.Sleep(2000);
+                        });
+                        cancelHasBeenUsed = true;
+                    }
+                    return true;
+                }
+                else
+                {
+                    foreach (ScriptArgument arg in ScriptTextVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptUsernameVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptPasswordVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (ScriptArgument arg in ScriptMultiLineVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals(""))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
 
         /// <summary>
         /// Helper function for the ICommand implementation.
@@ -446,6 +535,7 @@ namespace PsGui.ViewModels
             {
             IsBusy                = false;
             CancelScriptExecution = false;
+            cancelHasBeenUsed     = false;
             CanInteract           = true;
             VisibleStatusBar      = false;
             _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
@@ -457,12 +547,13 @@ namespace PsGui.ViewModels
             SetInitialScriptCategory();
 
             RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
-            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
-            // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
+            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync((Func<object, Task>)GetScriptDescriptionAsync, (Func<object, bool>)CanClickDescriptionButton);
             ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
+            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
 
-            // ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
-            //ExecuteButtonPushed = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
+            // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
+            // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScriptAsync
+            // ExecuteButtonPushed           = new PsGui.Converters.CommandHandler(ExecutePowershellScript, CanExecuteScript);
 
         }
 
@@ -1250,8 +1341,9 @@ namespace PsGui.ViewModels
             powershellExecuter.ClearSession();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
-            IsScriptSelected = false;
-            IsBusy           = false;
+            IsScriptSelected  = false;
+            IsBusy            = false;
+            cancelHasBeenUsed = false;
         }
 
     }
