@@ -203,7 +203,7 @@
                     <StackPanel Margin="0 5 5 0">
                         <CheckBox Content="{Binding InputKey}"
                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
-                                  
+                                  ToolTip="{Binding InputDescription}"
                                   IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,

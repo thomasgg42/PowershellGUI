@@ -27,7 +27,7 @@ namespace PsGui.ViewModels
         private bool   _canInteract;
         private bool   _cancelScriptExecution;
         
-        private bool   cancelHasBeenUsed;
+        private bool   hasAwaitedStopActivationDelay;
 
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
@@ -70,7 +70,7 @@ namespace PsGui.ViewModels
         /// <param name="obj">Caller object</param>
         private async Task StartOrStopScriptExecution(object obj)
         {
-            if(IsBusy && cancelHasBeenUsed)
+            if(IsBusy)
             {
                 CancelScriptExecution = true;
             } 
@@ -230,6 +230,7 @@ namespace PsGui.ViewModels
 
             int custPrefixLength = powershellExecuter.CustomOutputPrefix.Length;
 
+            // TODO: Race condition error
             // ensure substring does not exceed length of output string, causing out of index
             if (output.Length >= custPrefixLength && (output.Substring(0, custPrefixLength).Equals(powershellExecuter.CustomOutputPrefix)))
             {
@@ -267,14 +268,20 @@ namespace PsGui.ViewModels
             {
                 if (IsBusy)
                 {
-                    if(!cancelHasBeenUsed)
+                    /*
+                    if(!hasAwaitedStopActivationDelay)
                     {
+                        // Currently working as intended. 
+                        // BUT does not update the view when the button is active again.
+
                         // Only once, do not allow the stop button to activate before
                         // x seconds has passed upon executing a script.
                         // This prevents miss doubleclicks.
                         // Timer is used instead of async wait due to struggles impelementing
                         // the commandhandler with a Task<bool> CanExecute.
 
+                        // Asynchronous execution, flow of control will continue
+                        // out of this scope while the timer runs.
                         System.Timers.Timer t = new System.Timers.Timer
                         {
                             Interval = 2000, // In milliseconds
@@ -285,10 +292,14 @@ namespace PsGui.ViewModels
                         // TODO: Make this a lambda expression instead
                         void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
                         {
-                            cancelHasBeenUsed = true;
+                            hasAwaitedStopActivationDelay = true;
                         }
+
+                        return false;
                     }
+                    */
                     return false;
+                    
                 }
                 else
                 {
@@ -377,6 +388,7 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
+        /*
         private async Task<bool> CanExecuteScriptAsync(object parameter)
         {
             System.Windows.MessageBox.Show("bop");
@@ -432,6 +444,7 @@ namespace PsGui.ViewModels
             }
             return true;
         }
+        */
 
 
         /// <summary>
@@ -535,7 +548,7 @@ namespace PsGui.ViewModels
             {
             IsBusy                = false;
             CancelScriptExecution = false;
-            cancelHasBeenUsed     = false;
+            hasAwaitedStopActivationDelay = false;
             CanInteract           = true;
             VisibleStatusBar      = false;
             _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
@@ -547,9 +560,9 @@ namespace PsGui.ViewModels
             SetInitialScriptCategory();
 
             RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
-            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync((Func<object, Task>)GetScriptDescriptionAsync, (Func<object, bool>)CanClickDescriptionButton);
+            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
             ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
-            ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
+           // ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandler(GetScriptDescription, CanClickDescriptionButton);
 
             // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(ExecutePowershellScriptAsync, CanExecuteScript);
             // ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScriptAsync
@@ -1343,7 +1356,7 @@ namespace PsGui.ViewModels
             SetInitialScriptCategory();
             IsScriptSelected  = false;
             IsBusy            = false;
-            cancelHasBeenUsed = false;
+            hasAwaitedStopActivationDelay = false;
         }
 
     }

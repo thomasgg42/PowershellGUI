@@ -11,7 +11,7 @@ namespace PsGui.Converters
         private readonly Func<object, bool> canExecuteMethod;
 
         // test
-        private readonly Func<object, Task<bool>> canExecuteMethodAsync;
+       // private readonly Func<object, Task<bool>> canExecuteMethodAsync;
 
         public event EventHandler CanExecuteChanged
         {
