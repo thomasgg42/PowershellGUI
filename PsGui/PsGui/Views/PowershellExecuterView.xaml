@@ -146,7 +146,8 @@
                 <DataTemplate DataType="{x:Type psExecModels:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" 
-                                   ToolTip="{Binding InputDescription}" /> <!-- Foreground="{DynamicResource PrimaryHueMidBrush}" -->
+                                   ToolTip="{Binding InputDescription}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" /> 
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
