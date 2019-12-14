@@ -123,6 +123,7 @@
     <Compile Include="Models\PowershellExecuter\CustomOutput.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />
     <Compile Include="Models\PowershellExecuter\PasswordArgument.cs" />
+    <Compile Include="Models\PowershellExecuter\RadiobuttonArgument.cs" />
     <Compile Include="Models\PowershellExecuter\ScriptCategory.cs" />
     <Compile Include="Models\PowershellExecuter\TextArgument.cs" />
     <Compile Include="Models\PowershellExecuter\UsernameArgument.cs" />
