@@ -15,11 +15,12 @@
             Collection views for the ObservableCollections in the ViewModel (ScriptReader)
             Required to make the Control visible in the UI.  
         -->
-        <CollectionViewSource x:Key="ScriptTextVariables" Source="{Binding ScriptTextVariables}" />
-        <CollectionViewSource x:Key="ScriptUsernameVariables" Source="{Binding ScriptUsernameVariables}" />
-        <CollectionViewSource x:Key="ScriptPasswordVariables" Source="{Binding ScriptPasswordVariables}" />
-        <CollectionViewSource x:Key="ScriptMultiLineVariables" Source="{Binding ScriptMultiLineVariables}" />
-        <CollectionViewSource x:Key="ScriptCheckboxVariables" Source="{Binding ScriptCheckboxVariables}" />
+        <CollectionViewSource x:Key="ScriptTextVariables"        Source="{Binding ScriptTextVariables}" />
+        <CollectionViewSource x:Key="ScriptUsernameVariables"    Source="{Binding ScriptUsernameVariables}" />
+        <CollectionViewSource x:Key="ScriptPasswordVariables"    Source="{Binding ScriptPasswordVariables}" />
+        <CollectionViewSource x:Key="ScriptMultiLineVariables"   Source="{Binding ScriptMultiLineVariables}" />
+        <CollectionViewSource x:Key="ScriptCheckboxVariables"    Source="{Binding ScriptCheckboxVariables}" />
+        <CollectionViewSource x:Key="ScriptRadiobuttonVariables" Source="{Binding ScriptRadiobuttonVariables}" />
 
         <!-- 
              Combine the collection view into a single composite collection.
@@ -35,6 +36,7 @@
                  Folowing collections are taken out of the CompositeCollection due to their
                  need of being separated from text input elements 
             -->
+            <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptRadiobuttonVariables}}" /> -->
             <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptCheckboxVariables}}" /> -->
             <!-- <CollectionContainer Collection="{Binding Source={StaticResource ScriptMultiLineVariables}}" /> -->
         </CompositeCollection>
@@ -51,27 +53,27 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <!--   <RowDefinition Height="auto" />  0 Header: Category -->
-            <RowDefinition Height="auto" /> <!-- 0 Script category radio buttons  -->
-            <RowDefinition Height="auto" /> <!-- 1 Script file dropdown menu -->
-            <!--   <RowDefinition Height="auto" />  3 Header: Input-->
-            <RowDefinition Height="auto" /> <!-- 2 Script info button -->
-            <RowDefinition Height="auto" /> <!-- 3 Single line string input fields -->
-            <RowDefinition Height="auto" /> <!-- 4 Checkbox input fields -->
-            <RowDefinition Height="auto" /> <!-- 5 Multiline string input fields -->
-            <RowDefinition Height="auto" /> <!-- 6 Execute button -->
-            <!--   <RowDefinition Height="auto" />  9 Header: output -->
-            <RowDefinition Height="*"    /> <!-- 7 Output field -->
-            <RowDefinition Height="auto" /> <!-- 8 Statusbar-->
+            <!-- 0 Script category radio buttons  -->
+            <RowDefinition Height="auto" />
+            <!-- 1 Script file dropdown menu -->
+            <RowDefinition Height="auto" />
+            <!-- 2 Script info button -->
+            <RowDefinition Height="auto" />
+            <!-- 3 Radiobutton input fields -->
+            <RowDefinition Height="auto" />
+            <!-- 4 Single line string input fields -->
+            <RowDefinition Height="auto" />
+            <!-- 5 Checkbox input fields -->
+            <RowDefinition Height="auto" />
+            <!-- 6 Multiline string input fields -->
+            <RowDefinition Height="auto" />
+            <!-- 7 Execute button -->
+            <RowDefinition Height="*"    />
+            <!-- 8 Output field -->
+            <RowDefinition Height="auto" />
+            <!-- 9 Statusbar-->
         </Grid.RowDefinitions>
-        
-        <!-- Header: Category -->
-        <!--
-        <TextBlock Text="Category" Grid.Row="0" 
-                   Grid.Column="0" Margin="10 10 0 10"
-                    />
-        -->
-        
+
         <!-- Script category radio buttons  -->
         <ItemsControl ItemsSource="{Binding Path=ScriptCategoryBrowser}" Grid.Row="0"
                       Margin="10 10 0 0"
@@ -122,12 +124,32 @@
                 Visibility="{Binding Path=IsScriptSelected, Converter={StaticResource BoolToVisibility}}">
         </Button>
 
-        <!-- Header: Input-->
-        <!--
-        <TextBlock Text="Input" Grid.Row="4"
-                   Grid.Column="0" 
-                   Margin="10 10 0 0" />
-        -->
+        <!-- Radiobutton input fields -->
+        <ItemsControl ItemsSource="{Binding Path=ScriptRadiobuttonVariables}" Grid.Row="4"
+                      Margin="10 10 0 0"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="3">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0 5 5 0">
+                        <RadioButton Content="{Binding InputKey}"
+                                  GroupName="RadiobuttonGroup"
+                                  Foreground="{DynamicResource PrimaryHueMidBrush}" 
+                                  ToolTip="{Binding InputDescription}"
+                                  IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!-- Single line string input fields -->
         <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="3"
@@ -146,7 +168,8 @@
                 <DataTemplate DataType="{x:Type psExecModels:UsernameArgument}">
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" 
-                                   ToolTip="{Binding InputDescription}" /> <!-- Foreground="{DynamicResource PrimaryHueMidBrush}" -->
+                                   ToolTip="{Binding InputDescription}"
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" /> 
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
@@ -191,10 +214,10 @@
         <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="4"
                       Margin="10 10 0 0"
                       Grid.Column="0"
-                      Grid.ColumnSpan="3">
+                      Grid.ColumnSpan="2">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="2" />
+                    <UniformGrid Columns="3" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -248,13 +271,6 @@
                 Content="Execute"
                 Margin="10 10 10 10"
                 IsDefault="True" />
-        
-        <!-- Header: Output -->
-        <!--
-        <TextBlock Text="Output" Grid.Row="9"
-                   Grid.Column="0" 
-                   Margin="10 10 0 5" />
-        -->
 
         <!-- Output field -->
         <dragablz:TabablzControl Grid.Row="7"
@@ -275,7 +291,7 @@
                             <DataTemplate>
                                 <TextBlock Text="{Binding Text}"
                                            TextWrapping="Wrap"
-                                           FontSize="16"
+                                           FontSize="14"
                                            Foreground="{Binding OutputColor}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

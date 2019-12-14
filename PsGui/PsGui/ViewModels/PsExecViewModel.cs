@@ -305,6 +305,8 @@ namespace PsGui.ViewModels
                 {
                     // TODO: Dette er veldig prosesskrevende for noe som
                     // kjøres kontinuerlig. Bør oppdateres
+
+                    bool radiobuttonActive = false;
                     foreach (ScriptArgument arg in ScriptTextVariables)
                     {
                         if (arg.InputValue != null && arg.InputValue.Equals(""))
@@ -333,9 +335,19 @@ namespace PsGui.ViewModels
                             return false;
                         }
                     }
+
+                    foreach ( ScriptArgument arg in ScriptRadiobuttonVariables)
+                    {
+                        if (arg.InputValue != null && arg.InputValue.Equals("true"))
+                        {
+                            radiobuttonActive = true;
+                        }
+                    }
+
+                    return radiobuttonActive;
                 }
             }
-            return true;
+            
 
             /*
             if (IsBusy == true)
@@ -589,6 +601,7 @@ namespace PsGui.ViewModels
                         ScriptPasswordVariables.Clear();
                         ScriptMultiLineVariables.Clear();
                         ScriptCheckboxVariables.Clear();
+                        ScriptRadiobuttonVariables.Clear();
                         ScriptVariables.Clear();
 
                         directoryReader.SelectedScript = value;
@@ -833,6 +846,18 @@ namespace PsGui.ViewModels
             get
             {
                 return scriptReader.ScriptCheckboxVariables;
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of strings representing
+        /// script input radiobutton values.
+        /// </summary>
+        public ObservableCollection<RadiobuttonArgument> ScriptRadiobuttonVariables
+        {
+            get
+            {
+                return scriptReader.ScriptRadiobuttonVariables;
             }
         }
 

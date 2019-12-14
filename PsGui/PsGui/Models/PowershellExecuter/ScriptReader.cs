@@ -8,12 +8,13 @@ namespace PsGui.Models.PowershellExecuter
     public class ScriptReader
         {
 
-        private CompositeCollection                     _scriptVariables;
-        private ObservableCollection<TextArgument>      _scriptTextVariables;
-        private ObservableCollection<PasswordArgument>  _scriptPasswordVariables;
-        private ObservableCollection<UsernameArgument>  _scriptUsernameVariables;
-        private ObservableCollection<MultiLineArgument> _scriptMultiLineVariables;
-        private ObservableCollection<CheckboxArgument>  _scriptCheckboxVariables;
+        private CompositeCollection                       _scriptVariables;
+        private ObservableCollection<TextArgument>        _scriptTextVariables;
+        private ObservableCollection<PasswordArgument>    _scriptPasswordVariables;
+        private ObservableCollection<UsernameArgument>    _scriptUsernameVariables;
+        private ObservableCollection<MultiLineArgument>   _scriptMultiLineVariables;
+        private ObservableCollection<CheckboxArgument>    _scriptCheckboxVariables;
+        private ObservableCollection<RadiobuttonArgument> _scriptRadiobuttonVariables;
 
         private string _scriptDescription;
 
@@ -88,7 +89,7 @@ namespace PsGui.Models.PowershellExecuter
         /// to the main collection of input objects.
         /// </summary>
         private void AddScriptArgumentsToMainCollection()
-            {
+        {
             if (ScriptTextVariables != null && ScriptTextVariables.Count > 0)
                 {
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptTextVariables });
@@ -113,7 +114,13 @@ namespace PsGui.Models.PowershellExecuter
                 {
                 ScriptVariables.Add(new CollectionContainer() { Collection = ScriptCheckboxVariables });
                 }
+
+            if (ScriptRadiobuttonVariables != null && ScriptRadiobuttonVariables.Count > 0)
+            {
+                ScriptVariables.Add(new CollectionContainer() { Collection = ScriptRadiobuttonVariables });
             }
+
+        }
 
         /// <summary>
         /// Adds a new script argument to the collection matching the argument's
@@ -127,11 +134,12 @@ namespace PsGui.Models.PowershellExecuter
             inputType = inputType.ToLower();
             switch (inputType)
                 {
-                case "password": _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType));    break;
-                case "username": _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType));    break;
-                case "multiline": _scriptMultiLineVariables.Add(new MultiLineArgument(inputKey, inputDesc, inputType)); break;
-                case "checkbox": _scriptCheckboxVariables.Add(new CheckboxArgument(inputKey, inputDesc, inputType));    break;
-                default: _scriptTextVariables.Add(new TextArgument(inputKey, inputDesc, inputType));                    break;
+                case "password":    _scriptPasswordVariables.Add(new PasswordArgument(inputKey, inputDesc, inputType));       break;
+                case "username":    _scriptUsernameVariables.Add(new UsernameArgument(inputKey, inputDesc, inputType));       break;
+                case "multiline":   _scriptMultiLineVariables.Add(new MultiLineArgument(inputKey, inputDesc, inputType));     break;
+                case "checkbox":    _scriptCheckboxVariables.Add(new CheckboxArgument(inputKey, inputDesc, inputType));       break;
+                case "radiobutton": _scriptRadiobuttonVariables.Add(new RadiobuttonArgument(inputKey, inputDesc, inputType)); break;
+                default:            _scriptTextVariables.Add(new TextArgument(inputKey, inputDesc, inputType));               break;
                 }
             }
 
@@ -169,14 +177,14 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public ScriptReader()
             {
-            _scriptVariables          = new CompositeCollection();
-            _scriptTextVariables      = new ObservableCollection<TextArgument>();
-            _scriptUsernameVariables  = new ObservableCollection<UsernameArgument>();
-            _scriptPasswordVariables  = new ObservableCollection<PasswordArgument>();
-            _scriptMultiLineVariables = new ObservableCollection<MultiLineArgument>();
-            _scriptCheckboxVariables  = new ObservableCollection<CheckboxArgument>();
-            _scriptDescription        = "";
-          //  _scriptHeader             = "";
+            _scriptVariables            = new CompositeCollection();
+            _scriptTextVariables        = new ObservableCollection<TextArgument>();
+            _scriptUsernameVariables    = new ObservableCollection<UsernameArgument>();
+            _scriptPasswordVariables    = new ObservableCollection<PasswordArgument>();
+            _scriptMultiLineVariables   = new ObservableCollection<MultiLineArgument>();
+            _scriptCheckboxVariables    = new ObservableCollection<CheckboxArgument>();
+            _scriptRadiobuttonVariables = new ObservableCollection<RadiobuttonArgument>();
+            _scriptDescription          = "";
             }
 
         /// <summary>
@@ -273,6 +281,21 @@ namespace PsGui.Models.PowershellExecuter
                 _scriptCheckboxVariables = value;
             }
         }
+        /// <summary>
+        /// Sets or gets a collection of strings representing
+        /// script radiobutton values.
+        /// </summary>
+        public ObservableCollection<RadiobuttonArgument> ScriptRadiobuttonVariables
+        {
+            get
+            {
+                return _scriptRadiobuttonVariables;
+            }
+            set
+            {
+                _scriptRadiobuttonVariables = value;
+            }
+        }
 
         /// <summary>
         /// Sets or gets the script description from the 
@@ -364,6 +387,13 @@ namespace PsGui.Models.PowershellExecuter
                     arg.ClearUserInput();
                     }
                 }
+            if(_scriptRadiobuttonVariables != null && _scriptRadiobuttonVariables.Count > 0)
+            {
+                foreach(RadiobuttonArgument arg in _scriptRadiobuttonVariables)
+                {
+                    arg.ClearUserInput();
+                }
+            }
             }
 
         /// <summary>
@@ -376,10 +406,9 @@ namespace PsGui.Models.PowershellExecuter
             ScriptPasswordVariables.Clear();
             ScriptMultiLineVariables.Clear();
             ScriptCheckboxVariables.Clear();
+            ScriptRadiobuttonVariables.Clear();
             ScriptVariables.Clear();
-            _scriptDescription = "";
-       //     _scriptHeader = "";
-            }
+            _scriptDescription = "";            }
 
         /// <summary>
         /// Locks all the script arguments, setting their lock out value to true
