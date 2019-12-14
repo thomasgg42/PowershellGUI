@@ -16,7 +16,6 @@ namespace PsGui.Models.PowershellExecuter
         private ObservableCollection<CheckboxArgument>  _scriptCheckboxVariables;
 
         private string _scriptDescription;
-       // private string _scriptHeader;
 
         /// <summary>
         /// Reads the powershell script header's top section.
@@ -275,7 +274,6 @@ namespace PsGui.Models.PowershellExecuter
             }
         }
 
-
         /// <summary>
         /// Sets or gets the script description from the 
         /// header section.
@@ -291,24 +289,6 @@ namespace PsGui.Models.PowershellExecuter
                 _scriptDescription = value;
                 }
             }
-
-        /// <summary>
-        /// Sets or gets the script header from the
-        /// header section.
-        /// </summary>
-        /*
-        public string ScriptHeader
-            {
-            get
-                {
-                return _scriptHeader;
-                }
-            set
-                {
-                _scriptHeader = value;
-                }
-            }
-        */
 
         /// <summary>
         /// Reads the selected powershell script and calls the functions
@@ -329,9 +309,9 @@ namespace PsGui.Models.PowershellExecuter
                     // If header is completely parsed
                     if (line.Equals(scriptHeaderEndTag)) { break; }
                     // If script meta data (description...)
-                    if (lineNum <= lastHeaderLine) { ReadScriptHeader(lineNum, line); }
+                    if (lineNum <= lastHeaderLine)       { ReadScriptHeader(lineNum, line); }
                     // Else if input variables to script
-                    else { ReadScriptVariables(line); }
+                    else                                 { ReadScriptVariables(line); }
                     lineNum++;
                     }
                 }

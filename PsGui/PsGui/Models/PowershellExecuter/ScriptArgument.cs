@@ -17,6 +17,12 @@
         private string _inputValue;
         private bool   _isEnabled;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="description"></param>
+        /// <param name="type"></param>
         public ScriptArgument(string key, string description, string type)
             {
             inputCheck        = new ArgumentChecker();
@@ -160,7 +166,5 @@
             _inputValue = "";
             }
        
-        
-
         }
     }

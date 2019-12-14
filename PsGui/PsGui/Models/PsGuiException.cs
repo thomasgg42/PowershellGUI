@@ -6,6 +6,12 @@ namespace PsGui.Models
     public class PsGuiException : Exception
         {
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="temp1"></param>
+        /// <param name="temp2"></param>
+        /// <param name="closeApp">True/false</param>
         public PsGuiException(string temp1, string temp2, bool closeApp)
             {
             System.Windows.MessageBox.Show(temp1);

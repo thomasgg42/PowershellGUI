@@ -32,7 +32,7 @@
         /// script category.
         /// </summary>
         /// <param name="filePath"></param
-       private void ConvertFriendlyName(string filePath, int modulePathLength)
+        private void ConvertFriendlyName(string filePath, int modulePathLength)
             {
             FriendlyName = FilePath.Substring(modulePathLength);
             }

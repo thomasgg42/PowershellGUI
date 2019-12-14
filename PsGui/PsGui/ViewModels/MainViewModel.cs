@@ -40,7 +40,6 @@ namespace PsGui.ViewModels
                     ParseConfig(line);
                     }
                 }
-
             }
 
         /// <summary>
@@ -68,12 +67,12 @@ namespace PsGui.ViewModels
         /// <returns></returns>
         private string ParseQuotationContent(string line)
             {
-            Regex regex = new Regex("\".*?\"");
-            var match = regex.Match(line);
+            Regex regex    = new Regex("\".*?\"");
+            var match      = regex.Match(line);
             string content = match.ToString();
-            int firstChar = 1;
-            int lastChar = content.Length;
-            content = content.Substring(firstChar);
+            int firstChar  = 1;
+            int lastChar   = content.Length;
+            content        = content.Substring(firstChar);
             return content.Substring(0, lastChar - 2);
             }
         

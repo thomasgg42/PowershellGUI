@@ -28,7 +28,6 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         private Types OutputType { get; set; }
 
-
         private void SetCurrentTextColor(Types type)
         {
             switch (type)

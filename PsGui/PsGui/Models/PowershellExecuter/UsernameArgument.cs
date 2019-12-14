@@ -7,6 +7,7 @@
     /// </summary>
     public class UsernameArgument : ScriptArgument
         {
+
         /// <summary>
         /// Constructor.
         /// </summary>
