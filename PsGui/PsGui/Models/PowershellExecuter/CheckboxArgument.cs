@@ -18,7 +18,7 @@
         public CheckboxArgument(string key, string description, string type) : base(key, description, type)
         {
             _isChecked = false;
-            
+
             // Checkboxes are unchecked by default
             base.InputValue = "false";
         }
@@ -35,6 +35,6 @@
                 base.InputValue = _isChecked ? base.InputValue = "true" : base.InputValue = "false";
             }
         }
-            
+
     }
 }

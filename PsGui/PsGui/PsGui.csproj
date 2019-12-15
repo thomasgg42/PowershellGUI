@@ -119,6 +119,7 @@
     <Compile Include="Converters\CommandHandlerAsync.cs" />
     <Compile Include="Converters\CommandHandler.cs" />
     <Compile Include="Converters\PasswordBoxAssistant.cs" />
+    <Compile Include="Converters\PasswordBoxAssistant2.cs" />
     <Compile Include="Models\PowershellExecuter\CheckboxArgument.cs" />
     <Compile Include="Models\PowershellExecuter\CustomOutput.cs" />
     <Compile Include="Models\PowershellExecuter\MultiLineArgument.cs" />

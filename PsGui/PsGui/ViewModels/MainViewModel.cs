@@ -2,24 +2,24 @@
 using System.Text.RegularExpressions;
 
 namespace PsGui.ViewModels
-    {
+{
     public class MainViewModel : ObservableObject
-        {
+    {
         private const string relConfigFilePath = @".\config.ini";
 
         private static string powershell_script_folder_path;
         private static string powershell_script_folder_name;
 
-        public static string powershell_script_credentialsfile_path; 
+        public static string powershell_script_credentialsfile_path;
 
         public ObservableCollection<object> Tabs { get; private set; }
 
         public MainViewModel()
-            {
+        {
             GetConfig();
             Tabs = new ObservableCollection<object>();
             Tabs.Add(new PsExecViewModel(powershell_script_folder_path, powershell_script_folder_name));
-            }
+        }
 
         /// <summary>
         /// Gets the config.ini contents and calls the function
@@ -27,22 +27,22 @@ namespace PsGui.ViewModels
         /// a new one is generated with default values.
         /// </summary>
         private void GetConfig()
+        {
+            if (!(System.IO.File.Exists(relConfigFilePath)))
             {
-            if(!(System.IO.File.Exists(relConfigFilePath)))
-                {
                 GenerateNewConfigFile();
-                }
+            }
 
             string[] lines = System.IO.File.ReadAllLines(relConfigFilePath);
             foreach (string line in lines)
-                {
+            {
                 // if not blank line or comment
                 if ((line != null && line != "") && !(line.Trim().StartsWith("#")))
-                    {
+                {
                     ParseConfig(line);
-                    }
                 }
             }
+        }
 
         /// <summary>
         /// Parses the configuration file contents provided
@@ -56,9 +56,9 @@ namespace PsGui.ViewModels
 
             switch (key)
             {
-                case "psgui_scriptfolder_relpath": powershell_script_folder_path          = value; break;
-                case "psgui_scriptfolder_name":    powershell_script_folder_name          = value; break;
-                case "psgui_credentials_path":     powershell_script_credentialsfile_path = value.Replace("AAAAA", GetCurrentScriptUser()); break;
+                case "psgui_scriptfolder_relpath": powershell_script_folder_path = value; break;
+                case "psgui_scriptfolder_name": powershell_script_folder_name = value; break;
+                case "psgui_credentials_path": powershell_script_credentialsfile_path = value.Replace("AAAAA", GetCurrentScriptUser()); break;
                 default: break;
             }
         }
@@ -75,21 +75,21 @@ namespace PsGui.ViewModels
         /// <param name="line"></param>
         /// <returns></returns>
         private string ParseQuotationContent(string line)
-            {
-            Regex regex    = new Regex("\".*?\"");
-            var match      = regex.Match(line);
+        {
+            Regex regex = new Regex("\".*?\"");
+            var match = regex.Match(line);
             string content = match.ToString();
-            int firstChar  = 1;
-            int lastChar   = content.Length;
-            content        = content.Substring(firstChar);
+            int firstChar = 1;
+            int lastChar = content.Length;
+            content = content.Substring(firstChar);
             return content.Substring(0, lastChar - 2);
-            }
-        
+        }
+
         /// <summary>
         /// Generates a config.ini file with default values.
         /// </summary>
         private void GenerateNewConfigFile()
-            {
+        {
             string relativeFilePath = ".\\config.ini";
             string[] contents =
                 {
@@ -102,14 +102,14 @@ namespace PsGui.ViewModels
                 "psgui_scriptfolder_name = \"Scripts\"",
                 };
             try
-                {
+            {
                 System.IO.File.WriteAllLines(relativeFilePath, contents);
-                }
-            catch (System.Exception e)
-                {
-                throw new PsGui.Models.PsGuiException("Could not create new config file. Check write permissions.", e.ToString(), true);
-                }
-            
             }
+            catch (System.Exception e)
+            {
+                throw new PsGui.Models.PsGuiException("Could not create new config file. Check write permissions.", e.ToString(), true);
+            }
+
         }
     }
+}

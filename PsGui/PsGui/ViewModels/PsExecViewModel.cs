@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -16,18 +15,16 @@ namespace PsGui.ViewModels
     /// </summary>
     public class PsExecViewModel : ObservableObject
     {
-        private DirectoryReader    directoryReader;
-        private ScriptReader       scriptReader;
+        private DirectoryReader directoryReader;
+        private ScriptReader scriptReader;
         private PowershellExecuter powershellExecuter;
 
         private const string newLine = "\r\n";
 
-        private bool   _visibleStatusBar;
-        private bool   _isBusy;
-        private bool   _canInteract;
-        private bool   _cancelScriptExecution;
-        
-        private bool   hasAwaitedStopActivationDelay;
+        private bool _visibleStatusBar;
+        private bool _isBusy;
+        private bool _canInteract;
+        private bool _cancelScriptExecution;
 
         // Module path should be renamed scriptFolderPath. The word
         // module should not be confused with a Powershell-module.
@@ -70,10 +67,10 @@ namespace PsGui.ViewModels
         /// <param name="obj">Caller object</param>
         private async Task StartOrStopScriptExecution(object obj)
         {
-            if(IsBusy)
+            if (IsBusy)
             {
                 CancelScriptExecution = true;
-            } 
+            }
             else
             {
                 await ExecutePowershellScriptAsync(obj);
@@ -110,8 +107,8 @@ namespace PsGui.ViewModels
                     PSDataCollection<PSObject> outputCollection = new PSDataCollection<PSObject>();
 
                     // Collect output in real time
-                    outputCollection.DataAdded            += OutputCollection_DataAdded;
-                    psInstance.Streams.Error.DataAdded    += Error_DataAdded;
+                    outputCollection.DataAdded += OutputCollection_DataAdded;
+                    psInstance.Streams.Error.DataAdded += Error_DataAdded;
                     psInstance.Streams.Progress.DataAdded += Progress_DataAdded;
 
                     // Begin powershell execution and continue control
@@ -123,7 +120,7 @@ namespace PsGui.ViewModels
                     while (result.IsCompleted == false)
                     {
                         Thread.Sleep(250);
-                        if(CancelScriptExecution)
+                        if (CancelScriptExecution)
                         {
                             psInstance.Stop();
                         }
@@ -155,19 +152,20 @@ namespace PsGui.ViewModels
         {
             // Exception.Message is treated as a custom error message and will
             // be shown together with custom output.
-            if(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message != null)
+            if (((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message != null)
             {
                 // This error added function is called from an async function,
                 // resulting in the CustomOutput object being created by the
                 // rendering thread and the ObservableCollection created by
                 // the UI thread.
-                App.Current.Dispatcher.Invoke(delegate {
+                App.Current.Dispatcher.Invoke(delegate
+                {
                     ScriptExecutionOutputCustom.Add(new CustomOutput(((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.Message, CustomOutput.Types.Error));
                 });
             }
-            
+
             // TargetObject
-            ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ? 
+            ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString() : "");
 
             // StackTrace
@@ -238,11 +236,12 @@ namespace PsGui.ViewModels
                 // resulting in the CustomOutput object being created by the
                 // rendering thread and the ObservableCollection created by
                 // the UI thread.
-                App.Current.Dispatcher.Invoke(delegate {
+                App.Current.Dispatcher.Invoke(delegate
+                {
                     // If Write-Output is custom
                     ScriptExecutionOutputCustom.Add(new CustomOutput(output.Substring(custPrefixLength), CustomOutput.Types.Output));
                 });
-                
+
             }
             else
             {
@@ -299,7 +298,7 @@ namespace PsGui.ViewModels
                     }
                     */
                     return false;
-                    
+
                 }
                 else
                 {
@@ -336,18 +335,21 @@ namespace PsGui.ViewModels
                         }
                     }
 
-                    foreach ( ScriptArgument arg in ScriptRadiobuttonVariables)
+                    if (ScriptRadiobuttonVariables.Count > 0)
                     {
-                        if (arg.InputValue != null && arg.InputValue.Equals("true"))
+                        foreach (ScriptArgument arg in ScriptRadiobuttonVariables)
                         {
-                            radiobuttonActive = true;
+                            if (arg.InputValue != null && arg.InputValue.Equals("true"))
+                            {
+                                radiobuttonActive = true;
+                            }
                         }
+                        return radiobuttonActive;
                     }
-
-                    return radiobuttonActive;
                 }
+                return true;
             }
-            
+
 
             /*
             if (IsBusy == true)
@@ -400,9 +402,9 @@ namespace PsGui.ViewModels
         /// <param name="param"></param>
         /// <returns></returns>
         private bool CanClickRadiobutton(object param)
-            {
+        {
             return true;
-            }
+        }
 
         /// <summary>
         /// Helper function for the ICommand implementation.
@@ -410,9 +412,9 @@ namespace PsGui.ViewModels
         /// <param name="param"></param>
         /// <returns></returns>
         private bool CanClickDescriptionButton(object param)
-            {
+        {
             return true;
-            }
+        }
 
         /// <summary>
         /// Helper function for the ICommand implementation. Ensures
@@ -420,9 +422,9 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="radioBtnContent"></param>
         private void GetSelectedScriptCategoryName(object radioBtnContent)
-            {
+        {
             SelectedScriptCategory = radioBtnContent.ToString();
-            }
+        }
 
         /// <summary>
         /// Displays a pop-up box with script information.
@@ -453,7 +455,7 @@ namespace PsGui.ViewModels
         /// <returns>void task</returns>
         private async Task GetScriptDescriptionAsync(object descButton)
         {
-            string msg   = "No script description provided.";
+            string msg = "No script description provided.";
             string title = SelectedScriptFile;
 
             if (scriptReader.ScriptDescription != null &&
@@ -474,18 +476,18 @@ namespace PsGui.ViewModels
         /// Sets the initial script category on program startup.
         /// </summary>
         private void SetInitialScriptCategory()
-            {
+        {
             int firstCategory = 0;
             try
-                {
+            {
                 ScriptCategoryBrowser[firstCategory].IsSelectedCategory = true;
                 SelectedScriptCategory = ScriptCategoryBrowser[firstCategory].FriendlyName;
-                }
-            catch(Exception e)
-                {
-                throw new PsExecException("Cannot find any category directories in the script folder!", e.ToString(), true);
-                }
             }
+            catch (Exception e)
+            {
+                throw new PsExecException("Cannot find any category directories in the script folder!", e.ToString(), true);
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -493,24 +495,21 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
         {
-            IsBusy                = false;
+            IsBusy = false;
             CancelScriptExecution = false; // Half-way implemented
-            hasAwaitedStopActivationDelay = false;
-            CanInteract           = true;
-            VisibleStatusBar      = false;
-            _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
-            directoryReader       = new DirectoryReader(_modulePath);
-            scriptReader          = new ScriptReader();
-            powershellExecuter    = new PowershellExecuter();
+            CanInteract = true;
+            VisibleStatusBar = false;
+            _modulePath = modulePath + "\\" + moduleFolderName + "\\";
+            directoryReader = new DirectoryReader(_modulePath);
+            scriptReader = new ScriptReader();
+            powershellExecuter = new PowershellExecuter();
 
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
 
-            RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
+            RadioButtonChecked = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
-            ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
-
-            // CacheUsernameAndPassword
+            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
         }
 
         /// <summary>
@@ -518,19 +517,19 @@ namespace PsGui.ViewModels
         /// the categories for all the powershell scripts.
         /// </summary>
         public string ModulePath
-            {
+        {
             get
-                {
+            {
                 return _modulePath;
-                }
+            }
             set
-                {
+            {
                 if (value != null)
-                    {
+                {
                     _modulePath = value;
-                    }
                 }
             }
+        }
 
         /// <summary>
         /// Sets or gets the selected category in form of a 
@@ -589,6 +588,7 @@ namespace PsGui.ViewModels
                         VisibleStatusBar = true;
                         SelectedScriptPath = _modulePath + directoryReader.SelectedCategoryName + "\\" + value + ".ps1";
                         scriptReader.ReadSelectedScript(SelectedScriptPath);
+
                         // If previous session output/errors, clear them
                         if (StreamsContainsData())
                         {
@@ -667,7 +667,7 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value)
+                if (value)
                 {
                     // If true, clean up 
                     IsBusy = false;
@@ -717,19 +717,19 @@ namespace PsGui.ViewModels
         /// the directory file paths, the script categories.
         /// </summary>
         public ObservableCollection<ScriptCategory> ScriptCategoryBrowser
-            {
+        {
             get
-                {
+            {
                 return directoryReader.ScriptCategories;
-                }
+            }
             set
-                {
+            {
                 if (value != null)
-                    {
+                {
                     directoryReader.ScriptCategories = value;
-                    }
                 }
             }
+        }
 
         /// <summary>
         /// Sets or gets a collection of strings representing
@@ -759,36 +759,36 @@ namespace PsGui.ViewModels
         /// types of script input variables and their values.
         /// </summary>
         public CompositeCollection ScriptVariables
-            {
+        {
             get
-                {
+            {
                 return scriptReader.ScriptVariables;
-                }
             }
+        }
 
         /// <summary>
         /// Gets a collection of strings representing the 
         /// script input text values.
         /// </summary>
         public ObservableCollection<TextArgument> ScriptTextVariables
-            {
+        {
             get
-                {
+            {
                 return scriptReader.ScriptTextVariables;
-                }
             }
+        }
 
         /// <summary>
         /// Gets a collection of strings representing the
         /// script input username values.
         /// </summary>
         public ObservableCollection<UsernameArgument> ScriptUsernameVariables
-            {
+        {
             get
-                {
+            {
                 return scriptReader.ScriptUsernameVariables;
-                }
             }
+        }
 
         /// <summary>
         /// Gets a collection of strings representing the
@@ -798,24 +798,24 @@ namespace PsGui.ViewModels
         /// RAM is accessible to attackers, you have bigger issues.
         /// </summary>
         public ObservableCollection<PasswordArgument> ScriptPasswordVariables
-            {
+        {
             get
-                {
+            {
                 return scriptReader.ScriptPasswordVariables;
-                }
             }
+        }
 
         /// <summary>
         /// Gets a collection of strings representing
         /// script input multi line text values.
         /// </summary>
         public ObservableCollection<MultiLineArgument> ScriptMultiLineVariables
-            {
+        {
             get
-                {
+            {
                 return scriptReader.ScriptMultiLineVariables;
-                }
             }
+        }
 
         /// <summary>
         /// Gets a collection of strings representing
@@ -853,7 +853,7 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     powershellExecuter.ScriptExecutionOutputCustom = value;
                 }
@@ -872,7 +872,7 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     powershellExecuter.ScriptExecutionOutputRaw = value;
                     OnPropertyChanged("ScriptExecutionOutputRaw");
@@ -892,7 +892,7 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     powershellExecuter.ScriptExecutionProgressPercentComplete = value;
                     OnPropertyChanged("ScriptExecutionProgressPercentComplete");
@@ -932,9 +932,9 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
-                    if(!value.Equals(""))
+                    if (!value.Equals(""))
                     {
                         // If adding additional error text
                         powershellExecuter.ScriptExecutionErrorRaw = value;
@@ -986,7 +986,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorScriptStackTrace = value;
-                    ScriptExecutionErrorRaw                                += value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorScriptStackTrace");
                 }
             }
@@ -1007,7 +1007,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId = value;
-                    ScriptExecutionErrorRaw                                     += value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorFullyQualifiedErrorId");
                 }
             }
@@ -1028,7 +1028,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorException = value;
-                    ScriptExecutionErrorRaw                          += value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorOutput");
                 }
             }
@@ -1049,7 +1049,7 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorDetails = value;
-                    ScriptExecutionErrorRaw                       += value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }
@@ -1067,10 +1067,10 @@ namespace PsGui.ViewModels
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorCategoryInfo = value;
-                    ScriptExecutionErrorRaw                            += value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorCategoryInfo");
                 }
             }
@@ -1090,8 +1090,8 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorInvocationInfo  = value;
-                    ScriptExecutionErrorRaw                               += value;
+                    powershellExecuter.ScriptExecutionErrorInvocationInfo = value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorInvocationInfo");
                 }
             }
@@ -1111,8 +1111,8 @@ namespace PsGui.ViewModels
             {
                 if (value != null)
                 {
-                    powershellExecuter.ScriptExecutionErrorPipelineIterationInfo  = value;
-                    ScriptExecutionErrorRaw                                      += value;
+                    powershellExecuter.ScriptExecutionErrorPipelineIterationInfo = value;
+                    ScriptExecutionErrorRaw += value;
                     OnPropertyChanged("ScriptExecutionErrorPipelineIterationInfo");
 
                 }
@@ -1157,11 +1157,11 @@ namespace PsGui.ViewModels
         {
             // Only checking ErrorRaw because this property will be updated
             // for each of the specific error properties
-            if((ScriptExecutionOutputRaw                != null && ScriptExecutionOutputRaw.Length > 0) ||
-               (ScriptExecutionOutputCustom             != null && ScriptExecutionOutputCustom.Count > 0) ||
-               (ScriptExecutionProgressPercentComplete  != null && !ScriptExecutionProgressPercentComplete.Equals("0")) ||
+            if ((ScriptExecutionOutputRaw != null && ScriptExecutionOutputRaw.Length > 0) ||
+               (ScriptExecutionOutputCustom != null && ScriptExecutionOutputCustom.Count > 0) ||
+               (ScriptExecutionProgressPercentComplete != null && !ScriptExecutionProgressPercentComplete.Equals("0")) ||
                (ScriptExecutionProgressCurrentOperation != null && ScriptExecutionProgressCurrentOperation.Length > 0) ||
-               (ScriptExecutionErrorRaw                 != null && ScriptExecutionErrorRaw.Length > 0))
+               (ScriptExecutionErrorRaw != null && ScriptExecutionErrorRaw.Length > 0))
             {
                 return true;
             }
@@ -1219,15 +1219,15 @@ namespace PsGui.ViewModels
         public void ClearErrorStreams()
         {
             //  ScriptExecutionErrorCustom                = "";
-            ScriptExecutionErrorRaw                   = "";
-            ScriptExecutionErrorTargetObject          = "";
-            ScriptExecutionErrorScriptStackTrace      = "";
+            ScriptExecutionErrorRaw = "";
+            ScriptExecutionErrorTargetObject = "";
+            ScriptExecutionErrorScriptStackTrace = "";
             ScriptExecutionErrorFullyQualifiedErrorId = "";
             ScriptExecutionErrorFullyQualifiedErrorId = "";
-            ScriptExecutionErrorDetails               = "";
-            ScriptExecutionErrorException             = "";
-            ScriptExecutionErrorCategoryInfo          = "";
-            ScriptExecutionErrorInvocationInfo        = "";
+            ScriptExecutionErrorDetails = "";
+            ScriptExecutionErrorException = "";
+            ScriptExecutionErrorCategoryInfo = "";
+            ScriptExecutionErrorInvocationInfo = "";
             ScriptExecutionErrorPipelineIterationInfo = "";
         }
 
@@ -1242,9 +1242,8 @@ namespace PsGui.ViewModels
             powershellExecuter.ClearSession();
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
-            IsScriptSelected  = false;
-            IsBusy            = false;
-            hasAwaitedStopActivationDelay = false;
+            IsScriptSelected = false;
+            IsBusy = false;
         }
 
     }

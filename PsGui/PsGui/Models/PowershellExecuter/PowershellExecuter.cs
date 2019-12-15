@@ -5,13 +5,13 @@ using System.Text;
 using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
-    {
+{
     /// <summary>
     /// A class responsible for executing a powershell 
     /// script at a provided path with provided arguments.
     /// </summary>
     class PowershellExecuter
-        {
+    {
         private List<string> _commandLineArguments;
         private List<string> _commandLineArgKeys;
 
@@ -20,25 +20,25 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         public PowershellExecuter()
         {
-          //  ScriptOutput = "";
-            CommandLineArguments        = new List<string>();
-            CommandLineArgumentKeys     = new List<string>();
+            //  ScriptOutput = "";
+            CommandLineArguments = new List<string>();
+            CommandLineArgumentKeys = new List<string>();
             ScriptExecutionOutputCustom = new ObservableCollection<CustomOutput>();
         }
 
-        public string CustomOutputPrefix                         { get; } = "cust: ";
-        public string ScriptExecutionOutputRaw                   { get; set; }
-        public string ScriptExecutionErrorRaw                    { get; set; }
-        public string ScriptExecutionErrorException              { get; set; }
-        public string ScriptExecutionErrorDetails                { get; set; }
-        public string ScriptExecutionErrorCategoryInfo           { get; set; }
-        public string ScriptExecutionErrorFullyQualifiedErrorId  { get; set; }
-        public string ScriptExecutionErrorInvocationInfo         { get; set; }
-        public string ScriptExecutionErrorPipelineIterationInfo  { get; set; }
-        public string ScriptExecutionErrorScriptStackTrace       { get; set; }
-        public string ScriptExecutionErrorTargetObject           { get; set; }
-        public string ScriptExecutionProgressPercentComplete     { get; set; }
-        public string ScriptExecutionProgressCurrentOperation    { get; set; }
+        public string CustomOutputPrefix                        { get; } = "cust: ";
+        public string ScriptExecutionOutputRaw                  { get; set; }
+        public string ScriptExecutionErrorRaw                   { get; set; }
+        public string ScriptExecutionErrorException             { get; set; }
+        public string ScriptExecutionErrorDetails               { get; set; }
+        public string ScriptExecutionErrorCategoryInfo          { get; set; }
+        public string ScriptExecutionErrorFullyQualifiedErrorId { get; set; }
+        public string ScriptExecutionErrorInvocationInfo        { get; set; }
+        public string ScriptExecutionErrorPipelineIterationInfo { get; set; }
+        public string ScriptExecutionErrorScriptStackTrace      { get; set; }
+        public string ScriptExecutionErrorTargetObject          { get; set; }
+        public string ScriptExecutionProgressPercentComplete    { get; set; }
+        public string ScriptExecutionProgressCurrentOperation   { get; set; }
 
         public ObservableCollection<CustomOutput> ScriptExecutionOutputCustom { get; set; }
 
@@ -58,7 +58,7 @@ namespace PsGui.Models.PowershellExecuter
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     _commandLineArgKeys = value;
                 }
@@ -77,7 +77,7 @@ namespace PsGui.Models.PowershellExecuter
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     _commandLineArguments = value;
                 }
@@ -90,17 +90,17 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="instance"></param>
         public void CollectPowershellScriptOutput(Collection<PSObject> instanceOutput)
-            {
+        {
             StringBuilder tmp = new StringBuilder();
             foreach (PSObject output in instanceOutput)
-                {
+            {
                 if (output != null)
-                    {
+                {
                     tmp.Append(output.ToString());
-                    }
                 }
-         //   ScriptOutput = tmp.ToString();
             }
+            //   ScriptOutput = tmp.ToString();
+        }
 
         /// <summary>
         /// Executes the powershell script in the provided
@@ -108,25 +108,25 @@ namespace PsGui.Models.PowershellExecuter
         /// </summary>
         /// <param name="scriptPath"></param>
         public void ExecuteScriptCommands(string scriptPath)
-            {
+        {
             using (PowerShell psInstance = PowerShell.Create())
-                  {
-                 psInstance.AddScript(scriptPath);
-                  int argLength = CommandLineArguments.Count;
-                  for (int ii = 0; ii < argLength; ii++)
-                      {
-                      psInstance.AddParameter(CommandLineArgumentKeys[ii], CommandLineArguments[ii]);
-                      }
+            {
+                psInstance.AddScript(scriptPath);
+                int argLength = CommandLineArguments.Count;
+                for (int ii = 0; ii < argLength; ii++)
+                {
+                    psInstance.AddParameter(CommandLineArgumentKeys[ii], CommandLineArguments[ii]);
+                }
 
-                  // Prevents displaying objects as objects
-                  psInstance.AddScript("Out-String");
+                // Prevents displaying objects as objects
+                psInstance.AddScript("Out-String");
 
-                  Collection<PSObject> psOutput = psInstance.Invoke();
+                Collection<PSObject> psOutput = psInstance.Invoke();
 
-                  CollectPowershellScriptOutput(psOutput);
-             //     CollectPowershellScriptErrors(psInstance);
-                  }
+                CollectPowershellScriptOutput(psOutput);
+                //     CollectPowershellScriptErrors(psInstance);
             }
+        }
 
         /// <summary>
         /// Sets the script argument data from the supplied composite collection
@@ -156,26 +156,26 @@ namespace PsGui.Models.PowershellExecuter
         /// <param name="scriptPath"></param>
         /// <param name="scriptVars"></param>
         public void ExecuteScript(string scriptPath, CompositeCollection scriptVars)
-            {
+        {
             SetScriptParameters(scriptVars);
             ExecuteScriptCommands(scriptPath);
-            }
+        }
 
         /// <summary>
         /// Clears the script output.
         /// </summary>
         public void ClearScriptOutput()
-            {
-         //   ScriptOutput = "";
-            }
+        {
+            //   ScriptOutput = "";
+        }
 
         /// <summary>
         /// Clears stored data, excludes the scriptoutput.
         /// </summary>
         public void ClearSession()
-            {
+        {
             CommandLineArgumentKeys.Clear();
             CommandLineArguments.Clear();
-            }
         }
     }
+}

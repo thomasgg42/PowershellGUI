@@ -1,35 +1,42 @@
 ﻿namespace PsGui.Models.PowershellExecuter
-    {
+{
     /// <summary>
-    /// A class with currently no functionality. Provides
+    /// A class with currently little functionality. Provides
     /// a scalable solution for input logic.
     /// @Inherits from ScriptArgument.
     /// </summary>
     public class PasswordArgument : ScriptArgument
-        {
-
+    {
         /// <summary>
-        /// Stores the username and hashed password from the personal
-        /// credentials file.
+        /// Gets the stored password in the defined
+        /// credentials file. Saves the password in
+        /// the input variable, freeing the user of 
+        /// typing in username and password manually.
+        /// 
+        /// Base64 is used only to obscure the password
+        /// from co-workers looking over your shoulder.
+        /// The security must be handled by the environment
+        /// where the application runs.
         /// </summary>
-        private void CachePassword()
+        public string GetStoredCredentials()
         {
-            string[] lines  = System.IO.File.ReadAllLines(PsGui.ViewModels.MainViewModel.powershell_script_credentialsfile_path);
-            string passwordHash = lines[1];
-            base.InputValue = passwordHash;
-            
-            
-            // Create powershell script to handle the 
-            // hashing.
-
-            // Silently check if file exists
-            // if no file, no warnings or errors.
-
-            // If file exists, read file
-            // If file contains 2 lines
-            // transform hashed value to normal value
-
-            // Add the values to the ScriptReader.ScriptUsernameVariables and scriptReader.ScriptPasswordVariables collections
+            int textFileRow = 1;
+            string passwordHash = "";
+            try
+            {
+                passwordHash = System.IO.File.ReadAllLines(PsGui.ViewModels.MainViewModel.powershell_script_credentialsfile_path)[textFileRow];
+            }
+            catch (System.Exception e)
+            {
+                // Errors are handled silently
+                // If the file is not found or unreadable,
+                // no credentials are stored.
+            }
+            if (passwordHash != "")
+            {
+                return base.Base64Decode(passwordHash);
+            }
+            return passwordHash;
         }
 
         /// <summary>
@@ -39,8 +46,8 @@
         /// <param name="description"></param>
         /// <param name="type"></param>
         public PasswordArgument(string key, string description, string type) : base(key, description, type)
-            {
-            CachePassword();
-            }
+        {
+            base.InputValue = GetStoredCredentials();
         }
     }
+}

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PsGui.Models.PowershellExecuter
+﻿namespace PsGui.Models.PowershellExecuter
 {
     /// <summary>
     /// Allows custom error output and custom regular output
@@ -19,9 +13,9 @@ namespace PsGui.Models.PowershellExecuter
             Error
         }
 
-        private string       _outputColor;
+        private string _outputColor;
         private const string typeColorOutput = "Red";
-        private const string typeColorError  = "Black";
+        private const string typeColorError = "Black";
 
         /// <summary>
         /// Regular or error output.
@@ -32,9 +26,9 @@ namespace PsGui.Models.PowershellExecuter
         {
             switch (type)
             {
-                case Types.Error:  OutputColor = typeColorOutput; break;
-                case Types.Output: OutputColor = typeColorError;  break;
-                default:           OutputColor = typeColorError;  break;
+                case Types.Error: OutputColor = typeColorOutput; break;
+                case Types.Output: OutputColor = typeColorError; break;
+                default: OutputColor = typeColorError; break;
             }
         }
 
