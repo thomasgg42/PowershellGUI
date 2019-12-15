@@ -185,11 +185,17 @@
                                    Foreground="{DynamicResource PrimaryHueMidBrush}" 
                                     />
                         <PasswordBox x:Name="PasswordBox"
+                                     IsEnabled="{Binding DataContext.CanInteract,
+                                                      RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType={x:Type ItemsControl}}}" />
+                        <!--
+                        <PasswordBox x:Name="PasswordBox"
                                      converters:PasswordBoxAssistant.BindPassword="True"
                                      converters:PasswordBoxAssistant.BoundPassword="{Binding Path=InputValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                      AncestorType={x:Type ItemsControl}}}" />
+                        -->
                     </StackPanel>
                 </DataTemplate>
 

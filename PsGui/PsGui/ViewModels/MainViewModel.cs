@@ -7,8 +7,10 @@ namespace PsGui.ViewModels
         {
         private const string relConfigFilePath = @".\config.ini";
 
-        private static string powershellScriptFolderPath;
-        private static string powershellScriptModuleFolderName;
+        private static string powershell_script_folder_path;
+        private static string powershell_script_folder_name;
+
+        public static string powershell_script_credentialsfile_path; 
 
         public ObservableCollection<object> Tabs { get; private set; }
 
@@ -16,7 +18,7 @@ namespace PsGui.ViewModels
             {
             GetConfig();
             Tabs = new ObservableCollection<object>();
-            Tabs.Add(new PsExecViewModel(powershellScriptFolderPath, powershellScriptModuleFolderName));
+            Tabs.Add(new PsExecViewModel(powershell_script_folder_path, powershell_script_folder_name));
             }
 
         /// <summary>
@@ -48,17 +50,24 @@ namespace PsGui.ViewModels
         /// </summary>
         /// <param name="line"></param>
         private void ParseConfig(string line)
-            {
+        {
             string key = line.Split('=')[0].Trim();
             string value = ParseQuotationContent(line);
 
             switch (key)
-                {
-                case "psgui_rel_scriptfolder_path":  powershellScriptFolderPath       = value; break;
-                case "psgui_scriptfolder_name":      powershellScriptModuleFolderName = value; break;
+            {
+                case "psgui_scriptfolder_relpath": powershell_script_folder_path          = value; break;
+                case "psgui_scriptfolder_name":    powershell_script_folder_name          = value; break;
+                case "psgui_credentials_path":     powershell_script_credentialsfile_path = value.Replace("AAAAA", GetCurrentScriptUser()); break;
                 default: break;
-                }
             }
+        }
+
+        private string GetCurrentScriptUser()
+        {
+            //return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            return System.Environment.UserName;
+        }
 
         /// <summary>
         /// Gets the content inside quotation marks in a string.

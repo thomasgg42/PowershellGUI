@@ -9,13 +9,24 @@
         {
 
         /// <summary>
+        /// Stores the username and hashed password from the personal
+        /// credentials file.
+        /// </summary>
+        private void CacheUsername()
+        {
+            string[] lines  = System.IO.File.ReadAllLines(PsGui.ViewModels.MainViewModel.powershell_script_credentialsfile_path);
+            base.InputValue = lines[0];
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="description"></param>
         /// <param name="type"></param>
         public UsernameArgument(string key, string description, string type) : base(key, description, type)
-            {
-            }
+        {
+            CacheUsername();
         }
+    }
     }

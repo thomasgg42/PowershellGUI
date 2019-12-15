@@ -26,7 +26,6 @@ namespace PsGui.Models.PowershellExecuter
         private void ReadScriptHeader(int lineNum, string line)
             {
             const int description = 1;
-           // const int header = 2;
 
             switch (lineNum)
                 {
@@ -35,13 +34,6 @@ namespace PsGui.Models.PowershellExecuter
                     _scriptDescription = ParseQuotationContent(line);
                     break;
                     }
-                /*
-                case header:
-                    {
-                    _scriptHeader = ParseQuotationContent(line);
-                    break;
-                    }
-                */
                 }
             }
 

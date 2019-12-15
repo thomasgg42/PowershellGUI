@@ -488,26 +488,6 @@ namespace PsGui.ViewModels
             }
 
         /// <summary>
-        /// Stores the username and hashed password from the personal
-        /// credentials file.
-        /// </summary>
-        private void CacheUsernameAndPassword()
-        {
-            // Create powershell script to handle the 
-            // hashing.
-
-            // Silently check if file exists
-            // if no file, no warnings or errors.
-
-            // If file exists, read file
-            // If file contains 2 lines
-            // transform hashed value to normal value
-
-            // Add the values to the ScriptReader.ScriptUsernameVariables and scriptReader.ScriptPasswordVariables collections 
-
-        }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="modulePath"></param>
