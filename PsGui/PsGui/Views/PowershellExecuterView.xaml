@@ -126,7 +126,7 @@
 
         <!-- Radiobutton input fields -->
         <ItemsControl ItemsSource="{Binding Path=ScriptRadiobuttonVariables}" Grid.Row="3"
-                      Margin="10 10 0 0"
+                      Margin="10 10 0 10"
                       Grid.Column="0"
                       Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
