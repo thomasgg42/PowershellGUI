@@ -67,10 +67,11 @@
             <!-- 6 Multiline string input fields -->
             <RowDefinition Height="auto" />
             <!-- 7 Execute button -->
-            <RowDefinition Height="*"    />
+            <RowDefinition Height="auto"    />
             <!-- 8 Output field -->
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
             <!-- 9 Statusbar-->
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <!-- Script category radio buttons  -->
@@ -124,7 +125,7 @@
         </Button>
 
         <!-- Radiobutton input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptRadiobuttonVariables}" Grid.Row="4"
+        <ItemsControl ItemsSource="{Binding Path=ScriptRadiobuttonVariables}" Grid.Row="3"
                       Margin="10 10 0 0"
                       Grid.Column="0"
                       Grid.ColumnSpan="3">
@@ -151,7 +152,7 @@
         </ItemsControl>
 
         <!-- Single line string input fields -->
-        <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="3"
+        <ItemsControl ItemsSource="{StaticResource ScriptVariables}" Grid.Row="4"
                       Margin="10 0 0 0"
                       Grid.Column="0"
                       Grid.ColumnSpan="3">
@@ -208,10 +209,10 @@
         </ItemsControl>
 
         <!-- Checkbox input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="4"
+        <ItemsControl ItemsSource="{Binding Path=ScriptCheckboxVariables}" Grid.Row="5"
                       Margin="10 10 0 0"
                       Grid.Column="0"
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="3" />
@@ -222,6 +223,7 @@
                 <DataTemplate>
                     <StackPanel Margin="0 5 5 0">
                         <CheckBox Content="{Binding InputKey}"
+                                  FontSize="12"
                                   Foreground="{DynamicResource PrimaryHueMidBrush}" 
                                   ToolTip="{Binding InputDescription}"
                                   IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -234,7 +236,7 @@
         </ItemsControl>
 
         <!-- Multiline string input fields -->
-        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}" Grid.Row="5"
+        <ItemsControl ItemsSource="{Binding Path=ScriptMultiLineVariables}" Grid.Row="6"
                       Margin="10 0 0 0"
                       Grid.Column="0" Grid.ColumnSpan="3">
             <ItemsControl.ItemsPanel>
@@ -263,14 +265,14 @@
         </ItemsControl>
 
         <!-- Execute button -->
-        <Button Command="{Binding Path=ExecuteButtonPushed}" Grid.Row="6"
+        <Button Command="{Binding Path=ExecuteButtonPushed}" Grid.Row="7"
                 Grid.Column="1"
                 Content="Execute"
                 Margin="10 10 10 10"
                 IsDefault="True" />
 
         <!-- Output field -->
-        <dragablz:TabablzControl Grid.Row="7"
+        <dragablz:TabablzControl Grid.Row="8"
                                  Grid.Column="0"
                                  Grid.ColumnSpan="3"
                                  FixedHeaderCount="3" 
@@ -314,7 +316,7 @@
         </dragablz:TabablzControl>
 
         <!-- Status bar -->
-        <Grid Grid.Row="8" 
+        <Grid Grid.Row="9" 
               Grid.Column="0" 
               Grid.ColumnSpan="3"
               Background="White"
