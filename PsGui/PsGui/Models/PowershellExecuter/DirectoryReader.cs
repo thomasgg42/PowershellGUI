@@ -68,7 +68,9 @@ namespace PsGui.Models.PowershellExecuter
             }
             catch (System.Exception e)
             {
-                throw new PsExecException("No script directory found!", e.ToString(), true);
+                PsGuiException.WriteErrorToFile(e.ToString());
+                PsGuiException.WriteErrorToScreen("No script directory found!");
+                PsGuiException.CloseApp();
             }
         }
 

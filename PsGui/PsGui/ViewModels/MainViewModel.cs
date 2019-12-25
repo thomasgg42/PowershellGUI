@@ -107,7 +107,9 @@ namespace PsGui.ViewModels
             }
             catch (System.Exception e)
             {
-                throw new PsGui.Models.PsGuiException("Could not create new config file. Check write permissions.", e.ToString(), true);
+                Models.PsGuiException.WriteErrorToFile(e.ToString());
+                Models.PsGuiException.WriteErrorToScreen("PsGui is unable to create the required config file. Likely due to lack of write permissions. Closing PsGui.");
+                Models.PsGuiException.CloseApp();
             }
 
         }

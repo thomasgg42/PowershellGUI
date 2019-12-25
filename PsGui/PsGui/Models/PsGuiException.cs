@@ -3,45 +3,40 @@ using System.IO;
 
 namespace PsGui.Models
 {
-    public class PsGuiException : Exception
+    public static class PsGuiException
     {
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="temp1"></param>
-        /// <param name="temp2"></param>
-        /// <param name="closeApp">True/false</param>
-        public PsGuiException(string temp1, string temp2, bool closeApp)
+        public static string errorLogName = "error.log";
+        public static void WriteErrorToScreen(string error)
         {
-            System.Windows.MessageBox.Show(temp1);
-            WriteErrorToFile(temp2);
-            if (closeApp)
-            {
-                CloseApp();
-            }
-        }
-
-        public PsGuiException(string temp1)
-        {
-            // Non-critical errors?
-            System.Windows.MessageBox.Show(temp1);
+            System.Windows.MessageBox.Show(error);
         }
 
         /// <summary>
-        /// Writes the provided error message to an error log in the 
-        /// current directory.
+        /// Writes the provided error string to error.log in the root
+        /// directory. If the file does not exists, it is created.
+        /// If the file exists, contents are appended.
         /// </summary>
         /// <param name="error"></param>
-        public void WriteErrorToFile(string error)
+        public static void WriteErrorToFile(string error)
         {
-            using (StreamWriter outputFile = new StreamWriter("error.log"))
+            bool appendFileContents = true;
+            using (StreamWriter outputFile = new StreamWriter(errorLogName, appendFileContents))
             {
                 outputFile.WriteLine(error);
             }
         }
 
-        public void CloseApp()
+        /// <summary>
+        /// Clears error.log in the root directory.
+        /// </summary>
+        public static void ClearErrorLog()
+        {
+            FileStream fileStream = File.Open(errorLogName, FileMode.Open);
+            fileStream.SetLength(0);
+            fileStream.Close();
+        }
+
+        public static void CloseApp()
         {
             if (System.Windows.Forms.Application.MessageLoop)
             {

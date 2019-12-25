@@ -50,7 +50,8 @@ namespace PsGui.ViewModels
             }
             catch (Exception e)
             {
-                throw new PsExecException("Script execution failed due to bad PowerShell script code!", e.ToString(), false);
+                Models.PsGuiException.WriteErrorToFile(e.ToString());
+                Models.PsGuiException.WriteErrorToScreen("Script execution failed due to bad PowerShell script code!");
             }
 
             // Outdated since async implemented
@@ -165,41 +166,56 @@ namespace PsGui.ViewModels
             }
 
             // TargetObject
+            // Typically the failing function or cmdlet name
             ScriptExecutionErrorTargetObject = (((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].TargetObject.ToString() : "");
 
-            // StackTrace
-            ScriptExecutionErrorScriptStackTrace = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace != null ?
-                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace : "");
-
-
-            /*
-             * Too many details. Drowning the interesting details.
-             * 
-            // FullyQualifiedErrorId
-            ScriptExecutionErrorFullyQualifiedErrorId = (((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId != null ?
-                ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId : "");
-            
             // CategoryInfo
+            // The name of the cmdlet that failed and the fully qualified error ID. Also
+            // displays what kind of argument the cmdlet was given.
+            // ex: ObjectNotFound: (Get-ADUser:String)[], CommandNotFoundException
             ScriptExecutionErrorCategoryInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].CategoryInfo.ToString() : "");
 
-            // Exception
-            ScriptExecutionErrorException = (((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception != null ?
-                ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString() : "");
+            // StackTrace
+            // Provides information about which script and which line number
+            // the error occured on.
+            ScriptExecutionErrorScriptStackTrace = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ScriptStackTrace : "");
 
-            // ErrorDetails
-            ScriptExecutionErrorDetails = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails != null ?
-                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString() : "");
-
-            // InvocationInfo
+            /*
+             * Following ErrorRecords shall not be written to PsGui but to the error log.
+            */
+        
+            // InvocationInfo contains many properties giving all the nescessary 
+            // information. However testing shows this informatoin is not collected
+            // by powershell.
             ScriptExecutionErrorInvocationInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo != null ?
-                ((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo.ToString() : "");
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].InvocationInfo.MyCommand.ToString() : "");
 
             // PipelineIterationinfo
+            // Shows the status of the pipeline when the error occured.
+            // ex: System.Collections.ObjectModel.ReadOnlyCollection`1[System.Int32]
             ScriptExecutionErrorPipelineIterationInfo = (((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo != null ?
                 ((PSDataCollection<ErrorRecord>)sender)[e.Index].PipelineIterationInfo.ToString() : "");
-            */
+
+            // FullyQualifiedErrorId
+            // The name of the type of error that occured. Ex: "CommandNotFoundException"
+            ScriptExecutionErrorFullyQualifiedErrorId = (((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].FullyQualifiedErrorId : "");
+
+            // ErrorDetails
+            // Contains aditional error details. Typically not implemented for many
+            // cmdlets.
+            ScriptExecutionErrorDetails = (((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].ErrorDetails.ToString() : "");
+           
+            // Exception
+            // Describes the problem and offers a solution to the failing cmdlet. Also lists
+            // the calls on the call stack back to the top of the stack. The solution
+            // part is also shown in the custom output.
+            ScriptExecutionErrorException = (((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception != null ?
+                ((PSDataCollection<ErrorRecord>)sender)[e.Index].Exception.ToString() : "");
 
             string errorSeparator = "=======================================================" + newLine;
             ScriptExecutionErrorRaw += errorSeparator;
@@ -485,7 +501,9 @@ namespace PsGui.ViewModels
             }
             catch (Exception e)
             {
-                throw new PsExecException("Cannot find any category directories in the script folder!", e.ToString(), true);
+                Models.PsGuiException.WriteErrorToFile(e.ToString());
+                Models.PsGuiException.WriteErrorToScreen("Cannot find any category directories in the script folder.");
+                Models.PsGuiException.CloseApp();
             }
         }
 
@@ -495,21 +513,25 @@ namespace PsGui.ViewModels
         /// <param name="modulePath"></param>
         public PsExecViewModel(string modulePath, string moduleFolderName)
         {
-            IsBusy = false;
+            IsBusy                = false;
             CancelScriptExecution = false; // Half-way implemented
-            CanInteract = true;
-            VisibleStatusBar = false;
-            _modulePath = modulePath + "\\" + moduleFolderName + "\\";
-            directoryReader = new DirectoryReader(_modulePath);
-            scriptReader = new ScriptReader();
-            powershellExecuter = new PowershellExecuter();
+            CanInteract           = true;
+            VisibleStatusBar      = false;
+            _modulePath           = modulePath + "\\" + moduleFolderName + "\\";
+            directoryReader       = new DirectoryReader(_modulePath);
+            scriptReader          = new ScriptReader();
+            powershellExecuter    = new PowershellExecuter();
 
             UpdateScriptCategoriesList();
             SetInitialScriptCategory();
 
-            RadioButtonChecked = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
+            RadioButtonChecked            = new PsGui.Converters.CommandHandler(GetSelectedScriptCategoryName, CanClickRadiobutton);
             ScriptDescriptionButtonPushed = new PsGui.Converters.CommandHandlerAsync(GetScriptDescriptionAsync, CanClickDescriptionButton);
-            ExecuteButtonPushed = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
+            ExecuteButtonPushed           = new PsGui.Converters.CommandHandlerAsync(StartOrStopScriptExecution, CanExecuteScript);
+
+            // Error log only contains information of the last
+            // crash and is reset upon starting the application again.
+            Models.PsGuiException.ClearErrorLog(); 
         }
 
         /// <summary>
@@ -966,91 +988,8 @@ namespace PsGui.ViewModels
                 {
                     powershellExecuter.ScriptExecutionErrorTargetObject = value;
                     ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
                     OnPropertyChanged("ScriptExecutionErrorTargetObject");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the error ScriptStackTrace output generated by the executed 
-        /// powershell script.
-        /// </summary>
-        public string ScriptExecutionErrorScriptStackTrace
-        {
-            get
-            {
-                return powershellExecuter.ScriptExecutionErrorScriptStackTrace;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    powershellExecuter.ScriptExecutionErrorScriptStackTrace = value;
-                    ScriptExecutionErrorRaw += value;
-                    OnPropertyChanged("ScriptExecutionErrorScriptStackTrace");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the error FullyQualifiedErrorId output generated by the executed 
-        /// powershell script.
-        /// </summary>
-        public string ScriptExecutionErrorFullyQualifiedErrorId
-        {
-            get
-            {
-                return powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId = value;
-                    ScriptExecutionErrorRaw += value;
-                    OnPropertyChanged("ScriptExecutionErrorFullyQualifiedErrorId");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the error Exception output generated by the executed 
-        /// powershell script.
-        /// </summary>
-        public string ScriptExecutionErrorException
-        {
-            get
-            {
-                return powershellExecuter.ScriptExecutionErrorException;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    powershellExecuter.ScriptExecutionErrorException = value;
-                    ScriptExecutionErrorRaw += value;
-                    OnPropertyChanged("ScriptExecutionErrorOutput");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the error Details output generated by the executed 
-        /// powershell script.
-        /// </summary>
-        public string ScriptExecutionErrorDetails
-        {
-            get
-            {
-                return powershellExecuter.ScriptExecutionErrorDetails;
-            }
-            set
-            {
-                if (value != null)
-                {
-                    powershellExecuter.ScriptExecutionErrorDetails = value;
-                    ScriptExecutionErrorRaw += value;
-                    OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }
         }
@@ -1071,7 +1010,96 @@ namespace PsGui.ViewModels
                 {
                     powershellExecuter.ScriptExecutionErrorCategoryInfo = value;
                     ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
                     OnPropertyChanged("ScriptExecutionErrorCategoryInfo");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error ScriptStackTrace output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorScriptStackTrace
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorScriptStackTrace;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorScriptStackTrace = value;
+                    ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
+                    OnPropertyChanged("ScriptExecutionErrorScriptStackTrace");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error FullyQualifiedErrorId output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorFullyQualifiedErrorId
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorFullyQualifiedErrorId = value;
+                    // ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
+                    OnPropertyChanged("ScriptExecutionErrorFullyQualifiedErrorId");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error Exception output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorException
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorException;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorException = value;
+                    // ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
+                    OnPropertyChanged("ScriptExecutionErrorOutput");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error Details output generated by the executed 
+        /// powershell script.
+        /// </summary>
+        public string ScriptExecutionErrorDetails
+        {
+            get
+            {
+                return powershellExecuter.ScriptExecutionErrorDetails;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    powershellExecuter.ScriptExecutionErrorDetails = value;
+                   // ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
+                    OnPropertyChanged("ScriptExecutionProgressCurrentOperation");
                 }
             }
         }
@@ -1091,7 +1119,8 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorInvocationInfo = value;
-                    ScriptExecutionErrorRaw += value;
+                    // ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
                     OnPropertyChanged("ScriptExecutionErrorInvocationInfo");
                 }
             }
@@ -1112,7 +1141,8 @@ namespace PsGui.ViewModels
                 if (value != null)
                 {
                     powershellExecuter.ScriptExecutionErrorPipelineIterationInfo = value;
-                    ScriptExecutionErrorRaw += value;
+                    // ScriptExecutionErrorRaw += value;
+                    Models.PsGuiException.WriteErrorToFile(value);
                     OnPropertyChanged("ScriptExecutionErrorPipelineIterationInfo");
 
                 }

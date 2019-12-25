@@ -353,7 +353,9 @@ namespace PsGui.Models.PowershellExecuter
             }
             catch (Exception e)
             {
-                throw new PsExecException("Cannot read script header. Bad structure!", e.ToString(), true);
+                PsGuiException.WriteErrorToFile(e.ToString());
+                PsGuiException.WriteErrorToScreen("The header in the Powershell-script is improperly formated. \r\nObviously not written by Thomas. \r\n\r\nClosing PsGui.");
+                PsGuiException.CloseApp();
             }
 
             AddScriptArgumentsToMainCollection();
