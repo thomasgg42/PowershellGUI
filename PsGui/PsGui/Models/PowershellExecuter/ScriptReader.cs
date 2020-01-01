@@ -358,7 +358,7 @@ namespace PsGui.Models.PowershellExecuter
             catch (Exception e)
             {
                 PsGuiException.WriteErrorToFile(e.ToString());
-                PsGuiException.WriteErrorToScreen("The header in the Powershell-script is improperly formated. \r\nObviously not written by Thomas. \r\n\r\nClosing PsGui.");
+                PsGuiException.WriteErrorToScreen("The header in the Powershell-script is improperly formated. \r\n\r\nClosing PsGui.");
                 PsGuiException.CloseApp();
             }
 
