@@ -106,8 +106,9 @@ namespace PsGui.ViewModels
                 "# generate a new, empty config.ini file.",
                 "",
                 "# PSGUI",
-                "psgui_rel_scriptfolder_path = \".\"",
+                "psgui_scriptfolder_relpath = \".\"",
                 "psgui_scriptfolder_name = \"Scripts\"",
+                "psgui_credentials_path = \".\""
                 };
             try
             {

@@ -35,9 +35,12 @@ namespace PsGui.Models
         /// </summary>
         public static void ClearErrorLog()
         {
-            FileStream fileStream = File.Open(errorLogName, FileMode.Open);
-            fileStream.SetLength(0);
-            fileStream.Close();
+            if(File.Exists(errorLogName))
+            {
+                FileStream fileStream = File.Open(errorLogName, FileMode.Open);
+                fileStream.SetLength(0);
+                fileStream.Close();
+            }
         }
 
         public static void CloseApp()
