@@ -67,6 +67,5 @@
         /// The output contents.
         /// </summary>
         public string Text { get; set; }
-
     }
 }

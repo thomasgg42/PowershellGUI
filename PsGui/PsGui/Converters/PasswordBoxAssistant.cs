@@ -10,13 +10,13 @@ using System.Windows.Data;
 
 namespace PsGui.Converters
 {
-    public static class PasswordBoxAssistant2
+    public static class PasswordBoxAssistant
     {
         private static readonly DependencyProperty PasswordInitializedProperty =
-            DependencyProperty.RegisterAttached("PasswordInitialized", typeof(bool), typeof(PasswordBoxAssistant2), new PropertyMetadata(false));
+            DependencyProperty.RegisterAttached("PasswordInitialized", typeof(bool), typeof(PasswordBoxAssistant), new PropertyMetadata(false));
 
         private static readonly DependencyProperty SettingPasswordProperty =
-            DependencyProperty.RegisterAttached("SettingPassword", typeof(bool), typeof(PasswordBoxAssistant2), new PropertyMetadata(false));
+            DependencyProperty.RegisterAttached("SettingPassword", typeof(bool), typeof(PasswordBoxAssistant), new PropertyMetadata(false));
 
         public static string GetPassword(DependencyObject obj)
         {
@@ -32,7 +32,7 @@ namespace PsGui.Converters
         // If the binding sets us to a value which we already are, then this doesn't happen. Therefore start with a value that's
         // definitely unique.
         public static readonly DependencyProperty PasswordProperty =
-            DependencyProperty.RegisterAttached("Password", typeof(string), typeof(PasswordBoxAssistant2),
+            DependencyProperty.RegisterAttached("Password", typeof(string), typeof(PasswordBoxAssistant),
                 new FrameworkPropertyMetadata(Guid.NewGuid().ToString(), HandleBoundPasswordChanged)
                 {
                     BindsTwoWayByDefault = true,

@@ -3,7 +3,9 @@
 namespace PsGui.ViewModels
 {
     /// <summary>
-    /// View model or the Material Design message box replacement.
+    /// View model of the Material Design Dialog Box. Replaces
+    /// the default Windows.System.MessageBox in a asynchronous
+    /// way.
     /// </summary>
     public partial class DialogBoxViewModel : UserControl
     {

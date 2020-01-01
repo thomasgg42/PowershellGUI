@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 
-
 namespace PsGui.ViewModels
 {
     /// <summary>

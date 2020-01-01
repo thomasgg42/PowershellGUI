@@ -3,6 +3,14 @@ using System.Text.RegularExpressions;
 
 namespace PsGui.ViewModels
 {
+    /// <summary>
+    /// The main view model originaly thought to contain
+    /// a collection of tabs each having their own view model, 
+    /// views and models. Each tab was to provide different types
+    /// of purpose. However PsGui resulted in only being used for
+    /// running Powershell-scripts and the tabs were removed from
+    /// the user interface.
+    /// </summary>
     public class MainViewModel : ObservableObject
     {
         private const string relConfigFilePath = @".\config.ini";

@@ -30,7 +30,7 @@
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptUsernameVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptPasswordVariables}}" />
             <CollectionContainer Collection="{Binding Source={StaticResource ScriptTextVariables}}" />
-            
+
             <!-- 
                  Folowing collections are taken out of the CompositeCollection due to their
                  need of being separated from text input elements 
@@ -107,7 +107,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
+
         <!-- Script file dropdown menu -->
         <ComboBox ItemsSource="{Binding Path=ScriptFileBrowser}" Grid.Row="1"
                   SelectedItem="{Binding Path=SelectedScriptFile, Mode=Default}"
@@ -156,7 +156,7 @@
                       Margin="10 0 0 0"
                       Grid.Column="0"
                       Grid.ColumnSpan="3">
-            
+
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="2" />
@@ -169,14 +169,14 @@
                     <StackPanel Margin="0 5 5 0">
                         <TextBlock Text="{Binding InputKey}" 
                                    ToolTip="{Binding InputDescription}"
-                                   Foreground="{DynamicResource PrimaryHueMidBrush}" /> 
+                                   Foreground="{DynamicResource PrimaryHueMidBrush}" />
                         <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                      AncestorType={x:Type ItemsControl}}}" />
                     </StackPanel>
                 </DataTemplate>
-                
+
                 <!-- Password -->
                 <DataTemplate DataType="{x:Type psExecModels:PasswordArgument}">
                     <StackPanel Margin="0 5 5 0" >
@@ -184,7 +184,7 @@
                                    ToolTip="{Binding InputDescription}"
                                    Foreground="{DynamicResource PrimaryHueMidBrush}" />
 
-                        <PasswordBox converters:PasswordBoxAssistant2.Password="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <PasswordBox converters:PasswordBoxAssistant.Password="{Binding InputValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      IsEnabled="{Binding DataContext.CanInteract,
                                                       RelativeSource={RelativeSource Mode=FindAncestor,
                                                                                      AncestorType={x:Type ItemsControl}}}" />
@@ -205,7 +205,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.Resources>
-            
+
         </ItemsControl>
 
         <!-- Checkbox input fields -->

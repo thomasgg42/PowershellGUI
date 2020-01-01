@@ -1,8 +1,7 @@
 ﻿namespace PsGui.Models.PowershellExecuter
 {
     /// <summary>
-    /// A class with currently little functionality. Provides
-    /// a scalable solution for input logic.
+    /// A class handling password box functionality.
     /// @Inherits from ScriptArgument.
     /// </summary>
     public class PasswordArgument : ScriptArgument
@@ -12,7 +11,6 @@
         /// credentials file. Saves the password in
         /// the input variable, freeing the user of 
         /// typing in username and password manually.
-        /// 
         /// Base64 is used only to obscure the password
         /// from co-workers looking over your shoulder.
         /// The security must be handled by the environment

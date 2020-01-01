@@ -29,7 +29,3 @@ namespace PsGui.Converters
     }
 
 }
-
-
-
-

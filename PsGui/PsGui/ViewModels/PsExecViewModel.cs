@@ -10,8 +10,10 @@ using System.Windows.Input;
 namespace PsGui.ViewModels
 {
     /// <summary>
-    /// Executes powershell scripts with command line arguments
-    /// in the form of user input.
+    /// The main view model for executing powershell scripts.
+    /// Using the functionality of all the models and conneting
+    /// them to the views, allowing powershell scripts to be 
+    /// executed with a graphical user interface.
     /// </summary>
     public class PsExecViewModel : ObservableObject
     {
@@ -1275,6 +1277,5 @@ namespace PsGui.ViewModels
             IsScriptSelected = false;
             IsBusy = false;
         }
-
     }
 }

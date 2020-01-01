@@ -1,8 +1,7 @@
 ﻿namespace PsGui.Models.PowershellExecuter
 {
     /// <summary>
-    /// A class with currently little functionality. Provides
-    /// a scalable solution for input logic.
+    /// A class handling username input box functionality.
     /// @Inherits from ScriptArgument.
     /// </summary>
     public class UsernameArgument : ScriptArgument

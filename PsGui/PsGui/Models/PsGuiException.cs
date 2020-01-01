@@ -3,6 +3,11 @@ using System.IO;
 
 namespace PsGui.Models
 {
+    /// <summary>
+    /// A class handling exceptions. Providing functionality to 
+    /// write error messages to the screen, file and closing 
+    /// of the application upon critical errors.
+    /// </summary>
     public static class PsGuiException
     {
         public static string errorLogName = "error.log";

@@ -210,6 +210,5 @@ namespace PsGui.Models.PowershellExecuter
             ClearCategories();
             ClearScripts();
         }
-
     }
 }

@@ -5,9 +5,13 @@ using System.Windows.Data;
 
 namespace PsGui.Models.PowershellExecuter
 {
+    /// <summary>
+    /// A class responsible with handling the reading of 
+    /// each powershell script header. Storing all the input arguments
+    /// and their properties.
+    /// </summary>
     public class ScriptReader
     {
-
         private CompositeCollection                       _scriptVariables;
         private ObservableCollection<TextArgument>        _scriptTextVariables;
         private ObservableCollection<PasswordArgument>    _scriptPasswordVariables;

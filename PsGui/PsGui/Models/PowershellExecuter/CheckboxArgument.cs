@@ -1,8 +1,7 @@
 ﻿namespace PsGui.Models.PowershellExecuter
 {
     /// <summary>
-    /// A class with currently no functionality. Provides
-    /// a scalable solution for input logic.
+    /// A class handling checkbox functionality.
     /// @Inherits from ScriptArgument.
     /// </summary>
     public class CheckboxArgument : ScriptArgument
@@ -23,6 +22,10 @@
             base.InputValue = "false";
         }
 
+        /// <summary>
+        /// Returns true if the checkbox is checked. False 
+        /// otherwise.
+        /// </summary>
         public bool IsChecked
         {
             get

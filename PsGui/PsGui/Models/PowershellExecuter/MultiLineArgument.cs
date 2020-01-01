@@ -14,8 +14,6 @@
         /// <param name="description"></param>
         /// <param name="type"></param>
         public MultiLineArgument(string key, string description, string type) : base(key, description, type)
-        {
-
-        }
+        { }
     }
 }

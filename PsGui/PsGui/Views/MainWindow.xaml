@@ -33,9 +33,7 @@
             </Grid>
         </Border>
     </materialDesign:DialogHost>
-
-
-            <!--
+    <!-- Used if PsGui ever were to contain more functionality than running powershell scripts
         <Grid>
             <dragablz:TabablzControl BorderThickness="0">
                 <dragablz:TabablzControl.InterTabController>
@@ -45,9 +43,6 @@
                     <local:PowershellExecuterView />
                 </TabItem>
             </dragablz:TabablzControl>
-            
-            -->
-            <!--
             <TabControl Padding="10">
                 <TabItem DataContext="{Binding Path=Tabs[0]}" x:Name="Tab1" Header="{Binding Path=TabName}">
                     <local:PowershellExecuterView />
@@ -56,5 +51,4 @@
             
         </Grid> 
         -->
-        
 </Window>
